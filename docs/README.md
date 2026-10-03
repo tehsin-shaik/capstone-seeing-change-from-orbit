@@ -2,6 +2,9 @@
 
 This folder will contain the project documentation as the work develops.
 
+- [Project plan](PROJECT_PLAN.md)
+- [Progress log](PROGRESS.md)
+
 ## Project Tracks
 
 1. **Data preparation and synchronization**
@@ -20,4 +23,4 @@ This folder will contain the project documentation as the work develops.
 
 Reliably track mangrove changes through time.
 
-Meeting notes, decisions, experiments, and results can be added here later as the project develops.
+Meeting notes, decisions, experiments, and results can be added here as the project develops.

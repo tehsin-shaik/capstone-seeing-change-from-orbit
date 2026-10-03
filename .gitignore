@@ -216,3 +216,23 @@ __marimo__/
 
 # Streamlit
 .streamlit/secrets.toml
+
+# Large geospatial data and generated raster files
+data/raw/
+data/processed/
+data/external/
+*.tif
+*.tiff
+*.jp2
+*.SAFE/
+*.aux.xml
+*.ovr
+*.zip
+
+# Model weights and checkpoints
+models/
+checkpoints/
+*.pt
+*.pth
+*.ckpt
+*.onnx
