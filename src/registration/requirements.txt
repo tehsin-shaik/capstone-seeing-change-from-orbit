@@ -1,0 +1,4 @@
+numpy
+opencv-python==4.13.0.92   # tested version; OpenCV 5 moved AKAZE and changed SIFT slightly
+rasterio
+matplotlib
