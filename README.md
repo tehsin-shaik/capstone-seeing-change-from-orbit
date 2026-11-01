@@ -17,4 +17,5 @@ variations caused by tides, seasons, clouds, and illumination.
 
 - [Project plan](docs/PROJECT_PLAN.md)
 - [Progress log](docs/PROGRESS.md)
+- [Meeting minutes](docs/meetings/README.md)
 - [Data documentation](data/README.md)
