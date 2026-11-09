@@ -1,0 +1,6 @@
+model,variant,fold,held_site,chips,mangrove_px,iou,f1,precision,recall,iou_ci95_lo,iou_ci95_hi,iou_eastern_mangroves,iou_jubail_island,iou_ras_ghurab,iou_ghantoot,iou_al_aryam_islands,iou_al_nouf
+DINOv3,b_no_haze,1,eastern_mangroves,8,149111,0.7968,0.8869,0.9691,0.8176,0.7533,0.8379,0.7968,,,,,
+DINOv3,b_no_haze,2,jubail_island,80,316083,0.5503,0.71,0.6211,0.8285,0.4791,0.6136,,0.5503,,,,
+DINOv3,b_no_haze,3,ras_ghurab,50,330884,0.6982,0.8223,0.8245,0.8201,0.6724,0.7206,,,0.6982,,,
+DINOv3,b_no_haze,4,ghantoot,41,320522,0.779,0.8758,0.8797,0.8719,0.7296,0.8117,,,,0.779,,
+DINOv3,b_no_haze,5,"al_aryam_islands,al_nouf",36,93256,0.6057,0.7544,0.8706,0.6655,0.5276,0.674,,,,,0.5497,0.6565
