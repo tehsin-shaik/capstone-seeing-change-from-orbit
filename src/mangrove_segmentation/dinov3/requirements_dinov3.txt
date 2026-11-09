@@ -1,0 +1,9 @@
+# Extra packages for the DINOv3 route, on top of 2_Code/environment.yml (and PyTorch, see RUN_LOCALLY.md).
+# Install in the Anaconda Prompt with the environment active:
+#   conda activate mangrove
+#   pip install -r 2_Code\dinov3\requirements_dinov3.txt
+transformers>=4.56      # DINOv3 support (dinov3_vit) arrived in 4.56
+peft>=0.13              # LoRA adapters (Stage B)
+huggingface_hub>=0.24   # login + gated download
+tabulate                # tables in RESULTS.md
+nbformat                # only to rebuild the 04_dinov3 notebook

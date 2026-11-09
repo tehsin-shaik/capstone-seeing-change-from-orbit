@@ -1,0 +1,30 @@
+# Conda environment for the mangrove pipeline.
+#   conda env create -f 2_Code\environment.yml
+#   conda activate mangrove
+# PyTorch (for the U-Net) is installed separately, see RUN_LOCALLY.md:
+#   NVIDIA GPU: the command from pytorch.org (choose your CUDA version)
+#   no GPU:     pip install torch
+name: mangrove
+channels:
+  - conda-forge
+dependencies:
+  - python=3.11
+  - numpy
+  - pandas
+  - scipy
+  - matplotlib
+  - scikit-learn
+  - scikit-image
+  - rasterio
+  - geopandas
+  - shapely
+  - pyproj
+  - pystac-client
+  - planetary-computer
+  - tqdm
+  - tabulate
+  - jupyterlab
+  - ipykernel
+  - nbconvert
+  - pytest
+  - pip
