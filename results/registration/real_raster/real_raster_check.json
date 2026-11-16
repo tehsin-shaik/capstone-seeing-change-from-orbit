@@ -1,0 +1,36 @@
+{
+  "gee_pair": {
+    "matches": 314,
+    "ransac_inliers": 231,
+    "selected": "none",
+    "reason": "best held-out model 'similarity' improves RMSE by 0.123 m (< 1.0 m threshold)",
+    "ransac_transform_shift_px_mean": 0.10680051959034938,
+    "ransac_transform_shift_px_max": 0.25306632152267555,
+    "baseline": {
+      "none": {
+        "insample_rmse_m": 4.830320968134687,
+        "cv_rmse_m": 4.830320968134687
+      },
+      "translation": {
+        "insample_rmse_m": 4.72322655752883,
+        "cv_rmse_m": 4.7430784668182
+      },
+      "similarity": {
+        "insample_rmse_m": 4.651148337675879,
+        "cv_rmse_m": 4.707584730018558
+      },
+      "affine": {
+        "insample_rmse_m": 4.643579009290102,
+        "cv_rmse_m": 4.719098745437085
+      }
+    }
+  },
+  "known_warp_roundtrip": {
+    "trials": 5,
+    "recovery_error_m_median": 0.12097014106286556,
+    "recovery_error_m_max": 0.15533493487024871
+  },
+  "identity_warp_exact": true,
+  "identity_warp_metadata_kept": true,
+  "aligned_output": "data/processed/registration/Jubail_2025_12_10_6band_aligned.tif"
+}
