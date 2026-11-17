@@ -31,4 +31,15 @@ The tests are in `tests/test_baseline_svm.py`.
 
 ## Status
 
-The code and its tests work on small synthetic chips, but it has not been run on the real data yet, so there is no SVM score. The script that ran the B1 and B2 cross-validation (`run_cv.py`) isn't in the repository, so the `cv` command was rebuilt from the written description and may differ from it in small details.
+The SVM was run on the real Train/Val data on 18 Nov 2026 (2020 chips, 5 folds, test data not opened). Mean leave-one-site-out IoU, with hazy scenes dropped from training:
+
+| Model | Mean IoU |
+|---|---|
+| NDVI rule (B1) | 0.601 |
+| Random forest (B2) | 0.704 |
+| SVM, linear | 0.597 |
+| SVM, approximate RBF (`--kernel rbf_approx`) | 0.702 |
+
+The linear SVM is level with the NDVI rule and the approximate RBF SVM matches the random forest. Per-fold scores, the checks that the runs are comparable with B1 and B2, and the caveats are in [results/mangrove_segmentation/svm/RESULTS.md](../../results/mangrove_segmentation/svm/RESULTS.md).
+
+The `cv` command has been compared line by line with `run_cv.py`, the team's script that ran the B1 and B2 cross-validation (not in this repository), and aligned with it: same pixel sample sizes, same seed handling, and a threshold grid that widens if the best value lands on its edge.
