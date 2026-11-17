@@ -1,0 +1,17 @@
+model,tie_rule,dates_used,iou,precision,recall,folds,cells
+RF,prob,one,0.714,0.805,0.86,5,75
+RF,not_mangrove,one,0.714,0.805,0.86,5,75
+RF,mangrove,one,0.714,0.805,0.86,5,75
+SVM,prob,one,0.708,0.781,0.88,5,75
+SVM,not_mangrove,one,0.708,0.781,0.88,5,75
+SVM,mangrove,one,0.708,0.781,0.88,5,75
+LoRA,not_mangrove,one,0.707,0.829,0.829,5,75
+LoRA,mangrove,one,0.707,0.829,0.829,5,75
+RF,prob,all,0.752,0.839,0.874,5,75
+RF,not_mangrove,all,0.747,0.852,0.853,5,75
+RF,mangrove,all,0.734,0.792,0.902,5,75
+SVM,prob,all,0.741,0.809,0.894,5,75
+SVM,not_mangrove,all,0.737,0.824,0.87,5,75
+SVM,mangrove,all,0.723,0.769,0.919,5,75
+LoRA,not_mangrove,all,0.722,0.867,0.81,5,75
+LoRA,mangrove,all,0.721,0.816,0.858,5,75
