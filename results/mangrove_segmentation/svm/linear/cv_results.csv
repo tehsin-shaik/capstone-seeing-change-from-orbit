@@ -1,0 +1,11 @@
+model,variant,fold,held_site,chips,mangrove_px,iou,f1,precision,recall,iou_ci95_lo,iou_ci95_hi,iou_eastern_mangroves,iou_jubail_island,iou_ras_ghurab,iou_ghantoot,iou_al_nouf,iou_al_aryam_islands
+SVM,a_all_dates,1,eastern_mangroves,8,149111,0.6978,0.822,0.8149,0.8293,0.63,0.7562,0.6978,,,,,
+SVM,a_all_dates,2,jubail_island,80,316083,0.4591,0.6293,0.6071,0.6531,0.3933,0.519,,0.4591,,,,
+SVM,a_all_dates,3,ras_ghurab,50,330884,0.6062,0.7548,0.6555,0.8897,0.5408,0.6596,,,0.6062,,,
+SVM,a_all_dates,4,ghantoot,41,320522,0.6669,0.8002,0.8756,0.7367,0.5986,0.7238,,,,0.6669,,
+SVM,a_all_dates,5,"al_aryam_islands,al_nouf",36,93256,0.6075,0.7558,0.7405,0.7718,0.5503,0.6466,,,,,0.6744,0.5429
+SVM,b_no_haze,1,eastern_mangroves,8,149111,0.6911,0.8173,0.8538,0.7838,0.6019,0.7612,0.6911,,,,,
+SVM,b_no_haze,2,jubail_island,80,316083,0.4425,0.6135,0.6176,0.6095,0.3777,0.5061,,0.4425,,,,
+SVM,b_no_haze,3,ras_ghurab,50,330884,0.6194,0.765,0.6747,0.8832,0.5609,0.6682,,,0.6194,,,
+SVM,b_no_haze,4,ghantoot,41,320522,0.6293,0.7725,0.8869,0.6842,0.5403,0.7005,,,,0.6293,,
+SVM,b_no_haze,5,"al_aryam_islands,al_nouf",36,93256,0.6019,0.7515,0.7651,0.7383,0.5469,0.6416,,,,,0.6626,0.5427
