@@ -1,0 +1,7 @@
+group,chips,gmw_mangrove_ha,mangrove_rejected_by_all3_pct,of_those_on_gmw_edge_pct,all_gmw_mangrove_on_edge_pct,non_mangrove_called_by_all3_pct,called_by_all3_as_pct_of_gmw_mangrove_area,of_those_touching_gmw_mangrove_pct,all_non_mangrove_touching_gmw_mangrove_pct,rejected_by_all3_that_v4112_calls_not_mangrove_pct,all_gmw_mangrove_that_v4112_calls_not_mangrove_pct,called_by_all3_that_v4112_calls_mangrove_pct,all_non_mangrove_that_v4112_calls_mangrove_pct,RF_iou,RF_iou_left_out,RF_misses_shared_by_all3_pct,RF_false_alarms_shared_by_all3_pct,SVM_iou,SVM_iou_left_out,SVM_misses_shared_by_all3_pct,SVM_false_alarms_shared_by_all3_pct,LoRA_iou,LoRA_iou_left_out,LoRA_misses_shared_by_all3_pct,LoRA_false_alarms_shared_by_all3_pct
+fold 1,8,1491.1,7.6,48.4,14.4,0.44,1.1,91.9,5.1,46.0,10.7,66.4,2.71,0.8206,0.895,56.2,20.8,0.8299,0.9034,71.2,14.6,0.8443,0.9232,56.3,46.6
+fold 2,80,3160.8,11.9,64.7,37.0,1.84,28.4,41.3,2.6,44.7,14.0,65.0,3.36,0.5616,0.7821,61.1,65.8,0.5584,0.7811,57.1,68.3,0.5739,0.7919,75.4,60.9
+fold 3,50,3308.8,10.8,77.2,34.6,1.27,11.1,60.2,3.8,45.0,12.9,69.7,2.81,0.6966,0.8551,62.2,60.0,0.689,0.8385,71.9,47.9,0.6996,0.8617,59.2,66.4
+fold 4,41,3205.2,4.1,92.0,32.3,0.91,6.6,75.3,4.1,69.2,15.0,66.8,2.2,0.7774,0.8588,35.7,48.3,0.7743,0.8507,58.7,33.1,0.7538,0.8316,31.4,43.7
+fold 5,36,932.6,11.0,82.3,43.6,0.28,6.6,65.2,2.0,70.2,26.7,41.0,0.84,0.6631,0.7714,64.8,26.2,0.6603,0.7628,80.5,21.5,0.6272,0.7443,36.6,56.5
+mean over folds,215,,,,,,,,,,,,,0.7039,0.8325,,,0.7024,0.8273,,,0.6998,0.8305,,
