@@ -222,7 +222,8 @@ def run(a) -> Path:
                          "<QA_download.csv>), or build it first with run_all.py --step datasets.")
 
     cat = T.load_cat(tv)
-    folds = [int(k) for k in (a.folds or sorted(cat.fold.unique()))]
+    all_folds = sorted(int(k) for k in cat.fold.unique())
+    folds = [int(k) for k in (a.folds or all_folds)]
     if a.max_chips:   # smoke/dry-run: keep a few chips per fold
         cat = pd.concat([g.sample(min(len(g), a.max_chips), random_state=0) for _, g in cat.groupby("fold")],
                         ignore_index=True)
@@ -317,7 +318,7 @@ def run(a) -> Path:
                "grad_checkpoint": a.grad_checkpoint,
                "per_fold": extra}, open(out / "config.json", "w"), indent=1)
     T.score(out, tv, cat, a)                          # evaluate.py scoring, figures and RESULTS.md, as for frozen
-    finish_report(out, a, info, gpu_batch, amp, extra)
+    finish_report(out, a, info, gpu_batch, amp, extra, folds, all_folds)
     return out
 
 
@@ -330,13 +331,38 @@ def frozen_cv_path(a) -> Path:
     return (Path(a.out) if a.out else T.DP.DINO_RESULTS) / f"{tag}{'_nospec' if a.no_spectral else ''}" / "cv_results.csv"
 
 
-def finish_report(out: Path, a, info: dict, gpu_batch: int, amp: bool, extra: list) -> None:
-    """Label the tables as LoRA, state the real LoRA settings in RESULTS.md, and add the LoRA-vs-frozen table."""
+def verdict_line(mean_iou: float, folds, all_folds, smoke: bool) -> str:
+    """The sentence after '**Verdict:**' in RESULTS.md.
+
+    The random-forest bar (T.BAR_B2) is a mean over ALL folds. It is only compared with a run that also covers all
+    folds. A partial run (--folds) gets no yes/no: one fold against a 5-fold mean says nothing, because some sites
+    are much easier than others."""
+    if smoke:
+        return "SMOKE TEST: random weights, the numbers mean nothing. This run only proves the code works."
+    n = len(set(all_folds))
+    if set(folds) != set(all_folds):
+        done = sorted(set(folds))
+        return (f"**No verdict: partial run** (fold{'s' if len(done) > 1 else ''} {', '.join(map(str, done))} of {n}). "
+                f"The random-forest bar of {T.BAR_B2} is a mean over all {n} folds, so it is not compared with this "
+                f"run's {mean_iou:.3f}. Run all folds for a verdict.")
+    answer = "**Yes: beats the random forest**" if mean_iou > T.BAR_B2 else "**No: does not beat the random forest yet**"
+    return f"{answer} (DINOv3 LoRA {mean_iou:.3f} vs B2 {T.BAR_B2}, both means over all {n} folds)"
+
+
+def set_verdict(md: str, line: str) -> str:
+    """Replace the verdict that train_dinov3.score() wrote (it always compares with the all-fold mean)."""
+    return re.sub(r"^\*\*Verdict:\*\* .*$", lambda _: f"**Verdict:** {line}", md, count=1, flags=re.M)
+
+
+def finish_report(out: Path, a, info: dict, gpu_batch: int, amp: bool, extra: list, folds, all_folds) -> None:
+    """Label the tables as LoRA, state the real LoRA settings in RESULTS.md, correct the verdict for partial runs,
+    and add the LoRA-vs-frozen table. `folds` are the folds of this run, `all_folds` every fold in the catalog."""
     for f in ("cv_results.csv", "per_chip.csv"):
         df = pd.read_csv(out / f); df["model"] = MODEL_LABEL; df.to_csv(out / f, index=False)
     cv = pd.read_csv(out / "cv_results.csv").set_index("fold")
     md = (out / "RESULTS.md").read_text(encoding="utf-8")
     md = md.replace(f"LoRA r={a.lora_r} on attention q/v", describe(info))
+    md = set_verdict(md, verdict_line(float(cv["iou"].mean()), folds, all_folds, a.smoke))
     peak = [e["peak_gpu_mb"] for e in extra if e["peak_gpu_mb"]]
     md += f"""
 ## LoRA settings
