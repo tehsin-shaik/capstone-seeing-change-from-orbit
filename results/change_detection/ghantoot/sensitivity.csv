@@ -1,0 +1,7 @@
+version,chips_compared,compared_ha,stable_mangrove_ha,gain_ha,loss_ha,stable_non_mangrove_ha,area_first_ha,area_second_ha,net_ha,net_pct_of_first,changed_ha,changed_pct_of_first
+"headline: all non-hazy dates, vote, ties by mean probability",11,7203.62,816.92,241.91,29.5,6115.29,846.42,1058.83,212.41,25.1,271.41,32.1
+ties count as not mangrove,11,7203.62,750.87,237.45,38.42,6176.88,789.29,988.32,199.03,25.2,275.87,35.0
+ties count as mangrove,11,7203.62,912.32,249.9,27.08,6014.32,939.4,1162.22,222.82,23.7,276.98,29.5
+"single dates, same month: 2018-03-20 vs 2025-03-18",9,5863.15,825.65,225.01,40.72,4771.77,866.37,1050.66,184.29,21.3,265.73,30.7
+"single dates, same month: 2018-11-05 vs 2025-11-13",9,5892.38,810.04,272.58,37.24,4772.52,847.28,1082.62,235.34,27.8,309.82,36.6
+"headline masks, only pixels with two dates in both years",8,5218.52,802.09,239.59,29.44,4147.4,831.53,1041.68,210.15,25.3,269.03,32.4

@@ -1,0 +1,7 @@
+site,heldout_iou,same_year_pairs,noise_max_abs_net_pct,noise_median_abs_net_pct,noise_net_pct_list,min_chips_in_a_pair,change_vote_net_pct,change_vote_chips,change_two_date_pixels_net_pct,change_single_date_net_pct_list
+ghantoot,0.7774,5,17.8,4.6,-0.6 -3.7 +15.9 +17.8 +4.6,8,25.1,11,25.3,+21.3 +27.8
+al_nouf,0.6838,1,19.6,19.6,+19.6,3,-10.5,1,,-10.5
+al_aryam_islands,0.6381,5,28.0,10.6,-10.6 -5.7 -28.0 -2.0 +10.9,1,-25.1,7,-19.2,-26.4 +2.6
+ras_ghurab,0.6966,5,36.9,15.3,+24.4 -15.3 +14.6 +36.9 -0.4,5,3.0,17,19.2,+33.1 +0.2
+eastern_mangroves,0.8206,5,37.9,12.8,+12.8 -30.9 -4.7 +37.9 -0.2,2,2.0,3,3.9,+7.4 -0.5
+jubail_island,0.5616,5,92.2,39.2,+39.2 -17.0 +53.7 +92.2 -15.0,14,-11.1,25,-0.8,+33.2 -20.8
