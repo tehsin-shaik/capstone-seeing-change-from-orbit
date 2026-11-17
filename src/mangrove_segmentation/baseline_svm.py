@@ -42,17 +42,26 @@ THREE COMMANDS
             --qa <QA_download.csv> --out results/svm_cv
         (with the SDP folder layout of paths.py, plain `python baseline_svm.py cv` finds everything)
 
-    The cv protocol is the one described in results/mangrove_segmentation/baselines/RESULTS.md
-    and implemented in train_unet.py. The script that ran it for B1/B2 (run_cv.py) is not in
-    this repository, so the steps below were rebuilt from those two sources:
+    The cv protocol is the one described in results/mangrove_segmentation/baselines/RESULTS.md.
+    It was first rebuilt from that description and train_unet.py, and has since been compared
+    line by line with the script that ran it for B1/B2 (the team's run_cv.py, which is not in
+    this repository) and aligned with it:
       * 2020 chips only, label GMW v4.0.19; folds come from the catalog's `fold` column.
       * Round k holds out fold k. Variant (a) trains on all other 2020 chips, variant (b)
         drops hazy scenes from training (dark-water red, water_b04_p5, above 0.05).
       * Training chips within one chip (2,560 m) of a held-out chip are dropped.
       * C and the threshold are tuned on an inner fold (first of 3, 4, 5, 2, 1 that is not
-        held out): train on the other 3 folds, validate on the inner one.
-      * The model is refitted on all 4 training folds, the held-out chips are predicted,
-        and the masks are scored by evaluate.py (pixel-pooled, 95% bootstrap CI over chips).
+        held out): train on 100k balanced pixels from the other 3 folds, validate on up to
+        300k pixels (natural class mix) of the inner one. Same sizes as run_cv.py used for B2.
+      * The chosen C and threshold are carried over unchanged, as run_cv.py carries the
+        forest's settings and threshold, and the model is refitted on 200k balanced pixels
+        from all 4 training folds. The random generator is restarted from the seed before
+        that draw, as in run_cv.py, so for the same fold and variant the SVM is refitted on
+        exactly the pixels the random forest was.
+      * If the best threshold lands on the edge of the grid, the grid is widened on that side
+        and searched again (run_cv.py did this by hand for B2: 0.80 -> 0.95).
+      * The held-out chips are predicted and the masks are scored by evaluate.py
+        (pixel-pooled, 95% bootstrap CI over chips).
     Output: cv_results.csv with the same columns as the baselines' cv_results.csv, plus
     fold_fits.csv, per_chip.csv, cv_catalog_2020.csv, config.json and preds/SVM_<variant>/.
 """
@@ -79,6 +88,9 @@ from chipio import chip_path, load_catalog, load_chip, save_mask  # noqa: E402
 
 SETTINGS = [{"C": 0.01}, {"C": 0.1}, {"C": 1.0}]
 THRESHOLDS = np.round(np.arange(-2.0, 4.01, 0.25), 2)   # cut-offs on the SVM score (0 = balanced boundary)
+GRID_STEP = 0.25        # spacing of THRESHOLDS; also the spacing used when the grid is widened
+WIDEN_BY = 4            # thresholds added per widening (4 x 0.25 = 1.0 score unit)
+MAX_WIDENINGS = 10      # per side, so the grid can grow by at most 10 score units each way
 KERNELS = ("linear", "rbf_approx")
 HAZE_P5 = 0.05          # same rule as make_datasets.py / train_unet.py
 BUFFER_M = 2560         # one chip
@@ -99,17 +111,47 @@ def make_model(C: float, kernel: str = "linear", seed: int = 0):
 
 
 def tune(Xtr, ytr, Xva, yva, kernel: str, seed: int) -> dict:
-    """Best C and score threshold by IoU on the validation pixels."""
-    best = None
+    """Best C and score threshold by IoU on the validation pixels.
+
+    The search starts on THRESHOLDS. If the best threshold is the lowest or highest value of
+    the grid, the true optimum may lie outside it, so the grid is widened on that side (same
+    0.25 spacing) and searched again, until the best value is inside the grid. This is what
+    run_cv.py did by hand for the random forest (grid end moved from 0.80 to 0.95).
+    Ties go to the smaller C, then the lower threshold, as before.
+    """
+    fitted = []
     for s in SETTINGS:
         model = make_model(kernel=kernel, seed=seed, **s).fit(Xtr, ytr)
-        score = model.decision_function(Xva)
-        for th in THRESHOLDS:
-            v = iou(score > th, yva)
-            if best is None or v > best["val_iou"]:
-                best = {"settings": s, "threshold": float(th), "val_iou": v, "svm": model}
-    if best["threshold"] in (float(THRESHOLDS[0]), float(THRESHOLDS[-1])):
-        print(f"  note: chosen threshold {best['threshold']} is at the edge of the grid; widen THRESHOLDS")
+        fitted.append((s, model, model.decision_function(Xva)))
+    grid = [float(t) for t in THRESHOLDS]
+    seen = {}                                    # (setting number, threshold) -> IoU, so nothing is scored twice
+    widened = {"lo": 0, "hi": 0}
+    while True:
+        best = None
+        for i, (s, model, score) in enumerate(fitted):
+            for th in grid:
+                if (i, th) not in seen:
+                    seen[(i, th)] = iou(score > th, yva)
+                v = seen[(i, th)]
+                if best is None or v > best["val_iou"]:
+                    best = {"settings": s, "threshold": th, "val_iou": v, "svm": model}
+        if best["threshold"] == grid[0] and widened["lo"] < MAX_WIDENINGS:
+            grid = [round(grid[0] - GRID_STEP * j, 2) for j in range(WIDEN_BY, 0, -1)] + grid
+            widened["lo"] += 1
+        elif best["threshold"] == grid[-1] and widened["hi"] < MAX_WIDENINGS:
+            grid = grid + [round(grid[-1] + GRID_STEP * j, 2) for j in range(1, WIDEN_BY + 1)]
+            widened["hi"] += 1
+        else:
+            break
+    if widened["lo"] or widened["hi"]:
+        print(f"  note: best threshold was on the edge of the grid; grid widened to [{grid[0]}, {grid[-1]}]")
+    if best["threshold"] in (grid[0], grid[-1]):
+        print(f"  WARNING: chosen threshold {best['threshold']} is still on the edge after widening "
+              f"to [{grid[0]}, {grid[-1]}]; the SVM score may carry no signal for these pixels")
+    best["threshold_grid"] = [grid[0], grid[-1]]
+    # best IoU each C reached on the validation pixels: shows how much the choice of C matters
+    best["val_iou_by_C"] = {str(s["C"]): round(max(seen[(i, th)] for th in grid), 4)
+                            for i, (s, _, _) in enumerate(fitted)}
     return best
 
 
@@ -191,7 +233,13 @@ def drop_near(train: pd.DataFrame, other: pd.DataFrame, buf=BUFFER_M) -> pd.Data
 
 
 def run_cv(catalog, chips_dir, out, qa=None, folds=None, label="v4019", variants=("a", "b"),
-           cap=200_000, val_cap=500_000, seed=0, kernel="linear", reps=1000):
+           cap=200_000, val_cap=300_000, seed=0, kernel="linear", reps=1000):
+    """Leave-one-site-out cross-validation, aligned with the team's run_cv.py (see the module docstring).
+
+    cap      balanced pixels for the final fit on 4 folds (run_cv.py: final_cap = 200k);
+             tuning on the inner split uses cap // 2 (run_cv.py: inner_cap = 100k).
+    val_cap  pixels of the inner-validation fold used for tuning (run_cv.py: inner_val_cap = 300k).
+    """
     out = Path(out)
     out.mkdir(parents=True, exist_ok=True)
     if "b" in variants and qa is None:
@@ -224,7 +272,11 @@ def run_cv(catalog, chips_dir, out, qa=None, folds=None, label="v4019", variants
             Xtr, ytr = collect(tr, chips_dir, label, cap // 2, rng, balanced=True)
             Xva, yva = collect(iv, chips_dir, label, val_cap, rng, balanced=False)
             best = tune(Xtr, ytr, Xva, yva, kernel, seed)
+            # Restart the generator before the final draw, as run_cv.py does. With the same seed,
+            # sampler (baseline_rf.collect) and chip order, these are the pixels B2 was refitted on.
+            rng = np.random.default_rng(seed)
             Xall, yall = collect(train, chips_dir, label, cap, rng, balanced=True)
+            # C and the threshold are carried over unchanged from the inner split (as run_cv.py does for B2)
             svm = make_model(kernel=kernel, seed=seed, **best["settings"]).fit(Xall, yall)   # refit on 4 folds
             predict_chips(svm, best["threshold"], held, chips_dir, pred_dir)
             held_sites = sorted(held["site"].unique())
@@ -241,7 +293,10 @@ def run_cv(catalog, chips_dir, out, qa=None, folds=None, label="v4019", variants
             fits.append({"model": "SVM", "variant": name, "fold": int(k), "held_site": row["held_site"],
                          "kernel": kernel, "C": best["settings"]["C"], "threshold": best["threshold"],
                          "inner_fold": int(inner), "inner_iou": round(best["val_iou"], 4),
+                         "threshold_grid_lo": best["threshold_grid"][0], "threshold_grid_hi": best["threshold_grid"][1],
+                         "inner_iou_by_C": json.dumps(best["val_iou_by_C"]),
                          "tune_chips": len(tr), "inner_chips": len(iv), "train_chips": len(train),
+                         "tune_pixels": int(len(ytr)), "inner_pixels": int(len(yva)),
                          "train_pixels": int(len(yall)),
                          "hazy_chips_dropped": int((cat["fold"] != k).sum() - len(pool)),
                          "buffer_chips_dropped": int(len(pool) - len(train)),
@@ -257,7 +312,8 @@ def run_cv(catalog, chips_dir, out, qa=None, folds=None, label="v4019", variants
             pd.concat(per_chip, ignore_index=True).to_csv(out / "per_chip.csv", index=False)
     (out / "config.json").write_text(json.dumps(
         {"model": "svm", "kernel": kernel, "label": label, "seed": seed, "cap": cap, "val_cap": val_cap,
-         "settings": SETTINGS, "thresholds": THRESHOLDS.tolist(), "haze_p5": HAZE_P5, "buffer_m": BUFFER_M,
+         "tune_cap": cap // 2, "settings": SETTINGS, "thresholds_start": THRESHOLDS.tolist(),
+         "threshold_grid_widens_if_best_on_edge": True, "haze_p5": HAZE_P5, "buffer_m": BUFFER_M,
          "inner_pref": INNER_PREF, "variants": [VARIANTS[v] for v in variants], "bootstrap_reps": reps}, indent=1))
     cv = pd.DataFrame(rows)
     print("\nmean +/- sd across folds:")
