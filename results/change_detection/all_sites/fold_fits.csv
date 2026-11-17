@@ -1,0 +1,7 @@
+fold,site,threshold,settings,train_chips,heldout_iou_site,heldout_iou_fold,committed_b2_fold_iou
+1,eastern_mangroves,0.85,"{""max_depth"": 12, ""min_samples_leaf"": 10}",155,0.8206,0.8206,0.8206
+2,jubail_island,0.9,"{""max_depth"": 12, ""min_samples_leaf"": 10}",89,0.5616,0.5616,0.5616
+3,ras_ghurab,0.85,"{""max_depth"": 12, ""min_samples_leaf"": 10}",119,0.6966,0.6966,0.6966
+4,ghantoot,0.85,"{""max_depth"": 12, ""min_samples_leaf"": 10}",133,0.7774,0.7774,0.7774
+5,al_aryam_islands,0.8,"{""max_depth"": 12, ""min_samples_leaf"": 10}",145,0.6381,0.6631,0.6631
+5,al_nouf,0.8,"{""max_depth"": 12, ""min_samples_leaf"": 10}",145,0.6838,0.6631,0.6631

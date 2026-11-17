@@ -1,0 +1,156 @@
+item,value
+site,jubail_island
+model,"B2 random forest, variant b, jubail_island held out"
+threshold,0.9
+settings.max_depth,12
+settings.min_samples_leaf,10
+site_grid_px,1280 1280
+site_area_ha,16384.0
+hazy_scenes_skipped,2020-08-24
+scenes_used.2018,2018-03-18 2018-11-23
+scenes_used.2020,2020-02-16 2020-05-18 2020-11-17
+scenes_used.2025,2025-03-18 2025-11-16
+chips_per_scene.2018-03-18,14
+chips_per_scene.2018-11-23,25
+chips_per_scene.2020-02-16,25
+chips_per_scene.2020-05-18,15
+chips_per_scene.2020-11-17,25
+chips_per_scene.2025-03-18,25
+chips_per_scene.2025-11-16,25
+mask_2018.mangrove_ha,1216.42
+mask_2018.usable_ha,16319.79
+mask_2018.px_with_2plus_scenes_ha,8962.49
+mask_2018.px_with_1_scene_ha,7357.3
+mask_2018.px_with_no_scene_ha,64.21
+mask_2018.tied_px_ha,206.56
+mask_2020.mangrove_ha,1134.47
+mask_2020.usable_ha,16373.09
+mask_2020.px_with_2plus_scenes_ha,16249.07
+mask_2020.px_with_1_scene_ha,124.02
+mask_2020.px_with_no_scene_ha,10.91
+mask_2020.tied_px_ha,227.36
+mask_2025.mangrove_ha,1082.2
+mask_2025.usable_ha,16383.92
+mask_2025.px_with_2plus_scenes_ha,16270.87
+mask_2025.px_with_1_scene_ha,113.05
+mask_2025.px_with_no_scene_ha,0.08
+mask_2025.tied_px_ha,358.98
+change_2018_2025.compared_ha,16319.71
+change_2018_2025.stable_mangrove_ha,905.76
+change_2018_2025.gain_ha,176.11
+change_2018_2025.loss_ha,310.66
+change_2018_2025.stable_non_mangrove_ha,14927.18
+change_2018_2025.area_first_ha,1216.42
+change_2018_2025.area_second_ha,1081.87
+change_2018_2025.net_ha,-134.55
+change_2018_2025.net_pct_of_first,-11.1
+change_2018_2025.changed_ha,486.77
+change_2018_2025.changed_pct_of_first,40.0
+change_2018_2025.no_data_ha,64.29
+change_2018_2025.chips_compared,25
+change_every_date_agrees.gain_ha,95.31
+change_every_date_agrees.loss_ha,184.92
+change_every_date_agrees.net_ha,-89.61
+change_every_date_agrees.share_of_headline_gain_pct,54.1
+change_every_date_agrees.share_of_headline_loss_pct,59.5
+same_year_net_pct_range,-17.0 92.2
+edge_check.gain_ha,176.11
+edge_check.loss_ha,310.66
+edge_check.gain_touching_2018_mangrove_pct,57.6
+edge_check.loss_on_2018_mangrove_edge_pct,72.6
+edge_check.gain_on_edge_of_either_year_pct,91.6
+edge_check.loss_on_edge_of_either_year_pct,85.3
+edge_check.all_2018_mangrove_on_its_edge_pct,43.6
+edge_check.all_2025_mangrove_on_its_edge_pct,42.4
+edge_check.all_2018_non_mangrove_touching_mangrove_pct,4.2
+edge_check.gain_not_touching_2018_mangrove_ha,74.66
+edge_check.loss_inside_2018_mangrove_ha,85.17
+edge_check.gain_by_distance_to_2018_mangrove_ha.1 px (touching),101.45
+edge_check.gain_by_distance_to_2018_mangrove_ha.2 to 3 px,31.22
+edge_check.gain_by_distance_to_2018_mangrove_ha.4 to 10 px,30.39
+edge_check.gain_by_distance_to_2018_mangrove_ha.more than 10 px,13.05
+label_v4112_2018.label_same_on_all_dates_of_year,True
+label_v4112_2018.compared_ha,16319.79
+label_v4112_2018.model_ha,1216.42
+label_v4112_2018.label_ha,1095.38
+label_v4112_2018.model_over_label,1.111
+label_v4112_2018.iou,0.637
+label_v4112_2018.precision,0.739
+label_v4112_2018.recall,0.821
+label_v4112_2020.label_same_on_all_dates_of_year,True
+label_v4112_2020.compared_ha,16373.09
+label_v4112_2020.model_ha,1134.47
+label_v4112_2020.label_ha,1353.96
+label_v4112_2020.model_over_label,0.838
+label_v4112_2020.iou,0.62
+label_v4112_2020.precision,0.839
+label_v4112_2020.recall,0.703
+label_v4112_2025.label_same_on_all_dates_of_year,True
+label_v4112_2025.compared_ha,16383.92
+label_v4112_2025.model_ha,1082.2
+label_v4112_2025.label_ha,1822.49
+label_v4112_2025.model_over_label,0.594
+label_v4112_2025.iou,0.53
+label_v4112_2025.precision,0.93
+label_v4112_2025.recall,0.552
+label_v4112_change_2018_2025.compared_ha,16319.71
+label_v4112_change_2018_2025.stable_mangrove_ha,1067.93
+label_v4112_change_2018_2025.gain_ha,752.1
+label_v4112_change_2018_2025.loss_ha,27.45
+label_v4112_change_2018_2025.stable_non_mangrove_ha,14472.23
+label_v4112_change_2018_2025.area_first_ha,1095.38
+label_v4112_change_2018_2025.area_second_ha,1820.03
+label_v4112_change_2018_2025.net_ha,724.65
+label_v4112_change_2018_2025.net_pct_of_first,66.2
+label_v4112_change_2018_2025.changed_ha,779.55
+label_v4112_change_2018_2025.changed_pct_of_first,71.2
+model_vs_label_change.model_gain_that_is_label_gain_pct,53.7
+model_vs_label_change.model_gain_that_label_calls_mangrove_in_both_years_pct,25.4
+model_vs_label_change.model_gain_that_label_calls_never_mangrove_pct,20.7
+model_vs_label_change.label_gain_that_is_model_gain_pct,12.6
+model_vs_label_change.label_gain_that_model_calls_mangrove_in_both_years_pct,15.2
+model_vs_label_change.label_gain_that_model_calls_never_mangrove_pct,63.8
+model_vs_label_change.model_loss_that_is_label_loss_pct,5.7
+scenes_shown_in_figure.2018,2018-11-23
+scenes_shown_in_figure.2025,2025-11-16
+change_if_threshold_were_0.5.compared_ha,16319.71
+change_if_threshold_were_0.5.stable_mangrove_ha,1729.75
+change_if_threshold_were_0.5.gain_ha,359.81
+change_if_threshold_were_0.5.loss_ha,420.46
+change_if_threshold_were_0.5.stable_non_mangrove_ha,13809.69
+change_if_threshold_were_0.5.area_first_ha,2150.21
+change_if_threshold_were_0.5.area_second_ha,2089.56
+change_if_threshold_were_0.5.net_ha,-60.65
+change_if_threshold_were_0.5.net_pct_of_first,-2.8
+change_if_threshold_were_0.5.changed_ha,780.27
+change_if_threshold_were_0.5.changed_pct_of_first,36.3
+label_v4019_2020.compared_ha,16373.09
+label_v4019_2020.model_ha,1134.47
+label_v4019_2020.label_ha,1017.7
+label_v4019_2020.model_over_label,1.115
+label_v4019_2020.iou,0.628
+label_v4019_2020.precision,0.732
+label_v4019_2020.recall,0.816
+area_series_same_pixels.compared_ha,16314.96
+area_series_same_pixels.model_2018_ha,1216.42
+area_series_same_pixels.model_2020_ha,1134.09
+area_series_same_pixels.model_2025_ha,1081.87
+area_series_same_pixels.label_v4112_2018_ha,1095.38
+area_series_same_pixels.label_v4112_2020_ha,1353.01
+area_series_same_pixels.label_v4112_2025_ha,1820.03
+image_shift_check_nir.2018-03-18 vs 2025-03-18.best_whole_pixel_shift_dy_dx,0 0
+image_shift_check_nir.2018-03-18 vs 2025-03-18.subpixel_shift_dy_dx,-0.27 0.22
+image_shift_check_nir.2018-03-18 vs 2025-03-18.corr_at_best,0.8314
+image_shift_check_nir.2018-03-18 vs 2025-03-18.corr_at_zero_shift,0.8314
+image_shift_check_nir.2018-11-23 vs 2025-11-16.best_whole_pixel_shift_dy_dx,0 0
+image_shift_check_nir.2018-11-23 vs 2025-11-16.subpixel_shift_dy_dx,-0.02 0.12
+image_shift_check_nir.2018-11-23 vs 2025-11-16.corr_at_best,0.853
+image_shift_check_nir.2018-11-23 vs 2025-11-16.corr_at_zero_shift,0.853
+image_shift_check_nir.2018-03-18 vs 2018-11-23.best_whole_pixel_shift_dy_dx,0 0
+image_shift_check_nir.2018-03-18 vs 2018-11-23.subpixel_shift_dy_dx,0.41 0.03
+image_shift_check_nir.2018-03-18 vs 2018-11-23.corr_at_best,0.9726
+image_shift_check_nir.2018-03-18 vs 2018-11-23.corr_at_zero_shift,0.9726
+image_shift_check_nir.2025-03-18 vs 2025-11-16.best_whole_pixel_shift_dy_dx,1 0
+image_shift_check_nir.2025-03-18 vs 2025-11-16.subpixel_shift_dy_dx,0.54 0.06
+image_shift_check_nir.2025-03-18 vs 2025-11-16.corr_at_best,0.704
+image_shift_check_nir.2025-03-18 vs 2025-11-16.corr_at_zero_shift,0.7035

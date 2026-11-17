@@ -1,0 +1,156 @@
+item,value
+site,ghantoot
+model,"B2 random forest, variant b, ghantoot held out"
+threshold,0.85
+settings.max_depth,12
+settings.min_samples_leaf,10
+site_grid_px,1024 1024
+site_area_ha,10485.76
+hazy_scenes_skipped,2020-08-31
+scenes_used.2018,2018-03-20 2018-11-05
+scenes_used.2020,2020-02-23 2020-05-18 2020-11-09
+scenes_used.2025,2025-03-18 2025-11-13
+chips_per_scene.2018-03-20,9
+chips_per_scene.2018-11-05,10
+chips_per_scene.2020-02-23,12
+chips_per_scene.2020-05-18,10
+chips_per_scene.2020-11-09,12
+chips_per_scene.2025-03-18,11
+chips_per_scene.2025-11-13,11
+mask_2018.mangrove_ha,846.42
+mask_2018.usable_ha,7204.44
+mask_2018.px_with_2plus_scenes_ha,5235.6
+mask_2018.px_with_1_scene_ha,1968.84
+mask_2018.px_with_no_scene_ha,3281.32
+mask_2018.tied_px_ha,150.11
+mask_2020.mangrove_ha,924.45
+mask_2020.usable_ha,9830.04
+mask_2020.px_with_2plus_scenes_ha,7176.01
+mask_2020.px_with_1_scene_ha,2654.03
+mask_2020.px_with_no_scene_ha,655.72
+mask_2020.tied_px_ha,38.81
+mask_2025.mangrove_ha,1067.82
+mask_2025.usable_ha,8517.4
+mask_2025.px_with_2plus_scenes_ha,5866.15
+mask_2025.px_with_1_scene_ha,2651.25
+mask_2025.px_with_no_scene_ha,1968.36
+mask_2025.tied_px_ha,173.9
+change_2018_2025.compared_ha,7203.62
+change_2018_2025.stable_mangrove_ha,816.92
+change_2018_2025.gain_ha,241.91
+change_2018_2025.loss_ha,29.5
+change_2018_2025.stable_non_mangrove_ha,6115.29
+change_2018_2025.area_first_ha,846.42
+change_2018_2025.area_second_ha,1058.83
+change_2018_2025.net_ha,212.41
+change_2018_2025.net_pct_of_first,25.1
+change_2018_2025.changed_ha,271.41
+change_2018_2025.changed_pct_of_first,32.1
+change_2018_2025.no_data_ha,3282.14
+change_2018_2025.chips_compared,11
+change_every_date_agrees.gain_ha,135.67
+change_every_date_agrees.loss_ha,11.01
+change_every_date_agrees.net_ha,124.66
+change_every_date_agrees.share_of_headline_gain_pct,56.1
+change_every_date_agrees.share_of_headline_loss_pct,37.3
+same_year_net_pct_range,-3.7 17.8
+edge_check.gain_ha,241.91
+edge_check.loss_ha,29.5
+edge_check.gain_touching_2018_mangrove_pct,59.4
+edge_check.loss_on_2018_mangrove_edge_pct,65.7
+edge_check.gain_on_edge_of_either_year_pct,87.9
+edge_check.loss_on_edge_of_either_year_pct,94.9
+edge_check.all_2018_mangrove_on_its_edge_pct,39.0
+edge_check.all_2025_mangrove_on_its_edge_pct,36.0
+edge_check.all_2018_non_mangrove_touching_mangrove_pct,5.1
+edge_check.gain_not_touching_2018_mangrove_ha,98.12
+edge_check.loss_inside_2018_mangrove_ha,10.13
+edge_check.gain_by_distance_to_2018_mangrove_ha.1 px (touching),143.79
+edge_check.gain_by_distance_to_2018_mangrove_ha.2 to 3 px,47.68
+edge_check.gain_by_distance_to_2018_mangrove_ha.4 to 10 px,36.05
+edge_check.gain_by_distance_to_2018_mangrove_ha.more than 10 px,14.39
+label_v4112_2018.label_same_on_all_dates_of_year,True
+label_v4112_2018.compared_ha,7204.44
+label_v4112_2018.model_ha,846.42
+label_v4112_2018.label_ha,771.22
+label_v4112_2018.model_over_label,1.098
+label_v4112_2018.iou,0.707
+label_v4112_2018.precision,0.791
+label_v4112_2018.recall,0.869
+label_v4112_2020.label_same_on_all_dates_of_year,True
+label_v4112_2020.compared_ha,9830.04
+label_v4112_2020.model_ha,924.45
+label_v4112_2020.label_ha,888.28
+label_v4112_2020.model_over_label,1.041
+label_v4112_2020.iou,0.726
+label_v4112_2020.precision,0.825
+label_v4112_2020.recall,0.858
+label_v4112_2025.label_same_on_all_dates_of_year,True
+label_v4112_2025.compared_ha,8517.4
+label_v4112_2025.model_ha,1067.82
+label_v4112_2025.label_ha,1109.24
+label_v4112_2025.model_over_label,0.963
+label_v4112_2025.iou,0.763
+label_v4112_2025.precision,0.882
+label_v4112_2025.recall,0.849
+label_v4112_change_2018_2025.compared_ha,7203.62
+label_v4112_change_2018_2025.stable_mangrove_ha,764.69
+label_v4112_change_2018_2025.gain_ha,337.83
+label_v4112_change_2018_2025.loss_ha,6.53
+label_v4112_change_2018_2025.stable_non_mangrove_ha,6094.57
+label_v4112_change_2018_2025.area_first_ha,771.22
+label_v4112_change_2018_2025.area_second_ha,1102.52
+label_v4112_change_2018_2025.net_ha,331.3
+label_v4112_change_2018_2025.net_pct_of_first,43.0
+label_v4112_change_2018_2025.changed_ha,344.36
+label_v4112_change_2018_2025.changed_pct_of_first,44.7
+model_vs_label_change.model_gain_that_is_label_gain_pct,49.4
+model_vs_label_change.model_gain_that_label_calls_mangrove_in_both_years_pct,20.4
+model_vs_label_change.model_gain_that_label_calls_never_mangrove_pct,30.0
+model_vs_label_change.label_gain_that_is_model_gain_pct,35.3
+model_vs_label_change.label_gain_that_model_calls_mangrove_in_both_years_pct,34.8
+model_vs_label_change.label_gain_that_model_calls_never_mangrove_pct,28.5
+model_vs_label_change.model_loss_that_is_label_loss_pct,2.6
+scenes_shown_in_figure.2018,2018-11-05
+scenes_shown_in_figure.2025,2025-11-13
+change_if_threshold_were_0.5.compared_ha,7203.62
+change_if_threshold_were_0.5.stable_mangrove_ha,1122.76
+change_if_threshold_were_0.5.gain_ha,206.36
+change_if_threshold_were_0.5.loss_ha,17.36
+change_if_threshold_were_0.5.stable_non_mangrove_ha,5857.14
+change_if_threshold_were_0.5.area_first_ha,1140.12
+change_if_threshold_were_0.5.area_second_ha,1329.12
+change_if_threshold_were_0.5.net_ha,189.0
+change_if_threshold_were_0.5.net_pct_of_first,16.6
+change_if_threshold_were_0.5.changed_ha,223.72
+change_if_threshold_were_0.5.changed_pct_of_first,19.6
+label_v4019_2020.compared_ha,9830.04
+label_v4019_2020.model_ha,924.45
+label_v4019_2020.label_ha,866.41
+label_v4019_2020.model_over_label,1.067
+label_v4019_2020.iou,0.805
+label_v4019_2020.precision,0.864
+label_v4019_2020.recall,0.922
+area_series_same_pixels.compared_ha,7203.51
+area_series_same_pixels.model_2018_ha,846.42
+area_series_same_pixels.model_2020_ha,917.51
+area_series_same_pixels.model_2025_ha,1058.83
+area_series_same_pixels.label_v4112_2018_ha,771.22
+area_series_same_pixels.label_v4112_2020_ha,883.24
+area_series_same_pixels.label_v4112_2025_ha,1102.52
+image_shift_check_nir.2018-03-20 vs 2025-03-18.best_whole_pixel_shift_dy_dx,0 0
+image_shift_check_nir.2018-03-20 vs 2025-03-18.subpixel_shift_dy_dx,-0.05 0.12
+image_shift_check_nir.2018-03-20 vs 2025-03-18.corr_at_best,0.985
+image_shift_check_nir.2018-03-20 vs 2025-03-18.corr_at_zero_shift,0.985
+image_shift_check_nir.2018-11-05 vs 2025-11-13.best_whole_pixel_shift_dy_dx,0 0
+image_shift_check_nir.2018-11-05 vs 2025-11-13.subpixel_shift_dy_dx,0.05 0.29
+image_shift_check_nir.2018-11-05 vs 2025-11-13.corr_at_best,0.9685
+image_shift_check_nir.2018-11-05 vs 2025-11-13.corr_at_zero_shift,0.9685
+image_shift_check_nir.2018-03-20 vs 2018-11-05.best_whole_pixel_shift_dy_dx,0 0
+image_shift_check_nir.2018-03-20 vs 2018-11-05.subpixel_shift_dy_dx,-0.08 -0.23
+image_shift_check_nir.2018-03-20 vs 2018-11-05.corr_at_best,0.8548
+image_shift_check_nir.2018-03-20 vs 2018-11-05.corr_at_zero_shift,0.8548
+image_shift_check_nir.2025-03-18 vs 2025-11-13.best_whole_pixel_shift_dy_dx,0 0
+image_shift_check_nir.2025-03-18 vs 2025-11-13.subpixel_shift_dy_dx,0.05 -0.02
+image_shift_check_nir.2025-03-18 vs 2025-11-13.corr_at_best,0.9058
+image_shift_check_nir.2025-03-18 vs 2025-11-13.corr_at_zero_shift,0.9058
