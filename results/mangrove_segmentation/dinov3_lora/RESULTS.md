@@ -48,9 +48,24 @@ LoRA is higher on two folds, lower on one and level on two. The largest gain is 
 
 - There is one seed per fold. The spread between folds is large (sd 0.11), so a difference under about 0.03 between two models is within noise. The mean difference from frozen is 0.008.
 - The 95% intervals of LoRA and frozen overlap on every fold. No fold shows a clear win for either.
-- Folds 2 and 3 ran all 40 epochs. Training stopped there because of the cap, not because the inner-validation IoU had stopped improving for 10 epochs. Their best epochs were 36 and 32. A longer run might end differently on these two folds.
+- In this run folds 2 and 3 ran all 40 epochs. Training stopped there because of the cap, not because the inner-validation IoU had stopped improving for 10 epochs. Their best epochs were 36 and 32. This was checked afterwards with an 80-epoch run (see the 80-epoch section below). The cap cost little: the mean IoU went from 0.694 to 0.700.
 - The default settings were not tuned on our data. Rank 8, alpha 16, dropout 0.05, the query and value projections, all 24 blocks and the two learning rates are the values written in the code.
 - As in the frozen run and the U-Net, each model trains on three folds and the fourth is kept for early stopping and for choosing the threshold. The random forest is refitted on all four.
+
+## 80-epoch run
+
+The run was repeated with `--epochs 80` and nothing else changed, to see whether the 40-epoch cap held the model back. All the other tables in this file are the 40-epoch run. The 80-epoch tables are in `epochs80/`.
+
+| Fold | Held-out site | 40-epoch IoU | 80-epoch IoU | Difference | Best epoch of epochs run, 40-epoch run | Best epoch of epochs run, 80-epoch run |
+|---|---|---|---|---|---|---|
+| 1 | eastern mangroves | 0.842 | 0.844 | +0.003 | 20 of 30 | 20 of 30 |
+| 2 | jubail island | 0.550 | 0.574 | +0.024 | 36 of 40 | 42 of 52 |
+| 3 | ras ghurab | 0.697 | 0.700 | +0.002 | 32 of 40 | 28 of 38 |
+| 4 | ghantoot | 0.754 | 0.754 | 0.000 | 11 of 21 | 11 of 21 |
+| 5 | al aryam islands,al nouf | 0.630 | 0.627 | -0.003 | 26 of 36 | 44 of 54 |
+| Mean | | 0.694 | 0.700 | +0.005 | | |
+
+No fold reached 80 epochs. All five stopped early because the inner-validation IoU had not improved for 10 epochs. The mean IoU went from 0.694 to 0.700, and only fold 2 moved by more than 0.003. So the epoch cap caveat is answered: the cap was not what held LoRA back. There is still one seed per fold, the 95% intervals of the two runs overlap on every fold, and 0.700 is still just under the random forest's 0.704.
 
 ## Setup
 
@@ -90,4 +105,5 @@ This is the table printed by `src/mangrove_segmentation/model_size.py`. It count
 - `lora_vs_frozen.csv`. The LoRA minus frozen table above.
 - `config.json`. The settings of the run, with peak GPU memory and seconds per epoch for each fold.
 - `iou_per_fold.png`, `training_curves.png`, `examples.png`.
+- `epochs80/cv_results.csv` and `epochs80/fold_fits.csv`. The same two tables for the 80-epoch run.
 - The scores per chip, the predicted masks and the model weights are not in the repository.
