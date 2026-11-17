@@ -1,0 +1,59 @@
+{
+ "mode": "lora",
+ "model_id": "facebook/dinov3-vitl16-pretrain-sat493m",
+ "smoke": false,
+ "spectral_branch": true,
+ "scale": 2,
+ "last4": false,
+ "aug": "flip",
+ "lora_r": 8,
+ "device": "cuda",
+ "epochs": 40,
+ "patience": 10,
+ "batch": 8,
+ "lr_head": 0.001,
+ "lr_lora": 0.0001,
+ "lora_alpha": 16,
+ "lora_scaling": 2.0,
+ "lora_dropout": 0.05,
+ "lora_targets": [
+  "q_proj",
+  "v_proj"
+ ],
+ "lora_last_n": null,
+ "lora_modules": 48,
+ "lora_blocks": 24,
+ "trainable_backbone_params": 786432,
+ "backbone_params": 303916032,
+ "trainable_pct": 0.2588,
+ "gpu_batch": 8,
+ "mixed_precision": true,
+ "grad_checkpoint": true,
+ "per_fold": [
+  {
+   "fold": 1,
+   "peak_gpu_mb": 2916,
+   "seconds_per_epoch": 15.9
+  },
+  {
+   "fold": 2,
+   "peak_gpu_mb": 2916,
+   "seconds_per_epoch": 8.7
+  },
+  {
+   "fold": 3,
+   "peak_gpu_mb": 2916,
+   "seconds_per_epoch": 12.6
+  },
+  {
+   "fold": 4,
+   "peak_gpu_mb": 2916,
+   "seconds_per_epoch": 12.7
+  },
+  {
+   "fold": 5,
+   "peak_gpu_mb": 2916,
+   "seconds_per_epoch": 14.5
+  }
+ ]
+}

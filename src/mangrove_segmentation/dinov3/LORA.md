@@ -29,7 +29,7 @@ It needs the Train/Val dataset, the haze table (`QA_download.csv`) and a Hugging
 python dinov3/train_dinov3_lora.py --train-val <Train_Val_Dataset> --qa <QA_download.csv> --out <results folder> --frozen-results ../../results/mangrove_segmentation/dinov3
 ```
 
-Add `--folds 1` for a quick first trial. To measure GPU memory and speed without data or weights, run `python dinov3/train_dinov3_lora.py --bench`. The tests are in `tests/test_dinov3_lora.py`.
+Add `--folds 1` for a quick first trial. A run of fewer than five folds gets no yes or no against the random forest in its `RESULTS.md`, because the random forest's 0.704 is a mean over all five folds. To measure GPU memory and speed without data or weights, run `python dinov3/train_dinov3_lora.py --bench`. The tests are in `tests/test_dinov3_lora.py` and `tests/test_dinov3_lora_verdict.py`.
 
 The Meeting 6 minutes mention trying a higher input resolution. That is `--scale 4`. It is off by default because the frozen run used `--scale 2`, so a fair test would rerun the frozen model at 4 too.
 
@@ -41,8 +41,10 @@ These numbers were measured on an 8 GB RTX 5060 Ti with a random-weight model th
 - `--no-grad-checkpoint --gpu-batch 4`: about 5.1 GB and roughly a quarter faster.
 - `--scale 4`: about 6.1 GB and about six times slower.
 
-A full five-fold run should take under an hour, but that is an estimate.
+The real five-fold run with the default settings used 2.9 GB at peak and about 13 seconds per epoch, for folds of 56 to 107 training chips. It took 36 minutes of training in total.
 
 ## Status
 
-The script and its tests work, but it has not been run on the real DINOv3 weights or the real chips yet, so there is no LoRA score. The default settings have not been tuned on our data.
+The script has been run on the real DINOv3 ViT-L weights and the real chips, on all five folds, with the default settings. The mean IoU is 0.694. The frozen run scored 0.686 and the random forest 0.704, so LoRA does not beat the random forest. The gain over the frozen run is 0.008, which is within noise: there is one seed per fold and the 95% intervals of the two runs overlap on every fold. Folds 2 and 3 ran all 40 epochs without stopping early. The default settings have not been tuned on our data.
+
+The tables and the caveats are in [results/mangrove_segmentation/dinov3_lora/RESULTS.md](../../../results/mangrove_segmentation/dinov3_lora/RESULTS.md).

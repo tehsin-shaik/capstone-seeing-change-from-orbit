@@ -1,0 +1,6 @@
+Fold,Held-out site,Frozen IoU (95% CI),LoRA IoU (95% CI),LoRA − frozen,CIs overlap
+1,eastern mangroves,0.797 (0.753–0.838),0.842 (0.774–0.899),+0.045,yes
+2,jubail island,0.550 (0.479–0.614),0.550 (0.486–0.606),-0.001,yes
+3,ras ghurab,0.698 (0.672–0.721),0.697 (0.673–0.719),-0.001,yes
+4,ghantoot,0.779 (0.730–0.812),0.754 (0.687–0.796),-0.025,yes
+5,"al aryam islands,al nouf",0.606 (0.528–0.674),0.630 (0.561–0.685),+0.024,yes
