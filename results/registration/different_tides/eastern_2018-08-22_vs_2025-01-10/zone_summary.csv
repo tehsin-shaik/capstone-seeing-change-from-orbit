@@ -1,0 +1,5 @@
+zone,matches,kept,kept_share,share_of_kept,share_of_non_water_area,rmse_no_correction_m,shift_east_m,shift_north_m,shift_m
+all,253,196,0.775,1.0,1.0,5.08,1.28,-0.74,1.48
+dry land,123,104,0.846,0.531,0.561,4.48,1.13,-0.36,1.18
+shoreline,130,92,0.708,0.469,0.439,5.68,1.46,-1.17,1.88
+tidal (part of shoreline),130,92,0.708,0.469,0.434,5.68,1.46,-1.17,1.88
