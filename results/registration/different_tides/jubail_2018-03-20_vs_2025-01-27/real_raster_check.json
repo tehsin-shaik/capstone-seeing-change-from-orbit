@@ -1,0 +1,36 @@
+{
+  "gee_pair": {
+    "matches": 288,
+    "ransac_inliers": 218,
+    "selected": "none",
+    "reason": "best held-out model 'translation' improves RMSE by 0.458 m (< 1.0 m threshold)",
+    "ransac_transform_shift_px_mean": 0.21215375060155914,
+    "ransac_transform_shift_px_max": 0.3233873904837862,
+    "baseline": {
+      "none": {
+        "insample_rmse_m": 5.745947730513963,
+        "cv_rmse_m": 5.745947730513963
+      },
+      "translation": {
+        "insample_rmse_m": 5.245944885217128,
+        "cv_rmse_m": 5.287967007234639
+      },
+      "similarity": {
+        "insample_rmse_m": 5.217401804215679,
+        "cv_rmse_m": 5.289170297265512
+      },
+      "affine": {
+        "insample_rmse_m": 5.203078405702312,
+        "cv_rmse_m": 5.292708729175098
+      }
+    }
+  },
+  "known_warp_roundtrip": {
+    "trials": 5,
+    "recovery_error_m_median": 0.10604091482518531,
+    "recovery_error_m_max": 0.1492903484838154
+  },
+  "identity_warp_exact": true,
+  "identity_warp_metadata_kept": true,
+  "aligned_output": "..\\..\\sdp-results\\registration_tides\\jubail_2018-03-20_vs_2025-01-27\\rasters\\jubail_island_2025-01-27_6band_aligned.tif"
+}

@@ -1,0 +1,36 @@
+{
+  "gee_pair": {
+    "matches": 220,
+    "ransac_inliers": 179,
+    "selected": "none",
+    "reason": "best held-out model 'translation' improves RMSE by 0.133 m (< 1.0 m threshold)",
+    "ransac_transform_shift_px_mean": 0.13286104396018172,
+    "ransac_transform_shift_px_max": 0.19035719836804812,
+    "baseline": {
+      "none": {
+        "insample_rmse_m": 5.067953770853731,
+        "cv_rmse_m": 5.067953770853731
+      },
+      "translation": {
+        "insample_rmse_m": 4.915369690007699,
+        "cv_rmse_m": 4.93517989128866
+      },
+      "similarity": {
+        "insample_rmse_m": 4.90238385177912,
+        "cv_rmse_m": 4.961908292332271
+      },
+      "affine": {
+        "insample_rmse_m": 4.884412900428009,
+        "cv_rmse_m": 4.9822845560579445
+      }
+    }
+  },
+  "known_warp_roundtrip": {
+    "trials": 5,
+    "recovery_error_m_median": 0.09534397900157661,
+    "recovery_error_m_max": 0.11809244216737089
+  },
+  "identity_warp_exact": true,
+  "identity_warp_metadata_kept": true,
+  "aligned_output": "..\\..\\sdp-results\\registration_tides\\eastern_2018-08-02_vs_2025-01-10\\rasters\\eastern_mangroves_2025-01-10_6band_aligned.tif"
+}
