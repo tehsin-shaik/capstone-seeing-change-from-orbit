@@ -1,0 +1,19 @@
+site,pair,kind,chips_compared,compared_ha,bare_at_first_date_ha,new_bare_ha,new_bare_pct_of_area,lost_bare_ha,net_bare_ha,new_bare_was_vegetation_ha,new_bare_was_water_ha,new_bare_was_dark_or_wet_ground_ha
+ghantoot,Nov 2018 -> Nov 2025,change,9,5892.4,2137.9,61.7,1.05,124.4,-62.7,31.2,27.5,3.0
+ghantoot,Mar 2018 -> Mar 2025,change,9,5863.2,2273.9,32.5,0.55,136.7,-104.2,20.0,11.1,1.4
+ghantoot,both months agree,change,8,5218.5,2217.8,15.9,0.31,63.1,-47.1,12.0,3.0,0.9
+ghantoot,Mar 2018 -> Nov 2018,same year,8,5235.6,2198.4,22.5,0.43,83.1,-60.6,17.4,4.7,0.4
+ghantoot,Nov 2018 -> Mar 2018 (backwards),same year,8,5235.6,2137.8,83.1,1.59,22.5,60.6,26.6,41.7,14.8
+ghantoot,Mar 2025 -> Nov 2025,same year,9,5866.2,2170.4,55.2,0.94,75.0,-19.8,49.4,4.9,0.9
+ghantoot,Nov 2025 -> Mar 2025 (backwards),same year,9,5866.2,2150.6,75.0,1.28,55.2,19.8,48.9,15.2,10.8
+ghantoot,Feb 2020 -> Nov 2020,same year,10,6456.3,2438.8,79.4,1.23,38.0,41.4,32.8,38.2,8.4
+ghantoot,Nov 2020 -> Feb 2020 (backwards),same year,10,6456.3,2480.2,38.0,0.59,79.4,-41.4,31.2,2.9,3.9
+jubail_island,Nov 2018 -> Nov 2025,change,25,16187.1,4136.4,462.7,2.86,446.9,15.9,278.1,169.7,14.9
+jubail_island,Mar 2018 -> Mar 2025,change,14,9016.0,3181.2,300.8,3.34,286.8,13.9,159.5,133.3,7.9
+jubail_island,both months agree,change,14,8920.6,3216.1,176.1,1.97,154.2,21.9,108.3,60.2,7.5
+jubail_island,Mar 2018 -> Nov 2018,same year,14,8962.5,3161.5,74.6,0.83,190.8,-116.2,29.4,42.0,3.2
+jubail_island,Nov 2018 -> Mar 2018 (backwards),same year,14,8962.5,3045.2,190.8,2.13,74.6,116.2,141.4,34.6,14.8
+jubail_island,Mar 2025 -> Nov 2025,same year,25,16270.9,4357.1,196.0,1.2,364.4,-168.4,61.9,123.6,10.5
+jubail_island,Nov 2025 -> Mar 2025 (backwards),same year,25,16270.9,4188.8,364.4,2.24,196.0,168.4,201.1,134.2,29.1
+jubail_island,Feb 2020 -> Nov 2020,same year,25,16187.6,4203.7,81.3,0.5,348.9,-267.5,24.2,46.0,11.1
+jubail_island,Nov 2020 -> Feb 2020 (backwards),same year,25,16187.6,3936.2,348.9,2.16,81.3,267.5,203.9,118.9,26.0

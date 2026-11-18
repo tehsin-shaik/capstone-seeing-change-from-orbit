@@ -1,0 +1,37 @@
+site,new_bare_from,kind,pixels,ha,is_new_bare_itself_pct,within_100m_pct,within_300m_pct,median_distance_m
+ghantoot,Nov 2018 -> Nov 2025,change,model loss,29.4,0.0,23.5,53.8,273.0
+ghantoot,Nov 2018 -> Nov 2025,change,model stable mangrove,802.4,0.0,17.9,60.2,240.0
+ghantoot,Nov 2018 -> Nov 2025,change,model gain,239.7,0.0,23.5,70.8,203.0
+ghantoot,Mar 2018 -> Mar 2025,change,model loss,29.5,0.0,20.6,48.0,316.0
+ghantoot,Mar 2018 -> Mar 2025,change,model stable mangrove,816.6,0.0,14.1,56.1,266.0
+ghantoot,Mar 2018 -> Mar 2025,change,model gain,241.7,0.0,16.4,53.6,275.0
+ghantoot,both months agree,change,model loss,29.4,0.0,16.2,43.6,350.0
+ghantoot,both months agree,change,model stable mangrove,802.1,0.0,8.7,46.4,322.0
+ghantoot,both months agree,change,model gain,239.6,0.0,10.7,40.2,368.0
+ghantoot,Mar 2018 -> Nov 2018,same year,model loss,29.5,0.0,23.1,57.1,256.0
+ghantoot,Mar 2018 -> Nov 2018,same year,model stable mangrove,802.5,0.0,18.9,60.8,234.0
+ghantoot,Mar 2018 -> Nov 2018,same year,model gain,239.7,0.0,19.1,54.9,266.0
+ghantoot,Mar 2025 -> Nov 2025,same year,model loss,29.5,0.0,19.0,52.8,282.0
+ghantoot,Mar 2025 -> Nov 2025,same year,model stable mangrove,816.5,0.0,19.7,63.9,220.0
+ghantoot,Mar 2025 -> Nov 2025,same year,model gain,241.6,0.0,22.8,69.2,202.0
+ghantoot,Feb 2020 -> Nov 2020,same year,model loss,29.5,0.0,25.3,65.5,212.0
+ghantoot,Feb 2020 -> Nov 2020,same year,model stable mangrove,816.4,0.0,23.4,70.8,190.0
+ghantoot,Feb 2020 -> Nov 2020,same year,model gain,241.3,0.0,33.1,77.6,156.0
+jubail_island,Nov 2018 -> Nov 2025,change,model loss,310.5,4.1,22.3,56.2,260.0
+jubail_island,Nov 2018 -> Nov 2025,change,model stable mangrove,905.4,0.0,9.1,44.9,330.0
+jubail_island,Nov 2018 -> Nov 2025,change,model gain,174.0,0.0,21.6,65.2,210.0
+jubail_island,Mar 2018 -> Mar 2025,change,model loss,126.0,2.1,20.0,68.9,210.0
+jubail_island,Mar 2018 -> Mar 2025,change,model stable mangrove,321.7,0.0,15.5,71.1,216.0
+jubail_island,Mar 2018 -> Mar 2025,change,model gain,123.6,0.0,23.4,72.8,190.0
+jubail_island,both months agree,change,model loss,125.9,1.7,11.0,44.2,335.0
+jubail_island,both months agree,change,model stable mangrove,321.5,0.0,5.9,37.3,386.0
+jubail_island,both months agree,change,model gain,122.4,0.0,11.5,50.0,300.0
+jubail_island,Mar 2018 -> Nov 2018,same year,model loss,125.9,0.0,17.6,64.4,225.0
+jubail_island,Mar 2018 -> Nov 2018,same year,model stable mangrove,321.6,0.0,19.2,67.9,215.0
+jubail_island,Mar 2018 -> Nov 2018,same year,model gain,122.5,0.0,30.9,65.2,182.0
+jubail_island,Mar 2025 -> Nov 2025,same year,model loss,310.5,1.6,19.4,55.4,262.0
+jubail_island,Mar 2025 -> Nov 2025,same year,model stable mangrove,905.3,0.0,10.3,47.6,313.0
+jubail_island,Mar 2025 -> Nov 2025,same year,model gain,175.0,0.0,25.2,65.1,201.0
+jubail_island,Feb 2020 -> Nov 2020,same year,model loss,309.5,0.0,11.2,47.9,314.0
+jubail_island,Feb 2020 -> Nov 2020,same year,model stable mangrove,904.1,0.0,8.6,41.2,352.0
+jubail_island,Feb 2020 -> Nov 2020,same year,model gain,174.6,0.0,19.0,54.5,269.0
