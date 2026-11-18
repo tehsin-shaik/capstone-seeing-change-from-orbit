@@ -1,0 +1,37 @@
+version,site,same_year_pairs,mean_abs_swing_pct,median_abs_swing_pct,max_abs_swing_pct,iou_all_2020_chips,iou_non_hazy_2020_chips
+A,al_aryam_islands,5,11.4261,10.6278,27.9503,0.6381,0.6504
+A,al_nouf,1,19.5578,19.5578,19.5578,0.6838,0.7111
+A,eastern_mangroves,5,17.2978,12.7544,37.9159,0.8206,0.8347
+A,ghantoot,5,8.5165,4.5787,17.7904,0.7774,0.7928
+A,jubail_island,5,43.4099,39.2157,92.1585,0.5616,0.5746
+A,ras_ghurab,5,18.33,15.3078,36.9048,0.6966,0.6991
+B,al_aryam_islands,5,11.5051,6.0158,24.7734,0.6312,0.6557
+B,al_nouf,1,18.9633,18.9633,18.9633,0.709,0.7345
+B,eastern_mangroves,5,18.5098,14.8063,40.9945,0.8237,0.8273
+B,ghantoot,5,9.3123,7.2204,21.2026,0.7833,0.7921
+B,jubail_island,5,33.1978,24.9124,73.46,0.5548,0.5772
+B,ras_ghurab,5,19.1812,17.7159,38.9215,0.6928,0.6949
+C,al_aryam_islands,5,16.9236,19.762,29.826,0.5952,0.6064
+C,al_nouf,1,1.1698,1.1698,1.1698,0.6958,0.723
+C,eastern_mangroves,5,10.107,9.1865,20.4249,0.7545,0.7621
+C,ghantoot,5,14.6236,16.6758,24.2053,0.7509,0.7576
+C,jubail_island,5,46.9767,40.4855,103.6784,0.4749,0.4889
+C,ras_ghurab,5,24.0243,20.5866,42.4098,0.6558,0.6605
+D,al_aryam_islands,5,19.0141,22.4131,26.2428,0.6381,0.6504
+D,al_nouf,1,5.1688,5.1688,5.1688,0.6838,0.7111
+D,eastern_mangroves,5,12.089,6.9992,23.2946,0.8206,0.8347
+D,ghantoot,5,5.5282,6.9354,9.3966,0.7774,0.7928
+D,jubail_island,5,26.4108,16.7444,53.664,0.5616,0.5746
+D,ras_ghurab,5,15.6937,12.7826,35.2665,0.6966,0.6991
+B with probability sum,al_aryam_islands,5,17.4065,16.2539,26.6509,0.6312,0.6557
+B with probability sum,al_nouf,1,6.4981,6.4981,6.4981,0.709,0.7345
+B with probability sum,eastern_mangroves,5,13.6446,13.1764,24.7458,0.8237,0.8273
+B with probability sum,ghantoot,5,5.7337,5.6408,9.6645,0.7833,0.7921
+B with probability sum,jubail_island,5,22.7193,13.2365,49.5378,0.5548,0.5772
+B with probability sum,ras_ghurab,5,16.2153,13.467,36.0304,0.6928,0.6949
+C with probability sum,al_aryam_islands,5,31.7435,29.3655,50.1934,0.5952,0.6064
+C with probability sum,al_nouf,1,21.984,21.984,21.984,0.6958,0.723
+C with probability sum,eastern_mangroves,5,5.9235,7.1117,9.8959,0.7545,0.7621
+C with probability sum,ghantoot,5,11.2364,11.0922,22.0615,0.7509,0.7576
+C with probability sum,jubail_island,5,29.7984,41.3101,44.6558,0.4749,0.4889
+C with probability sum,ras_ghurab,5,21.4152,27.1385,32.9344,0.6558,0.6605

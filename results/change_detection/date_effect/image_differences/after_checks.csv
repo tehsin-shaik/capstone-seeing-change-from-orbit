@@ -1,0 +1,32 @@
+check,value,scenes,p_shuffle_dates
+correlation of the scene swing before and after the correction (site averages removed),0.853,40.0,
+"within-site spread of the scene swing, before (%)",14.96,40.0,
+"within-site spread of the scene swing, after (%)",15.96,40.0,
+r of deep water (red) with the swing before the correction,-0.466,38.0,0.0268
+r of deep water (red) with the swing after the correction,-0.163,38.0,0.4567
+r of bright stable ground with the swing before the correction,-0.413,40.0,0.0741
+r of bright stable ground with the swing after the correction,-0.306,40.0,0.1176
+r of zero or negative share with the swing before the correction,0.394,40.0,0.1632
+r of zero or negative share with the swing after the correction,0.236,40.0,0.2807
+r of sun elevation with the swing before the correction,-0.419,40.0,0.0562
+r of sun elevation with the swing after the correction,-0.194,40.0,0.355
+r of tide with the swing before the correction,-0.085,40.0,0.7225
+r of tide with the swing after the correction,-0.268,40.0,0.216
+share of the swing before the correction explained by deep water (red) + bright ground,0.474,38.0,
+share of the swing after the correction explained by deep water (red) + bright ground,0.203,38.0,
+"solid canopy, ndvi spread between dates, mean of sites, before",0.0707,,
+"solid canopy, ndvi spread between dates, mean of sites, after",0.0788,,
+"solid canopy, ndvi mean same year difference, mean of sites, before",0.0907,,
+"solid canopy, ndvi mean same year difference, mean of sites, after",0.1003,,
+"solid canopy, red spread between dates, mean of sites, before",0.0155,,
+"solid canopy, red spread between dates, mean of sites, after",0.0116,,
+"solid canopy, red mean same year difference, mean of sites, before",0.023,,
+"solid canopy, red mean same year difference, mean of sites, after",0.0153,,
+"solid canopy, nir spread between dates, mean of sites, before",0.0339,,
+"solid canopy, nir spread between dates, mean of sites, after",0.0281,,
+"solid canopy, nir mean same year difference, mean of sites, before",0.0489,,
+"solid canopy, nir mean same year difference, mean of sites, after",0.0414,,
+"solid canopy, swir1 spread between dates, mean of sites, before",0.0216,,
+"solid canopy, swir1 spread between dates, mean of sites, after",0.0158,,
+"solid canopy, swir1 mean same year difference, mean of sites, before",0.0271,,
+"solid canopy, swir1 mean same year difference, mean of sites, after",0.0203,,

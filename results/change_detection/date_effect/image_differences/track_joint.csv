@@ -1,0 +1,9 @@
+explained_by,compared,scenes,share_of_swing,p_shuffle_dates
+deep water (red) + bright stable ground,all dates of a site,38,0.474,0.0044
+deep water (red) + bright stable ground,dates of the same year only,37,0.498,0.1424
+deep water (red) + bright stable ground,"all dates, without the 18 May 2020 pass",34,0.326,0.05
+deep water (red) + bright stable ground,"all dates, without Al Nouf",35,0.468,0.0072
+deep water (red) + bright ground + zero or negative share,all dates of a site,38,0.675,0.0001
+deep water (red) + bright ground + zero or negative share,dates of the same year only,37,0.724,0.0827
+deep water (red) + bright ground + zero or negative share,"all dates, without the 18 May 2020 pass",34,0.589,0.0006
+deep water (red) + bright ground + zero or negative share,"all dates, without Al Nouf",35,0.675,0.0002

@@ -1,0 +1,9 @@
+site,pairs,A_area_first_ha,D_probability_sum_first_ha,D_sum_over_A_area,A_mean_abs_swing_ha,D_mean_abs_swing_ha,B_mean_abs_swing_ha,C_mean_abs_swing_ha,A_mean_abs_swing_pct,D_mean_abs_swing_pct,pairs_where_D_moves_the_same_way_as_A,D_swing_in_ha_as_pct_of_A_swing_in_ha
+al_aryam_islands,5,59.532,128.018,2.15,5.314,24.189,6.142,10.26,11.426,19.014,3,455.201
+al_nouf,1,179.11,296.5,1.655,35.03,15.326,31.389,1.87,19.558,5.169,1,43.751
+eastern_mangroves,5,328.582,407.032,1.239,54.278,49.728,58.6,36.86,17.298,12.089,4,91.618
+ghantoot,5,870.29,1108.722,1.274,72.024,60.867,76.113,116.723,8.516,5.528,3,84.51
+jubail_island,5,768.492,1644.836,2.14,298.906,415.914,247.633,412.518,43.41,26.411,4,139.145
+ras_ghurab,5,690.294,1055.652,1.529,108.407,145.524,117.299,193.11,18.33,15.694,5,134.238
+MEAN OF THE SIX SITES,26,482.717,773.46,1.665,95.66,118.591,89.53,128.557,19.756,13.984,20,123.972
+MEAN WITHOUT AL NOUF (one pair),25,543.438,868.852,1.667,107.786,139.245,101.158,153.894,19.796,15.747,19,129.186

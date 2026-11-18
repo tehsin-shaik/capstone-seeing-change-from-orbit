@@ -1,0 +1,4 @@
+version,six_site_mean_abs_swing_pct,six_site_mean_of_worst_swing_pct,all_pairs_mean_abs_swing_pct,five_site_mean_abs_swing_pct_without_al_nouf,iou_mean_over_5_folds,mean_site_spread_of_scene_deviation_pct,mean_same_year_flip_share_pct
+as_is,19.7564,38.713,19.7869,19.7961,0.7171,15.5396,26.2127
+gain_offset,15.1717,33.2278,16.7036,17.1631,0.7184,16.6184,29.0275
+offset_only,21.4066,43.1475,22.2484,22.501,0.702,25.0791,31.4411
