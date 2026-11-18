@@ -1,7 +1,7 @@
-site,scenes,dev_pct_min,dev_pct_max,dev_pct_sd,water_pct_min,water_pct_max,tide_m_min,tide_m_max,r_dev_vs_water_pct,r_dev_vs_water_swir_rule_pct,r_dev_vs_tide_eot20_m,r_dev_vs_tide_got410_m,r_dev_vs_tide_position_0low_1high,r_dev_vs_sun_elevation,r_dev_vs_interior_ndvi,r_dev_vs_november,r_water_vs_tide,r_tide_vs_sun_elevation
-al_aryam_islands,7,-16.71,13.63,10.2,20.78,44.38,-0.505,0.719,-0.24,-0.14,-0.2,-0.24,-0.31,-0.4,0.77,-0.25,0.68,-0.67
-al_nouf,5,-42.43,18.99,25.1,0.47,32.02,-0.601,0.715,-0.38,-0.41,-0.45,-0.41,-0.37,0.59,0.72,-0.47,0.97,-0.69
-eastern_mangroves,7,-24.23,9.62,11.6,13.21,17.81,-0.66,0.733,-0.04,0.34,-0.1,0.01,-0.23,-0.86,0.27,0.4,0.92,-0.4
-ghantoot,7,-9.43,15.66,11.0,27.22,39.63,-0.39,0.604,-0.2,-0.47,-0.41,-0.36,-0.36,-0.43,0.21,0.41,0.88,-0.4
-jubail_island,7,-25.41,40.61,22.7,38.89,55.77,-0.462,0.715,-0.07,-0.32,0.28,0.3,0.04,-0.63,0.47,0.64,0.74,-0.45
-ras_ghurab,7,-18.15,11.29,12.6,46.88,59.17,-0.459,0.713,0.01,0.27,0.18,0.19,0.01,-0.78,0.3,0.69,0.92,-0.44
+site,scenes,dev_pct_min,dev_pct_max,dev_pct_sd,water_diff_min,water_diff_max,tide_diff_m_min,tide_diff_m_max,r_dev_vs_water_pct,r_dev_vs_water_swir_rule_pct,r_dev_vs_tide_eot20_m,r_dev_vs_tide_got410_m,r_dev_vs_tide_position_0low_1high,r_dev_vs_sun_elevation,r_dev_vs_interior_ndvi,r_dev_vs_november,r_water_vs_tide,r_tide_vs_sun_elevation
+al_aryam_islands,7,-10.54,8.23,7.1,-11.36,11.36,-0.612,0.615,0.25,0.2,-0.53,-0.56,-0.41,-0.04,0.47,-0.49,0.64,-0.71
+al_nouf,2,-8.91,8.91,12.6,-12.52,12.52,-0.357,0.357,,,,,,,,,1.0,-1.0
+eastern_mangroves,7,-21.59,13.43,11.4,-1.95,1.95,-0.696,0.696,0.08,0.24,-0.07,0.04,-0.23,-0.89,0.51,0.39,0.99,-0.4
+ghantoot,7,-6.72,11.01,5.7,-6.75,6.75,-0.392,0.392,-0.05,-0.15,-0.12,-0.08,-0.05,-0.66,0.05,0.72,0.92,-0.58
+jubail_island,7,-27.3,37.91,22.2,-8.77,8.77,-0.512,0.512,-0.14,-0.35,0.33,0.35,0.06,-0.66,0.53,0.66,0.84,-0.45
+ras_ghurab,7,-15.61,14.89,10.8,-6.8,6.8,-0.51,0.51,0.12,-0.01,0.38,0.43,0.1,-0.87,0.78,0.75,0.95,-0.45

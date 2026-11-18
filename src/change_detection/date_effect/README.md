@@ -46,6 +46,10 @@ python 04_after_checks.py       --out <robustness out>
 
 Everything runs on a CPU. Most steps take a few minutes. `image_differences/05` takes about 12 minutes, and `robustness/01` and `robustness/02` about 20 minutes each.
 
+## How the swing is measured
+
+The swing is always a same-year swing. In `tide/04` and `image_differences/04` a scene's swing (`dev_pct`) is its predicted mangrove area as a % above or below the average of the dates of the same site and the same year, and water level and the image measures are taken the same way. A scene is never compared with another year, so real change between 2018, 2020 and 2025 is not mixed in. A site and year with a single usable date drops out. Columns and rows marked "all years" hold an older version that compared with the site's average over all its years. They are kept for comparison only.
+
 ## What was fixed before running
 
 - The number that counts in `image_differences/05` and `robustness/02` is the average size of the same-year swing per site. A same-year pair is two non-hazy dates of one site and year, compared like `noise_floor_all_sites.py` does. A pair's swing is the size of the net change as a % of the first date's predicted mangrove. A site's number is the mean over its pairs, and the main number is the mean of the six sites.

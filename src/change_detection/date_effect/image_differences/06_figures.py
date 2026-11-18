@@ -1,8 +1,9 @@
 """Figures for the image-comparability check.
 
-    track_swings.png        part b: each scene's swing in predicted mangrove area against (left) how bright deep water is,
-                            (middle) how bright stable ground is, (right) the swing the two together would predict.
-                            Site averages removed. Colour and marker shape show the season.
+    track_swings.png        part b: each scene's same-year swing in predicted mangrove area against (left) how bright deep
+                            water is, (middle) how bright stable ground is, (right) the swing the two together would predict.
+                            Everything is the difference from the average of the same site and year.
+                            Colour and marker shape show the season.
     before_after.png        part c: per site, the average same-year swing and the held-out IoU, on the images as they are
                             and after the correction (gain and offset, typical date as reference).
 
@@ -48,16 +49,17 @@ def style(ax, zero=True):
 T = pd.read_csv(out / "scene_table_images.csv")
 m = pd.to_datetime(T["date"]).dt.month
 T["season"] = np.where(m == 11, "November", np.where(m <= 3, "January to March", "May or September"))
-D = T.dropna(subset=["deep_water_red_diff", "bright_ground_diff_pct"]).copy()
+# every value is the difference from the average of the same site and the same year
+D = T.dropna(subset=["dev_pct", "deep_water_red_diff", "bright_ground_diff_pct"]).copy()
 xs = ["deep_water_red_diff", "bright_ground_diff_pct"]
 dm = demean(D, ["dev_pct"] + xs)
 beta = np.linalg.lstsq(dm[xs].values, dm["dev_pct"].values, rcond=None)[0]
 D["dev_d"], D["dw"], D["bg"] = dm["dev_pct"], 100 * dm["deep_water_red_diff"], dm["bright_ground_diff_pct"]
 D["fit"] = dm[xs].values @ beta
 fig, axes = plt.subplots(1, 3, figsize=(14.5, 5.0), sharey=True)
-PANELS = [("dw", "Deep water in the red band, difference from the site's average\n(reflectance x 100)", "Deep water brightness"),
-          ("bg", "Bright stable ground, difference from the site's average (%)", "Bright stable ground brightness"),
-          ("fit", "Swing predicted from the two measures together (%)", "Both together")]
+PANELS = [("dw", "Deep water in the red band (reflectance x 100),\ndifference from the average of the same site and year", "Deep water brightness"),
+          ("bg", "Bright stable ground (%),\ndifference from the average of the same site and year", "Bright stable ground brightness"),
+          ("fit", "Same-year swing predicted\nfrom the two measures together (%)", "Both together")]
 for ax, (x, xl, title) in zip(axes, PANELS):
     style(ax)
     ax.axvline(0, color=INK2, linewidth=0.8)
@@ -75,9 +77,9 @@ for ax, (x, xl, title) in zip(axes, PANELS):
         left = rr[x] > np.mean(ax.get_xlim())                                           # keep the label inside its panel
         ax.annotate(f"{NAMES[rr['site']]} {rr['date']}", (rr[x], rr["dev_d"]), xytext=(-7 if left else 7, 5), textcoords="offset points",
                     ha="right" if left else "left", fontsize=7.5, color=INK2)
-axes[0].set_ylabel("Predicted mangrove area, % above or below the site's average")
+axes[0].set_ylabel("Same-year swing: predicted mangrove area,\n% above or below the average of the same site and year")
 axes[0].legend(title="Season of the scene", frameon=False, loc="lower left", fontsize=8.5, title_fontsize=8.5)
-fig.suptitle("Do image differences on things that should not change go with the swings?  Each point is one scene, site averages removed.",
+fig.suptitle("Do image differences on things that should not change go with the same-year swings?  Each point is one scene.",
              x=0.01, ha="left", fontsize=11.5, color=INK)
 fig.tight_layout(rect=(0, 0, 1, 0.94))
 fig.savefig(out / "track_swings.png", dpi=170)

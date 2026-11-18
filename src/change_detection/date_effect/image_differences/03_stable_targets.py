@@ -1,4 +1,4 @@
-"""Part a: how each scene's brightness differs from the other dates of its site on things that should not change,
+"""Part a: how each scene's brightness differs from the other dates of the same site and year on things that should not change,
 and the per-date straight lines (gain and offset per band) that make those things agree.
 
 No labels and no model predictions are used. Pixels are picked by band rules only:
@@ -8,9 +8,10 @@ No labels and no model predictions are used. Pixels are picked by band rules onl
                           brightness, steadier half by movement against the other such pixels of the chip cell
 
 Outputs in <out>:
-    scene_image_measures.csv   one row per scene: deep-water and bright-ground brightness as a difference from the site's
-                               average over its dates, share of pixels with a zero or negative band, haze measure,
-                               processing version
+    scene_image_measures.csv   one row per scene: deep-water and bright-ground brightness as a difference from the average
+                               of the same site and year, share of pixels with a zero or negative band, haze measure,
+                               processing version. Columns ending in _all_years hold the old version, the difference
+                               from the site's average over all its years, for comparison only.
     scene_band_values.csv      the per-band values behind it
     correction_lines.csv       per site, date and band: gain and offset (gain + offset fit, and offset-only fit),
                                which date is the typical one (the reference), and whether a gain could be fitted
@@ -146,10 +147,12 @@ for site in SITES:
                     "cells_with_bright_ground": int(sum(stable[r:r + CHIP, c:c + CHIP].sum() >= 50 for r, c in cells)),
                     "cells": int((present.sum(1) >= 2).sum())})
 
-    # ---- part a: per-date value of each target, built from the chip cells (median per cell and date, then the two-way table)
+    # ---- part a: per-date value of each target, built from the chip cells (median per cell and date, then the two-way table).
+    # The table is made separately for each year, so a date is only compared with the other dates of the same site and year.
     P2 = present & (present.sum(1) >= 2)[:, None]
+    years = np.array([int(d[:4]) for d in dates])
 
-    def site_values(mask, arr):                             # arr [date, H, W] -> site value per date
+    def cell_medians(mask, arr):                            # arr [date, H, W] -> median per cell and date, and the cell weights
         V = np.full((len(cells), n), np.nan)
         wgt = np.zeros(len(cells))
         for ci, (r, c) in enumerate(cells):
@@ -159,20 +162,44 @@ for site in SITES:
             wgt[ci] = mm.sum()
             for i in np.where(P2[ci])[0]:
                 V[ci, i] = np.median(arr[i, r:r + CHIP, c:c + CHIP][mm])
-        return additive(np.nan_to_num(V), P2 & (wgt > 0)[:, None], wgt)
+        return np.nan_to_num(V), wgt
 
-    def site_share(flag):                                   # flag [date, H, W] bool -> percent of fixed pixels per date
+    def cell_shares(flag):                                  # flag [date, H, W] bool -> percent of the cell's fixed pixels
         npx = use.reshape(H // CHIP, CHIP, W // CHIP, CHIP).sum((1, 3)).ravel().astype(float)
         cnt = flag.reshape(n, H // CHIP, CHIP, W // CHIP, CHIP).sum((2, 4)).reshape(n, -1).T
         with np.errstate(invalid="ignore", divide="ignore"):
-            return additive(np.nan_to_num(100 * cnt / npx[:, None]), P2 & (npx > 0)[:, None], npx)
+            return np.nan_to_num(100 * cnt / npx[:, None]), npx
 
-    dk = np.array([site_values(dark, refl[:, b]) for b in range(6)])        # [band, date]
-    br = np.array([site_values(stable, refl[:, b]) for b in range(6)])
-    neg = site_share(negany)
-    negb = np.array([site_share(negband[:, b]) for b in range(6)])
-    dk_dev = dk - np.nanmean(dk, axis=1, keepdims=True)
-    br_rel = 100 * (br / np.nanmean(br, axis=1, keepdims=True) - 1)
+    def same_year(V, wgt, relative=False):
+        """Per date: the value built from the cells of the same year, and its difference from the mean of that year
+        (in percent of that mean if relative)."""
+        val, dif = np.full(n, np.nan), np.full(n, np.nan)
+        for y in sorted(set(years)):
+            sel = years == y
+            Py = P2 & sel[None, :]
+            Py = Py & (Py.sum(1) >= 2)[:, None] & (wgt > 0)[:, None]
+            if sel.sum() < 2 or not Py.any():
+                continue
+            v = additive(V, Py, wgt)
+            mean = np.nanmean(v[sel])
+            val[sel] = v[sel]
+            dif[sel] = 100 * (v[sel] / mean - 1) if relative else v[sel] - mean
+        return val, dif
+
+    def all_years(V, wgt, relative=False):                  # the old version: difference from the site's average over all dates
+        v = additive(V, P2 & (wgt > 0)[:, None], wgt)
+        return 100 * (v / np.nanmean(v) - 1) if relative else v - np.nanmean(v)
+
+    Vd = [cell_medians(dark, refl[:, b]) for b in range(6)]
+    Vb = [cell_medians(stable, refl[:, b]) for b in range(6)]
+    Vn = cell_shares(negany)
+    dk, dk_dev = (np.array(x) for x in zip(*[same_year(*v) for v in Vd]))                       # [band, date]
+    br, br_rel = (np.array(x) for x in zip(*[same_year(*v, relative=True) for v in Vb]))
+    _, neg_dif = same_year(*Vn)
+    negb = np.array([same_year(*cell_shares(negband[:, b]))[1] for b in range(6)])
+    dk_all = np.array([all_years(*v) for v in Vd])
+    br_all = np.array([all_years(*v, relative=True) for v in Vb])
+    neg_all = all_years(*Vn)
     for i, d in enumerate(dates):
         mrow = meta[(meta.site == site) & (meta.date == d)].iloc[0]
         meas.append({"site": site, "date": d,
@@ -180,14 +207,16 @@ for site in SITES:
                      "deep_water_infrared_diff": round(np.mean(dk_dev[3:, i]), 5),
                      "bright_ground_diff_pct": round(np.mean(br_rel[:, i]), 3), "bright_ground_red_diff_pct": round(br_rel[2, i], 3),
                      "bright_ground_nir_diff_pct": round(br_rel[3, i], 3),
-                     "zero_or_negative_diff_points": round(neg[i] - np.nanmean(neg), 3),
+                     "zero_or_negative_diff_points": round(neg_dif[i], 3),
+                     "deep_water_red_diff_all_years": round(dk_all[2, i], 5), "bright_ground_diff_all_years_pct": round(np.mean(br_all[:, i]), 3),
+                     "zero_or_negative_diff_all_years_points": round(neg_all[i], 3),
                      "zero_or_negative_raw_pct": round(100 * negany[i].sum() / max(cov[i].sum(), 1), 3),
                      "haze_measure": mrow["haze_measure"],
                      "processing_baseline": mrow["processing_baseline"], "sun_elevation": mrow["sun_elevation"], "view_azimuth": mrow["view_azimuth"]})
         for b, name in enumerate(BANDS):
             bandrows.append({"site": site, "date": d, "band": name, "deep_water": round(dk[b, i], 5), "deep_water_diff": round(dk_dev[b, i], 5),
                              "bright_ground": round(br[b, i], 5), "bright_ground_diff_pct": round(br_rel[b, i], 3),
-                             "zero_or_negative_pct": round(negb[b, i], 3)})
+                             "zero_or_negative_diff_points": round(negb[b, i], 3)})
 
     # ---- the lines: sample stable pixels per cell and class, half for the fit and half kept aside to check it
     idx, cls = [], []

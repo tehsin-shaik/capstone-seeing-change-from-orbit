@@ -1,12 +1,12 @@
-explained_by,terms,scenes,share_of_swing,share_adjusted,share_each_site_equal_weight,share_same_year_only
-deep water (red),1,38,0.217,0.192,0.171,0.351
-bright stable ground,1,40,0.171,0.146,0.32,0.133
-zero or negative share,1,40,0.155,0.13,0.131,0.252
-team's haze measure,1,40,0.188,0.163,0.169,0.334
-deep water (red) + bright stable ground,2,38,0.474,0.439,0.551,0.498
-deep water (red) + bright ground + zero or negative share,3,38,0.675,0.641,0.702,0.724
-for comparison: tide,1,40,0.007,-0.023,0.01,0.001
-for comparison: sun elevation,1,40,0.176,0.151,0.272,0.17
-for comparison: interior greenness,1,38,0.184,0.158,0.18,0.289
-deep water (red) + bright ground + sun elevation,3,38,0.488,0.435,0.56,0.525
-deep water (red) + bright ground + tide,3,38,0.479,0.425,0.564,0.498
+explained_by,terms,scenes,share_of_same_year_swing,share_adjusted,share_each_site_equal_weight,old_definition_share_all_years,old_definition_scenes
+deep water (red),1,37,0.303,0.268,0.276,0.217,38
+bright stable ground,1,37,0.235,0.197,0.351,0.171,40
+zero or negative share,1,37,0.406,0.376,0.262,0.155,40
+team's haze measure,1,37,0.372,0.34,0.282,0.188,40
+deep water (red) + bright stable ground,2,37,0.461,0.405,0.538,0.474,38
+deep water (red) + bright ground + zero or negative share,3,37,0.699,0.649,0.675,0.675,38
+for comparison: tide,1,37,0.011,-0.039,0.0,0.007,40
+for comparison: sun elevation,1,37,0.389,0.359,0.414,0.176,40
+for comparison: interior greenness,1,36,0.262,0.223,0.26,0.108,36
+deep water (red) + bright ground + sun elevation,3,37,0.483,0.396,0.55,0.488,38
+deep water (red) + bright ground + tide,3,37,0.467,0.378,0.561,0.479,38

@@ -1,24 +1,24 @@
-explained_by,terms,scenes,r2_within_site,r2_adjusted,r2_each_site_equal_weight,r2_adjusted_equal_weight
-water share (image),1,40,0.044,0.015,0.032,0.002
-tide height (EOT20 model),1,40,0.007,-0.023,0.01,-0.02
-sun elevation,1,40,0.176,0.151,0.272,0.25
-November or not,1,40,0.057,0.028,0.076,0.048
-time of year (annual wave),2,40,0.201,0.151,0.301,0.258
-interior greenness (NDVI),1,38,0.184,0.158,0.18,0.153
-which side the satellite looked from,1,40,0.205,0.181,0.246,0.223
-dark-water brightness (haze measure),1,40,0.188,0.163,0.169,0.144
-tide + dark-water brightness,2,40,0.217,0.168,0.202,0.153
-water share + dark-water brightness,2,40,0.281,0.236,0.241,0.194
-sun elevation + dark-water brightness,2,40,0.284,0.239,0.348,0.307
-sun elevation + interior greenness,2,38,0.427,0.389,0.456,0.419
-sun elevation + interior greenness + dark-water brightness,3,38,0.484,0.43,0.477,0.423
-tide + sun elevation,2,40,0.283,0.239,0.435,0.4
-tide + November,2,40,0.241,0.194,0.328,0.286
-tide + time of year,3,40,0.322,0.256,0.475,0.424
-tide + interior greenness,2,38,0.195,0.141,0.18,0.126
-water share + sun elevation,2,40,0.332,0.29,0.434,0.399
-water share + November,2,40,0.271,0.226,0.281,0.236
-water share + time of year,3,40,0.369,0.308,0.458,0.406
-water share + interior greenness,2,38,0.19,0.136,0.181,0.126
-water share + tide,2,40,0.054,-0.005,0.034,-0.027
-water share + tide + sun elevation + interior greenness,4,38,0.456,0.378,0.533,0.466
+explained_by,terms,scenes,r2_same_site_and_year,r2_adjusted,r2_each_site_equal_weight,r2_adjusted_equal_weight
+water share (image),1,37,0.01,-0.039,0.021,-0.028
+tide height (EOT20 model),1,37,0.011,-0.039,0.0,-0.05
+sun elevation,1,37,0.389,0.359,0.414,0.385
+November or not,1,37,0.207,0.168,0.184,0.143
+time of year (annual wave),2,37,0.422,0.362,0.445,0.387
+interior greenness (NDVI),1,36,0.262,0.223,0.26,0.221
+which side the satellite looked from,1,37,0.407,0.378,0.335,0.302
+dark-water brightness (haze measure),1,37,0.372,0.34,0.282,0.246
+tide + dark-water brightness,2,37,0.375,0.309,0.301,0.228
+water share + dark-water brightness,2,37,0.376,0.31,0.282,0.206
+sun elevation + dark-water brightness,2,37,0.539,0.49,0.499,0.446
+sun elevation + interior greenness,2,36,0.525,0.473,0.593,0.548
+sun elevation + interior greenness + dark-water brightness,3,36,0.587,0.514,0.616,0.549
+tide + sun elevation,2,37,0.444,0.386,0.544,0.496
+tide + November,2,37,0.456,0.399,0.592,0.549
+tide + time of year,3,37,0.554,0.48,0.724,0.677
+tide + interior greenness,2,36,0.388,0.32,0.349,0.277
+water share + sun elevation,2,37,0.409,0.347,0.424,0.364
+water share + November,2,37,0.273,0.197,0.214,0.132
+water share + time of year,3,37,0.463,0.373,0.466,0.377
+water share + interior greenness,2,36,0.322,0.246,0.358,0.286
+water share + tide,2,37,0.012,-0.092,0.042,-0.059
+water share + tide + sun elevation + interior greenness,4,36,0.526,0.407,0.626,0.532

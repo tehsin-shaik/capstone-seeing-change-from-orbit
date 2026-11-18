@@ -12,6 +12,7 @@ Versions
     gain_offset, every other date as the reference                                                (check)
 
 Outputs in <out>: same_year_pairs.csv, site_swing.csv, summary.csv, reference_choice.csv, scene_after_correction.csv
+(dev_pct in scene_after_correction.csv is the scene's swing against the other dates of the same site and year)
 
 Usage: python 05_corrected_check.py --work <work> --out <results> --committed <repo>/results/change_detection/all_sites/noise_floor_all_pairs.csv
 """
@@ -71,7 +72,15 @@ def score(site, version, ref, dates, mask, valid, covered, gmw, layout):
     m = mask & cov
     Y = m.reshape(len(dates), H // CHIP, CHIP, W // CHIP, CHIP).sum((2, 4)).reshape(len(dates), -1).T
     npx = use.reshape(H // CHIP, CHIP, W // CHIP, CHIP).sum((1, 3)).ravel()
-    g = ipf(Y, present & (present.sum(1) >= 2)[:, None] & (npx > 0)[:, None])
+    # the swing of a scene: its predicted area against the average of the dates of the same site and the same year
+    Pall = present & (present.sum(1) >= 2)[:, None] & (npx > 0)[:, None]
+    g = np.full(len(dates), np.nan)
+    for y in sorted(set(years)):
+        sel = years == y
+        Py = Pall & sel[None, :]
+        Py = Py & (Py.sum(1) >= 2)[:, None]
+        if sel.sum() >= 2 and Py.any():
+            g[sel] = ipf(Y, Py)[sel]
     for i, d in enumerate(dates):
         row = {"site": site, "version": version, "reference": ref, "date": d, "dev_pct": round(100 * (g[i] - 1), 2)}
         if years[i] == 2020:
@@ -89,7 +98,7 @@ def score(site, version, ref, dates, mask, valid, covered, gmw, layout):
         ok = use & (k >= 2)
         ms = m[sel].sum(0)
         ever += int((ok & (ms > 0)).sum()); flip += int((ok & (ms > 0) & (ms < k)).sum())
-    return pairs, scenes, {"tp": tp, "fp": fp, "fn": fn, "flip_share_pct": 100 * flip / max(ever, 1), "dev_sd": float(np.nanstd(100 * (g - 1), ddof=1))}
+    return pairs, scenes, {"tp": tp, "fp": fp, "fn": fn, "flip_share_pct": 100 * flip / max(ever, 1), "dev_sd": float(np.nanstd(100 * (g - 1), ddof=1)) if np.isfinite(g).sum() > 1 else np.nan}
 
 
 pairs_all, scenes_all, site_rows = [], [], []
@@ -181,7 +190,7 @@ for v in ("as_is", "gain_offset", "offset_only"):
     head.append({"version": v, "six_site_mean_abs_swing_pct": d.mean_abs_swing_pct.mean(), "six_site_mean_of_worst_swing_pct": d.max_abs_swing_pct.mean(),
                  "all_pairs_mean_abs_swing_pct": P[(P.version == v) & P.main]["net_pct_of_first"].abs().mean(),
                  "five_site_mean_abs_swing_pct_without_al_nouf": d[d.site != "al_nouf"].mean_abs_swing_pct.mean(),
-                 "iou_mean_over_5_folds": fold_iou(d), "mean_site_spread_of_scene_deviation_pct": d.dev_sd.mean(),
+                 "iou_mean_over_5_folds": fold_iou(d), "mean_site_spread_of_same_year_swing_pct": d.dev_sd.mean(),
                  "mean_same_year_flip_share_pct": d.flip_share_pct.mean()})
 Hd = pd.DataFrame(head)
 Hd.round(4).to_csv(out / "summary.csv", index=False)

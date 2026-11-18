@@ -27,24 +27,27 @@ a = ap.parse_args()
 work, out = Path(a.work), Path(a.out)
 K3 = np.ones((3, 3), bool)
 
-T = pd.read_csv(out / "scene_table_images.csv")
-A = pd.read_csv(out / "scene_after_correction.csv")
-A = A[A.main & (A.version == "gain_offset")][["site", "date", "dev_pct"]].rename(columns={"dev_pct": "dev_after_pct"})
-T = T.merge(A, on=["site", "date"])
+# The swing here is always the same-year swing: the scene's predicted area against the other dates of the same site and year.
+# Before and after both come from 05_corrected_check.py, so they are measured on the same pixels.
+T = pd.read_csv(out / "scene_table_images.csv").drop(columns=["dev_pct"])
+A0 = pd.read_csv(out / "scene_after_correction.csv")
+A = A0[A0.main & (A0.version == "gain_offset")][["site", "date", "dev_pct"]].rename(columns={"dev_pct": "dev_after_pct"})
+B = A0[A0.main & (A0.version == "as_is")][["site", "date", "dev_pct"]]
+T = T.merge(B, on=["site", "date"]).merge(A, on=["site", "date"]).dropna(subset=["dev_pct", "dev_after_pct"])
 rows = []
 dm = demean(T, ["dev_pct", "dev_after_pct"])
-rows.append({"check": "correlation of the scene swing before and after the correction (site averages removed)",
+rows.append({"check": "correlation of the same-year swing before and after the correction",
              "value": round(float(np.corrcoef(dm.dev_pct, dm.dev_after_pct)[0, 1]), 3), "scenes": len(T)})
-rows.append({"check": "within-site spread of the scene swing, before (%)", "value": round(float(dm.dev_pct.std()), 2), "scenes": len(T)})
-rows.append({"check": "within-site spread of the scene swing, after (%)", "value": round(float(dm.dev_after_pct.std()), 2), "scenes": len(T)})
+rows.append({"check": "spread of the same-year swing, before (%)", "value": round(float(dm.dev_pct.std()), 2), "scenes": len(T)})
+rows.append({"check": "spread of the same-year swing, after (%)", "value": round(float(dm.dev_after_pct.std()), 2), "scenes": len(T)})
 for x, name in (("deep_water_red_diff", "deep water (red)"), ("bright_ground_diff_pct", "bright stable ground"),
                 ("zero_or_negative_diff_points", "zero or negative share"), ("sun_elevation", "sun elevation"), ("tide_eot20_m", "tide")):
     for y, when in (("dev_pct", "before"), ("dev_after_pct", "after")):
         r = pooled(T, x, y)
-        rows.append({"check": f"r of {name} with the swing {when} the correction", "value": r["r_within"], "p_shuffle_dates": r["p_shuffle_dates"], "scenes": r["scenes"]})
+        rows.append({"check": f"r of {name} with the same-year swing {when} the correction", "value": r["r_within"], "p_shuffle_dates": r["p_shuffle_dates"], "scenes": r["scenes"]})
 for y, when in (("dev_pct", "before"), ("dev_after_pct", "after")):
     R2, _, n = r2_within(T, y, ["deep_water_red_diff", "bright_ground_diff_pct"])
-    rows.append({"check": f"share of the swing {when} the correction explained by deep water (red) + bright ground", "value": round(R2, 3), "scenes": n})
+    rows.append({"check": f"share of the same-year swing {when} the correction explained by deep water (red) + bright ground", "value": round(R2, 3), "scenes": n})
 
 # ---- solid canopy before and after
 L = pd.read_csv(out / "correction_lines.csv")

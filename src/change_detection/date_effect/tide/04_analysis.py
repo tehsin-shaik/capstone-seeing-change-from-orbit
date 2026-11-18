@@ -6,16 +6,24 @@ Inputs
     <out>/scene_tides.csv, scene_tides_lagged.csv   from 03_tide_model.py
     --disagreement per_site_date.csv of the model disagreement check (2020 miss / false alarm shares of all three models)
 
+What a scene's swing is
+    The swing of a scene (dev_pct) is its predicted mangrove area as a percent above or below the average of the dates
+    of the SAME SITE AND THE SAME YEAR. A scene is never compared with another year, so real change between 2018, 2020
+    and 2025 cannot get into it. Water share, tide and everything else are compared the same way: all statistics remove
+    the average of each site and year first. A site and year with a single non-hazy date drops out (Al Nouf 2025).
+    The old version, against the site's average over all its years, is kept in the table as dev_all_years_pct and
+    water_all_years_pct, only so the two can be compared.
+
 How the "fixed area" is done
     The chips of a site are not the same on every date. Each 256 x 256 chip cell is therefore its own fixed area:
-    only cells with at least two non-hazy dates are used, and inside a cell only the pixels usable on every one
-    of the cell's dates. A site value for a date is then built from its cells with a two-way table (cell x date),
-    so a date is not penalised for the cells it happens to lack:
+    for one site and year, only cells with at least two non-hazy dates of that year are used, and inside a cell only
+    the pixels usable on every one of those dates. A value for a date is then built from its cells with a two-way
+    table (cell x date), so a date is not penalised for the cells it happens to lack:
       * predicted mangrove area: area = cell size x date factor (fitted by iterative proportional fitting).
-        The date factor, relative to the mean over the site's dates, is the scene's deviation in percent.
+        The date factor, relative to the mean over the year's dates, is the scene's swing in percent.
       * water share and interior NDVI: value = cell level + date shift (weighted least squares).
     On cells present on every date both give the plain totals. A strict version, only the cells present on every
-    date of the site, is also written (strict_*), as a check.
+    date of the year, is also written (strict_*), as a check.
 
 Water rule (one rule, every date): a pixel is water if green (B03) is brighter than near-infrared (B08).
 Second rule as a check: green brighter than short-wave infrared (B11), which is MNDWI > 0.
@@ -142,89 +150,95 @@ for site in SITES:
     gmw = z["gmw4019"]
     H, W = gmw.shape
 
-    # ---- cells: present dates and the pixels usable on all of them
     cells = [(r, c) for r in range(0, H, CHIP) for c in range(0, W, CHIP)]
-    present = np.array([[bool(covered[i, r, c]) for i in range(n)] for r, c in cells])          # [cell, date]
-    use = np.zeros((H, W), bool)             # pixel belongs to a cell with >= 2 dates and is usable on all of them
-    npres = np.zeros((H, W), np.int16)       # number of dates of the pixel's cell
-    for (r, c), p in zip(cells, present):
-        if p.sum() >= 2:
-            sl = (slice(r, r + CHIP), slice(c, c + CHIP))
-            use[sl] = np.all(valid[p][(slice(None),) + sl], axis=0)
-            npres[sl] = p.sum()
-    cov = covered & use[None]                # pixel analysed on that date
-    m, w1, w2 = mask & cov, water & cov, water2 & cov
+    core = ndimage.binary_erosion(gmw == 1, K3, iterations=3)      # GMW mangrove at least 3 pixels from its edge
 
-    # ---- solid mangrove interior: GMW mangrove at least 3 pixels from its edge, never water, always predicted mangrove
-    core = ndimage.binary_erosion(gmw == 1, K3, iterations=3)
-    interior = core & use & (w1.sum(0) == 0) & (m.sum(0) == npres) & (npres >= 2)
-
-    def per_cell(arr2d_or_3d, weight=None):
+    def per_cell(x):
         """Sum over each cell: [cell] for a 2-D array, [cell, date] for a 3-D one."""
-        x = np.asarray(arr2d_or_3d, dtype=np.float64)
+        x = np.asarray(x, dtype=np.float64)
         if x.ndim == 2:
             return x.reshape(H // CHIP, CHIP, W // CHIP, CHIP).sum((1, 3)).ravel()
         return x.reshape(n, H // CHIP, CHIP, W // CHIP, CHIP).sum((2, 4)).reshape(n, -1).T
 
-    npx = per_cell(use)
-    Ym, Yw1, Yw2 = per_cell(m), per_cell(w1), per_cell(w2)
-    P = present & (present.sum(1) >= 2)[:, None] & (npx > 0)[:, None]
+    def block(sel):
+        """All the tables for one set of dates (the dates of one year, or all dates of the site): the chip cells with at
+        least two of those dates, the pixels usable on every one of them, and each date's value built from the cells."""
+        present = np.array([[bool(covered[i, r, c]) and bool(sel[i]) for i in range(n)] for r, c in cells])      # [cell, date]
+        use = np.zeros((H, W), bool)             # pixel belongs to a cell with >= 2 of the dates and is usable on all of them
+        npres = np.zeros((H, W), np.int16)       # number of those dates of the pixel's cell
+        for (r, c), pr in zip(cells, present):
+            if pr.sum() >= 2:
+                sl = (slice(r, r + CHIP), slice(c, c + CHIP))
+                use[sl] = np.all(valid[pr][(slice(None),) + sl], axis=0)
+                npres[sl] = pr.sum()
+        cov = covered & use[None] & sel[:, None, None]                 # pixel analysed on that date
+        m, w1, w2 = mask & cov, water & cov, water2 & cov
+        # solid mangrove interior: GMW mangrove away from its edge, never water, always predicted mangrove on these dates
+        interior = core & use & (w1.sum(0) == 0) & (m.sum(0) == npres) & (npres >= 2)
+        npx = per_cell(use)
+        Ym, Yw1, Yw2 = per_cell(m), per_cell(w1), per_cell(w2)
+        P = present & (present.sum(1) >= 2)[:, None] & (npx > 0)[:, None]
+        g, total_px, ncell = ipf(Ym, P)
+        with np.errstate(invalid="ignore", divide="ignore"):
+            wat1 = additive(100 * Yw1 / npx[:, None], P, npx)
+            wat2 = additive(100 * Yw2 / npx[:, None], P, npx)
+            nint = per_cell(interior)
+            nd = per_cell(np.where(interior[None] & cov, np.nan_to_num(ndvi), 0.0)) / np.where(nint > 0, nint, np.nan)[:, None]
+            ndv = additive(np.nan_to_num(nd), P & (nint >= 50)[:, None], np.where(nint >= 50, nint, 0))
+        # 2020 dates only: the forest's own misses and false alarms against GMW v4.0.19 on the same fixed pixels
+        lab = (gmw != 255) & use
+        miss = per_cell((~m) & cov & (lab & (gmw == 1))[None])
+        fa = per_cell(m & (lab & (gmw == 0))[None])
+        gm = per_cell(lab & (gmw == 1))
+        P20 = P & (years == 2020)[None, :]
+        P20 = P20 & (P20.sum(1) >= 2)[:, None] & (gm > 0)[:, None]
+        _, miss_tot, _ = ipf(np.where(P20, miss, 0), P20)
+        _, fa_tot, _ = ipf(np.where(P20, fa, 0), P20)
+        gm_tot = gm[P20.any(1)].sum()
+        # strict check: only the cells present on every one of these dates
+        allc = present[:, sel].all(1)
+        strict_use = np.zeros((H, W), bool)
+        for (r, c), ok in zip(cells, allc):
+            if ok:
+                strict_use[r:r + CHIP, c:c + CHIP] = use[r:r + CHIP, c:c + CHIP]
+        s_m = (mask & strict_use[None]).sum((1, 2)).astype(float)
+        s_w = (water & strict_use[None]).sum((1, 2)).astype(float)
+        return dict(P=P, npx=npx, Ym=Ym, Yw1=Yw1, g=g, total_px=total_px, ncell=ncell, wat1=wat1, wat2=wat2, ndv=ndv, nint=nint,
+                    miss_tot=miss_tot, fa_tot=fa_tot, gm_tot=gm_tot, allc=allc, s_m=s_m, s_w=s_w, strict_px=int(strict_use.sum()),
+                    strict_mean=float(s_m[sel].mean()), use=use, cov=cov, m=m, w1=w1)
 
-    g, total_px, ncell = ipf(Ym, P)
-    with np.errstate(invalid="ignore", divide="ignore"):
-        wat1 = additive(100 * Yw1 / npx[:, None], P, npx)
-        wat2 = additive(100 * Yw2 / npx[:, None], P, npx)
-        nint = per_cell(interior)
-        nd = per_cell(np.where(interior[None] & cov, np.nan_to_num(ndvi), 0.0)) / np.where(nint > 0, nint, np.nan)[:, None]
-        ndv = additive(np.nan_to_num(nd), P & (nint >= 50)[:, None], np.where(nint >= 50, nint, 0))
-
-    # ---- 2020 only: the forest's own misses and false alarms against GMW v4.0.19 on the same fixed pixels
-    is20 = years == 2020
-    lab = (gmw != 255) & use
-    miss = per_cell(m == 0) * 0
-    miss = per_cell((~m) & cov & (lab & (gmw == 1))[None])
-    fa = per_cell(m & (lab & (gmw == 0))[None])
-    gm = per_cell(lab & (gmw == 1))
-    P20 = P & is20[None, :]
-    P20 = P20 & (P20.sum(1) >= 2)[:, None] & (gm > 0)[:, None]
-    _, miss_tot, _ = ipf(np.where(P20, miss, 0), P20)
-    _, fa_tot, _ = ipf(np.where(P20, fa, 0), P20)
-    gm_tot = gm[P20.any(1)].sum()
-
-    # ---- strict check: only the cells present on every date
-    allc = present.all(1)
-    strict_use = np.zeros((H, W), bool)
-    for (r, c), ok in zip(cells, allc):
-        if ok:
-            strict_use[r:r + CHIP, c:c + CHIP] = use[r:r + CHIP, c:c + CHIP]
-    s_m = (mask & strict_use[None]).sum((1, 2)).astype(float)
-    s_w = (water & strict_use[None]).sum((1, 2)).astype(float)
-
+    A = block(np.ones(n, bool))                    # all dates of the site together: the old definition, kept for comparison
+    Yb = {int(y): block(years == y) for y in sorted(set(years)) if (years == y).sum() >= 2}      # one set of tables per year
+    use, cov, m, w1 = A["use"], A["cov"], A["m"], A["w1"]          # the strip test below works on these pixels
     for i, d in enumerate(dates):
-        same_year = years == years[i]
+        b = Yb.get(int(years[i]))
         dd = dis[(dis["site"] == site) & (dis["date"] == d)]
-        rows.append({
-            "site": site, "date": d,
-            "cells_on_this_date": int(P[:, i].sum()), "cells_in_site_table": ncell,
-            "pred_mangrove_ha": round(total_px[i] * PX_HA, 1) if np.isfinite(total_px[i]) else np.nan,
-            "dev_pct": round(100 * (g[i] - 1), 2),
-            "dev_within_year_pct": round(100 * (g[i] / np.nanmean(g[same_year]) - 1), 2) if same_year.sum() > 1 else np.nan,
-            "water_pct": round(wat1[i], 2), "water_swir_rule_pct": round(wat2[i], 2),
-            "interior_ndvi": round(ndv[i], 4), "interior_px": int(nint.sum()),
-            "rf_miss_pct_of_gmw": round(100 * miss_tot[i] / gm_tot, 2) if is20[i] and gm_tot and np.isfinite(miss_tot[i]) else np.nan,
-            "rf_false_alarm_pct_of_gmw": round(100 * fa_tot[i] / gm_tot, 2) if is20[i] and gm_tot and np.isfinite(fa_tot[i]) else np.nan,
+        row = {"site": site, "date": d}
+        if b is not None:                          # same site, same year
+            is20 = years[i] == 2020
+            row.update({
+                "cells_on_this_date": int(b["P"][:, i].sum()), "cells_in_year_table": b["ncell"],
+                "pred_mangrove_ha": round(b["total_px"][i] * PX_HA, 1) if np.isfinite(b["total_px"][i]) else np.nan,
+                "dev_pct": round(100 * (b["g"][i] - 1), 2),
+                "water_pct": round(b["wat1"][i], 2), "water_swir_rule_pct": round(b["wat2"][i], 2),
+                "interior_ndvi": round(b["ndv"][i], 4), "interior_px": int(b["nint"].sum()),
+                "rf_miss_pct_of_gmw": round(100 * b["miss_tot"][i] / b["gm_tot"], 2) if is20 and b["gm_tot"] and np.isfinite(b["miss_tot"][i]) else np.nan,
+                "rf_false_alarm_pct_of_gmw": round(100 * b["fa_tot"][i] / b["gm_tot"], 2) if is20 and b["gm_tot"] and np.isfinite(b["fa_tot"][i]) else np.nan,
+                "strict_cells": int(b["allc"].sum()),
+                "strict_dev_pct": round(100 * (b["s_m"][i] / b["strict_mean"] - 1), 2) if b["allc"].any() and b["strict_mean"] > 0 else np.nan,
+                "strict_water_pct": round(100 * b["s_w"][i] / b["strict_px"], 2) if b["allc"].any() else np.nan})
+        row.update({
             "all3_miss_pct_of_gmw": float(dd["mangrove_rejected_by_all3_pct"].iloc[0]) if len(dd) else np.nan,
             "all3_false_alarm_pct_of_gmw": float(dd["called_by_all3_as_pct_of_gmw_mangrove_area"].iloc[0]) if len(dd) else np.nan,
-            "strict_cells": int(allc.sum()),
-            "strict_dev_pct": round(100 * (s_m[i] / s_m.mean() - 1), 2) if allc.any() and s_m.mean() > 0 else np.nan,
-            "strict_water_pct": round(100 * s_w[i] / strict_use.sum(), 2) if allc.any() else np.nan,
-        })
+            "dev_all_years_pct": round(100 * (A["g"][i] - 1), 2), "water_all_years_pct": round(A["wat1"][i], 2)})
+        rows.append(row)
 
-    # ---- chip level: per cell and date, mangrove and water as a share of the cell's fixed pixels
-    for ci, (r, c) in enumerate(cells):
-        for i in np.where(P[ci])[0]:
-            chip_rows.append({"site": site, "date": dates[i], "cell": f"{r}_{c}", "px": npx[ci],
-                              "mangrove_pct": 100 * Ym[ci, i] / npx[ci], "water_pct": 100 * Yw1[ci, i] / npx[ci]})
+    # ---- chip level: per cell and date, mangrove and water as a share of the cell's fixed pixels of that year
+    for y, b in Yb.items():
+        for ci, (r, c) in enumerate(cells):
+            for i in np.where(b["P"][ci])[0]:
+                chip_rows.append({"site": site, "year": y, "date": dates[i], "cell": f"{r}_{c}", "px": b["npx"][ci],
+                                  "mangrove_pct": 100 * b["Ym"][ci, i] / b["npx"][ci], "water_pct": 100 * b["Yw1"][ci, i] / b["npx"][ci]})
 
     # ---- Test 2: the strip that is water on some dates and land on others, and the pixels whose prediction flips
     def strip_test(sel, tag):
@@ -265,7 +279,7 @@ for site in SITES:
     for y in sorted(set(years)):
         if (years == y).sum() >= 2:
             strip_rows.append(strip_test(years == y, f"within {y}"))
-    print(f"{site}: {n} scenes, {ncell} cells in the table, {int(use.sum())} fixed pixels, interior {int(interior.sum())} px", flush=True)
+    print(f"{site}: {n} scenes, same-year tables for {sorted(Yb)}", flush=True)
 
 T = scenes.merge(pd.DataFrame(rows), on=["site", "date"])
 # dark-water brightness of the scene (red band, 5th percentile over water): the team's haze measure. Near 0 is clear,
@@ -278,6 +292,7 @@ T["season"] = np.where(T["month"] == 11, "November", np.where(T["month"] <= 3, "
 T["november"] = (T["month"] == 11).astype(float)
 T["cos_doy"], T["sin_doy"] = np.cos(2 * np.pi * T["doy"] / 365.25), np.sin(2 * np.pi * T["doy"] / 365.25)
 T["east_looking"] = (T["view_azimuth"] < 180).astype(float)
+T["site_year"] = T["site"] + "_" + T["year"].astype(str)          # every comparison below is inside one site and year
 T.to_csv(out / "scene_table.csv", index=False)
 
 # ------------------------------------------------------------------ Test 2 table
@@ -307,13 +322,16 @@ S.drop(columns=["shift_null_mean_share", "shift_null_p97_5_share"]).round(2).to_
 
 
 # ------------------------------------------------------------------ Test 1 and season statistics
-def demean(d, cols, by="site"):
+GROUP = "site_year"       # the average that is removed before any comparison: the same site and the same year
+
+
+def demean(d, cols, by=GROUP):
     return d[cols] - d.groupby(by)[cols].transform("mean")
 
 
-def perm_p(d, x, y, by="site", n_perm=20000):
-    """Chance of a within-site correlation at least this strong if x had nothing to do with y. x is shuffled between the
-    dates of each site. Sites that share a calendar date get the same shuffle, because their tide is the same tide."""
+def perm_p(d, x, y, by=GROUP, n_perm=20000):
+    """Chance of a correlation at least this strong if x had nothing to do with y. x is shuffled between the dates of
+    the same site and year. Sites that share a calendar date get the same shuffle, because their tide is the same tide."""
     d = d.dropna(subset=[x, y]).sort_values([by, "date"])
     yd = demean(d, [y], by)[y].values
     obs = np.corrcoef(demean(d, [x], by)[x].values, yd)[0, 1]
@@ -335,7 +353,7 @@ def perm_p(d, x, y, by="site", n_perm=20000):
     return (hits + 1) / (n_perm + 1)
 
 
-def pooled(d, x, y, by="site", perm=True, min_n=2):
+def pooled(d, x, y, by=GROUP, perm=True, min_n=2):
     d = d.dropna(subset=[x, y])
     d = d[d.groupby(by)[x].transform("size") >= min_n]
     if len(d) < 4:
@@ -348,7 +366,7 @@ def pooled(d, x, y, by="site", perm=True, min_n=2):
     zz = zs.dropna()
     return {"x": x, "y": y, "grouping": by, "scenes": len(d), "groups": k, "passes": d["date"].nunique(),
             "r_within": round(r, 3), "r2_within": round(r * r, 3), "spearman_within": round(stats.spearmanr(dm[x], dm[y])[0], 3),
-            "r_each_site_equal_weight": round(np.corrcoef(zz[x], zz[y])[0, 1], 3) if len(zz) > 3 else np.nan,
+            "r_each_group_equal_weight": round(np.corrcoef(zz[x], zz[y])[0, 1], 3) if len(zz) > 3 else np.nan,
             "slope_y_per_unit_x": round(slope, 3),
             "p_shuffle_dates": round(perm_p(d, x, y, by), 4) if perm else np.nan,
             "leave_one_site_out_r_min": round(min(np.corrcoef(*demean(d[d["site"] != s], [x, y], by).values.T)[0, 1] for s in d["site"].unique()), 3),
@@ -357,29 +375,34 @@ def pooled(d, x, y, by="site", perm=True, min_n=2):
 
 XS = ["water_pct", "water_swir_rule_pct", "tide_eot20_m", "tide_got410_m", "tide_position_0low_1high"]
 per_site = []
-for site, g in T.groupby("site"):
-    r = {"site": site, "scenes": len(g), "dev_pct_min": g.dev_pct.min(), "dev_pct_max": g.dev_pct.max(), "dev_pct_sd": round(g.dev_pct.std(), 1),
-         "water_pct_min": g.water_pct.min(), "water_pct_max": g.water_pct.max(),
-         "tide_m_min": g.tide_eot20_m.min(), "tide_m_max": g.tide_eot20_m.max()}
+for site, g in T.dropna(subset=["dev_pct"]).groupby("site"):
+    # every column is first turned into "difference from the average of the same year", then the years are put together
+    cols = XS + ["sun_elevation", "interior_ndvi", "november", "dev_pct"]
+    dm = demean(g, cols)
+    r = {"site": site, "scenes": len(g), "dev_pct_min": g.dev_pct.min(), "dev_pct_max": g.dev_pct.max(), "dev_pct_sd": round(dm.dev_pct.std(), 1),
+         "water_diff_min": round(dm.water_pct.min(), 2), "water_diff_max": round(dm.water_pct.max(), 2),
+         "tide_diff_m_min": round(dm.tide_eot20_m.min(), 3), "tide_diff_m_max": round(dm.tide_eot20_m.max(), 3)}
     for x in XS + ["sun_elevation", "interior_ndvi", "november"]:
-        gg = g.dropna(subset=[x, "dev_pct"])
+        gg = dm.dropna(subset=[x, "dev_pct"])
         r[f"r_dev_vs_{x}"] = round(np.corrcoef(gg[x], gg["dev_pct"])[0, 1], 2) if len(gg) >= 3 and gg[x].std() > 0 else np.nan
-    gg = g.dropna(subset=["water_pct", "tide_eot20_m"])
-    r["r_water_vs_tide"] = round(np.corrcoef(gg.water_pct, gg.tide_eot20_m)[0, 1], 2)
-    r["r_tide_vs_sun_elevation"] = round(np.corrcoef(g.tide_eot20_m, g.sun_elevation)[0, 1], 2)
+    r["r_water_vs_tide"] = round(np.corrcoef(dm.water_pct, dm.tide_eot20_m)[0, 1], 2)
+    r["r_tide_vs_sun_elevation"] = round(np.corrcoef(dm.tide_eot20_m, dm.sun_elevation)[0, 1], 2)
     per_site.append(r)
 pd.DataFrame(per_site).to_csv(out / "test1_per_site.csv", index=False)
 
 pool = []
-for y in ("dev_pct", "dev_within_year_pct", "strict_dev_pct"):
+for y in ("dev_pct", "strict_dev_pct"):
     for x in XS:
         xx = "strict_water_pct" if (y == "strict_dev_pct" and x == "water_pct") else x
         d = T[T["strict_cells"] >= 2] if y == "strict_dev_pct" else T
-        by = "site_year" if y == "dev_within_year_pct" else "site"
-        d = d.assign(site_year=d["site"] + "_" + d["year"].astype(str))
-        res = pooled(d, xx, y, by)
+        res = pooled(d, xx, y)
         if res:
             pool.append(res)
+# for comparison only: the old definition, each scene against the site's average over all its years
+for x in ("water_all_years_pct", "tide_eot20_m"):
+    res = pooled(T, x, "dev_all_years_pct", by="site")
+    res["note"] = "old definition: against the site's average over all years"
+    pool.append(res)
 for y in ("rf_miss_pct_of_gmw", "rf_false_alarm_pct_of_gmw", "all3_miss_pct_of_gmw", "all3_false_alarm_pct_of_gmw"):
     for x in ("water_pct", "tide_eot20_m"):
         res = pooled(T[T["year"] == 2020], x, y)
@@ -404,20 +427,20 @@ for x in ("sun_elevation", "november", "interior_ndvi", "east_looking", "dark_wa
 pd.DataFrame(pool).to_csv(out / "test1_pooled.csv", index=False)
 
 # lag check: which delay of the model tide matches the water seen in the image, and the swings
-L = pd.read_csv(out / "scene_tides_lagged.csv").merge(T[["site", "date", "water_pct", "dev_pct"]], on=["site", "date"])
+L = pd.read_csv(out / "scene_tides_lagged.csv").merge(T[["site", "site_year", "date", "water_pct", "dev_pct"]], on=["site", "date"]).dropna(subset=["dev_pct"])
 lag_rows = []
 for hrs, g in L.groupby("hours_earlier"):
     dm = demean(g, ["tide_eot20_m", "water_pct", "dev_pct"])
     row = {"hours_earlier": hrs, "r_water_vs_tide_all_sites": round(np.corrcoef(dm.tide_eot20_m, dm.water_pct)[0, 1], 3),
            "r_dev_vs_tide_all_sites": round(np.corrcoef(dm.tide_eot20_m, dm.dev_pct)[0, 1], 3)}
-    for s, gs in g.groupby("site"):
-        row[f"r_water_vs_tide_{s}"] = round(np.corrcoef(gs.tide_eot20_m, gs.water_pct)[0, 1], 2)
+    for s_, gs in dm.groupby(g["site"]):
+        row[f"r_water_vs_tide_{s_}"] = round(np.corrcoef(gs.tide_eot20_m, gs.water_pct)[0, 1], 2)
     lag_rows.append(row)
 pd.DataFrame(lag_rows).to_csv(out / "test1_lags.csv", index=False)
 
 
-# ---- season: how much of the within-site swing does each thing explain, alone and after the other
-def r2(d, y, xs, by="site"):
+# ---- season: how much of the same-year swing does each thing explain, alone and after the other
+def r2(d, y, xs, by=GROUP):
     d = d.dropna(subset=[y] + xs)
     dm = demean(d, [y] + xs, by)
     X = dm[xs].values
@@ -450,15 +473,16 @@ num = ["dev_pct", "water_pct", "tide_eot20_m", "sun_elevation", "november", "cos
 mods = []
 for name, xs in MODELS.items():
     R2, adj, n, dfree = r2(T, "dev_pct", xs)
-    # every site given the same weight: the deviation is divided by the site's own spread first
-    Tz["dev_z"] = demean(T, ["dev_pct"])["dev_pct"] / T.groupby("site")["dev_pct"].transform("std")
+    # every site given the same weight: the same-year swing is divided by the site's own spread first
+    dmv = demean(T, ["dev_pct"])["dev_pct"]
+    Tz["dev_z"] = dmv / dmv.groupby(T["site"]).transform("std")
     R2z, adjz, _, _ = r2(Tz, "dev_z", xs)
-    mods.append({"explained_by": name, "terms": len(xs), "scenes": n, "r2_within_site": round(R2, 3), "r2_adjusted": round(adj, 3),
+    mods.append({"explained_by": name, "terms": len(xs), "scenes": n, "r2_same_site_and_year": round(R2, 3), "r2_adjusted": round(adj, 3),
                  "r2_each_site_equal_weight": round(R2z, 3), "r2_adjusted_equal_weight": round(adjz, 3)})
 pd.DataFrame(mods).to_csv(out / "season_models.csv", index=False)
 
 
-def partial(d, x, y, ctrl, by="site"):
+def partial(d, x, y, ctrl, by=GROUP):
     d = d.dropna(subset=[x, y] + ctrl)
     dm = demean(d, [x, y] + ctrl, by)
     C = dm[ctrl].values
@@ -481,24 +505,18 @@ for x, ctrls in (("tide_eot20_m", [["sun_elevation"], ["november"], ["cos_doy", 
                  ("interior_ndvi", [["tide_eot20_m"], ["water_pct"]])):
     for c in ctrls:
         part.append(partial(T, x, "dev_pct", c))
-# same season only: remove the average of each site and season, so only scenes of the same season are compared
-T["site_season"] = T["site"] + "_" + T["season"]
-for x in ("water_pct", "tide_eot20_m"):
-    res = pooled(T, x, "dev_pct", "site_season")
-    if res:
-        res["note"] = "same site and same season only"
-        pool.append(res)
+# (A "same season only" comparison is not possible inside one year: a site has at most one scene per season in a year.)
 pd.DataFrame(pool).to_csv(out / "test1_pooled.csv", index=False)
 pd.DataFrame(part).to_csv(out / "season_partial.csv", index=False)
 
 # ---- chip level: inside one scene the season is the same for every chip, but the water does not move the same amount
 Cc = pd.DataFrame(chip_rows)
 Cc["sd"] = Cc["site"] + "_" + Cc["date"]
-Cc["sc"] = Cc["site"] + "_" + Cc["cell"]
+Cc["sc"] = Cc["site"] + "_" + Cc["cell"] + "_" + Cc["year"].astype(str)        # one cell in one year
 chip_out = []
 for label, d in [("all sites", Cc)] + [(s, g) for s, g in Cc.groupby("site")]:
     d = d.copy()
-    for _ in range(200):                      # remove the cell average and the scene average (two-way)
+    for _ in range(200):                      # remove the cell's average of that year and the scene average (two-way)
         for v in ("mangrove_pct", "water_pct"):
             d[v] = d[v] - d.groupby("sc")[v].transform("mean")
             d[v] = d[v] - d.groupby("sd")[v].transform("mean")
@@ -515,7 +533,7 @@ pd.DataFrame(chip_out).to_csv(out / "chip_level.csv", index=False)
 
 # ------------------------------------------------------------------ print
 with pd.option_context("display.width", 300, "display.max_rows", 200, "display.max_columns", 60):
-    print("\nSCENE TABLE\n" + T[["site", "date", "cells_on_this_date", "pred_mangrove_ha", "dev_pct", "dev_within_year_pct", "strict_cells",
+    print("\nSCENE TABLE\n" + T[["site", "date", "cells_on_this_date", "pred_mangrove_ha", "dev_pct", "dev_all_years_pct", "strict_cells",
                                  "strict_dev_pct", "water_pct", "water_swir_rule_pct", "strict_water_pct", "tide_eot20_m",
                                  "sun_elevation", "interior_ndvi", "dark_water_red", "rf_miss_pct_of_gmw", "rf_false_alarm_pct_of_gmw",
                                  "all3_miss_pct_of_gmw", "all3_false_alarm_pct_of_gmw"]].to_string(index=False))
@@ -533,7 +551,7 @@ with pd.option_context("display.width", 300, "display.max_rows", 200, "display.m
 
 
 # ------------------------------------------------------------------ extra checks on the season question
-def perm_partial(d, x, y, ctrl, by="site", n_perm=5000):
+def perm_partial(d, x, y, ctrl, by=GROUP, n_perm=5000):
     """Shuffle-the-dates test for a partial correlation (x shuffled as in perm_p, the other variables stay with their date)."""
     d = d.dropna(subset=[x, y] + ctrl).sort_values([by, "date"]).reset_index(drop=True)
     dm = demean(d, [x, y] + ctrl, by)
@@ -560,7 +578,7 @@ def perm_partial(d, x, y, ctrl, by="site", n_perm=5000):
     return round(float(obs), 3), round((hits + 1) / (n_perm + 1), 4)
 
 
-def coefs(d, y, xs, by="site"):
+def coefs(d, y, xs, by=GROUP):
     d = d.dropna(subset=[y] + xs)
     dm = demean(d, [y] + xs, by)
     beta = np.linalg.lstsq(dm[xs].values, dm[y].values, rcond=None)[0]
@@ -591,8 +609,9 @@ for name, xs in (("the time of year (annual wave)", ["cos_doy", "sin_doy"]), ("s
 for xs in (["tide_eot20_m", "sun_elevation"], ["water_pct", "sun_elevation"], ["tide_eot20_m"], ["water_pct"], ["sun_elevation"]):
     for x, (b, sd) in coefs(T, "dev_pct", xs).items():
         extra.append({"check": f"slope of dev_pct on {x} in the model with {' + '.join(xs)} (percent of area per unit)", "value": round(b, 3),
-                      "typical_within_site_spread_of_x": round(sd, 3), "area_swing_for_that_spread_pct": round(abs(b) * sd, 2), "scenes": len(T)})
-extra.append({"check": "within-site spread (standard deviation) of dev_pct, all scenes", "value": round(float(demean(T, ["dev_pct"])["dev_pct"].std()), 2), "scenes": len(T)})
+                      "typical_same_year_spread_of_x": round(sd, 3), "area_swing_for_that_spread_pct": round(abs(b) * sd, 2), "scenes": len(T)})
+extra.append({"check": "spread (standard deviation) of the same-year swing dev_pct, all scenes", "value": round(float(demean(T, ["dev_pct"])["dev_pct"].std()), 2),
+              "scenes": int(T["dev_pct"].notna().sum())})
 for y in ("rf_miss_pct_of_gmw", "rf_false_alarm_pct_of_gmw", "all3_miss_pct_of_gmw", "all3_false_alarm_pct_of_gmw"):
     for x in ("sun_elevation", "dark_water_red", "interior_ndvi"):
         res = pooled(T[T["year"] == 2020], x, y)

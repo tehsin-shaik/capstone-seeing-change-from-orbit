@@ -1,8 +1,8 @@
 sites,chip_dates,cells,scenes,r_mangrove_change_vs_water_change,slope_mangrove_points_per_water_point,r_cells_with_mangrove_only
-all sites,396,77,40,-0.173,-0.055,-0.174
-al_aryam_islands,36,8,7,-0.417,-0.027,-0.425
-al_nouf,12,4,5,-0.174,-0.006,-0.174
-eastern_mangroves,17,4,7,-0.669,-0.664,-0.645
-ghantoot,74,14,7,-0.233,-0.106,-0.123
-jubail_island,154,25,7,-0.157,-0.05,-0.175
-ras_ghurab,103,22,7,-0.189,-0.078,-0.214
+all sites,339,154,37,-0.129,-0.04,-0.14
+al_aryam_islands,29,14,7,-0.375,-0.014,-0.375
+al_nouf,6,3,2,0.188,0.006,0.188
+eastern_mangroves,14,6,7,-0.614,-0.641,-0.58
+ghantoot,64,28,7,-0.085,-0.03,-0.051
+jubail_island,143,64,7,-0.122,-0.05,-0.14
+ras_ghurab,83,39,7,-0.2,-0.06,-0.232

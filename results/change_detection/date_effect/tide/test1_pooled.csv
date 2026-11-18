@@ -1,49 +1,44 @@
-x,y,grouping,scenes,groups,passes,r_within,r2_within,spearman_within,r_each_site_equal_weight,slope_y_per_unit_x,p_shuffle_dates,leave_one_site_out_r_min,leave_one_site_out_r_max,note
-water_pct,dev_pct,site,40,6,18,-0.21,0.044,-0.103,-0.141,-0.488,0.433,-0.257,-0.105,
-water_swir_rule_pct,dev_pct,site,40,6,18,-0.098,0.01,-0.073,-0.106,-0.366,0.6883,-0.215,-0.021,
-tide_eot20_m,dev_pct,site,40,6,18,-0.085,0.007,-0.078,-0.098,-2.914,0.7162,-0.204,0.013,
-tide_got410_m,dev_pct,site,40,6,18,-0.051,0.003,-0.069,-0.068,-1.848,0.8334,-0.174,0.046,
-tide_position_0low_1high,dev_pct,site,40,6,18,-0.159,0.025,-0.142,-0.19,-7.77,0.4931,-0.231,-0.118,
-water_pct,dev_within_year_pct,site_year,39,17,18,-0.11,0.012,0.028,0.061,-0.284,0.6801,-0.158,0.031,
-water_swir_rule_pct,dev_within_year_pct,site_year,39,17,18,-0.205,0.042,-0.108,-0.04,-0.851,0.6923,-0.35,-0.039,
-tide_eot20_m,dev_within_year_pct,site_year,39,17,18,0.023,0.001,0.016,0.067,0.839,0.929,-0.085,0.107,
-tide_got410_m,dev_within_year_pct,site_year,39,17,18,0.069,0.005,0.046,0.114,2.629,0.8362,-0.041,0.148,
-tide_position_0low_1high,dev_within_year_pct,site_year,39,17,18,-0.042,0.002,-0.066,-0.017,-2.104,0.8495,-0.086,-0.01,
-strict_water_pct,strict_dev_pct,site,21,3,12,-0.131,0.017,-0.052,-0.168,-0.428,0.6064,-0.175,-0.088,
-water_swir_rule_pct,strict_dev_pct,site,21,3,12,-0.29,0.084,-0.19,-0.283,-1.362,0.4271,-0.449,-0.09,
-tide_eot20_m,strict_dev_pct,site,21,3,12,0.127,0.016,0.145,0.028,5.577,0.7183,-0.015,0.241,
-tide_got410_m,strict_dev_pct,site,21,3,12,0.154,0.024,0.174,0.058,6.935,0.6634,0.017,0.266,
-tide_position_0low_1high,strict_dev_pct,site,21,3,12,-0.027,0.001,0.074,-0.084,-1.555,0.9377,-0.096,0.05,
-water_pct,rf_miss_pct_of_gmw,site,17,6,8,0.015,0.0,-0.022,0.116,0.024,0.8819,-0.061,0.199,
-tide_eot20_m,rf_miss_pct_of_gmw,site,17,6,8,0.165,0.027,0.071,0.032,3.84,0.7538,-0.101,0.35,
-water_pct,rf_false_alarm_pct_of_gmw,site,17,6,8,0.308,0.095,0.316,-0.039,0.711,0.6546,0.066,0.537,
-tide_eot20_m,rf_false_alarm_pct_of_gmw,site,17,6,8,0.352,0.124,0.306,-0.02,11.463,0.6343,0.16,0.459,
-water_pct,all3_miss_pct_of_gmw,site,17,6,8,0.078,0.006,0.206,0.414,0.088,0.6286,0.031,0.194,
-tide_eot20_m,all3_miss_pct_of_gmw,site,17,6,8,0.049,0.002,0.076,0.238,0.786,0.9307,-0.05,0.243,
-water_pct,all3_false_alarm_pct_of_gmw,site,17,6,8,0.022,0.0,0.042,-0.065,0.032,0.8157,-0.05,0.062,
-tide_eot20_m,all3_false_alarm_pct_of_gmw,site,17,6,8,0.227,0.052,0.282,0.154,4.703,0.6125,-0.067,0.304,
-tide_eot20_m,water_pct,site,40,6,18,0.732,0.536,0.788,0.844,10.824,0.0,0.716,0.78,
-tide_got410_m,water_pct,site,40,6,18,0.72,0.519,0.787,0.823,11.233,0.0,0.698,0.761,
-water_pct,dev_pct,site,26,4,17,-0.112,0.013,-0.085,-0.117,-0.296,0.6446,-0.15,-0.082,only scenes with at least 5 chip cells
-water_pct,dev_pct,site,35,5,18,-0.105,0.011,-0.05,-0.109,-0.293,0.6524,-0.129,-0.077,without Al Nouf (few chips)
-water_pct,dev_pct,site,36,6,17,-0.213,0.045,-0.084,-0.088,-0.439,0.5071,-0.261,-0.081,without the 18 May 2020 pass
-tide_eot20_m,dev_pct,site,26,4,17,0.048,0.002,0.067,-0.045,1.825,0.871,-0.132,0.143,only scenes with at least 5 chip cells
-tide_eot20_m,dev_pct,site,35,5,18,0.013,0.0,-0.043,-0.051,0.42,0.9622,-0.112,0.072,without Al Nouf (few chips)
-tide_eot20_m,dev_pct,site,36,6,17,-0.101,0.01,-0.135,-0.115,-3.065,0.6684,-0.226,0.01,without the 18 May 2020 pass
-sun_elevation,dev_pct,site,40,6,18,-0.419,0.176,-0.444,-0.48,-0.678,0.0539,-0.614,-0.346,
-sun_elevation,tide_eot20_m,site,40,6,18,-0.483,0.234,-0.553,-0.496,-0.023,,-0.505,-0.447,
-sun_elevation,water_pct,site,40,6,18,-0.374,0.14,-0.492,-0.431,-0.26,,-0.4,-0.345,
-november,dev_pct,site,40,6,18,0.239,0.057,0.284,0.278,7.134,0.3097,0.109,0.415,
-november,tide_eot20_m,site,40,6,18,0.777,0.604,0.74,0.762,0.676,,0.732,0.849,
-november,water_pct,site,40,6,18,0.629,0.396,0.657,0.695,8.088,,0.601,0.664,
-interior_ndvi,dev_pct,site,38,6,17,0.429,0.184,0.452,0.421,77.407,0.0936,0.377,0.462,
-interior_ndvi,tide_eot20_m,site,38,6,17,-0.12,0.014,-0.144,-0.127,-0.684,,-0.172,-0.048,
-interior_ndvi,water_pct,site,38,6,17,-0.192,0.037,-0.163,-0.27,-15.777,,-0.31,-0.131,
-east_looking,dev_pct,site,40,6,18,-0.453,0.205,-0.254,-0.682,-26.364,0.1414,-0.537,-0.374,
-east_looking,tide_eot20_m,site,40,6,18,-0.009,0.0,-0.006,-0.016,-0.016,,-0.036,0.006,
-east_looking,water_pct,site,40,6,18,0.034,0.001,0.039,0.093,0.854,,0.014,0.049,
-dark_water_red,dev_pct,site,40,6,18,-0.434,0.188,-0.365,-0.467,-508.94,0.06,-0.575,-0.283,
-dark_water_red,tide_eot20_m,site,40,6,18,-0.189,0.036,-0.199,-0.133,-6.44,,-0.253,-0.122,
-dark_water_red,water_pct,site,40,6,18,-0.205,0.042,-0.303,-0.105,-103.732,,-0.25,-0.093,
-water_pct,dev_pct,site_season,35,12,16,-0.265,0.07,-0.394,-0.314,-0.883,0.1113,-0.455,-0.112,same site and same season only
-tide_eot20_m,dev_pct,site_season,35,12,16,-0.369,0.136,-0.461,-0.303,-18.217,0.0389,-0.471,-0.308,same site and same season only
+x,y,grouping,scenes,groups,passes,r_within,r2_within,spearman_within,r_each_group_equal_weight,slope_y_per_unit_x,p_shuffle_dates,leave_one_site_out_r_min,leave_one_site_out_r_max,note
+water_pct,dev_pct,site_year,37,16,18,0.101,0.01,0.055,-0.057,0.228,0.6044,0.003,0.243,
+water_swir_rule_pct,dev_pct,site_year,37,16,18,-0.072,0.005,0.016,-0.147,-0.262,0.9254,-0.204,0.091,
+tide_eot20_m,dev_pct,site_year,37,16,18,0.104,0.011,0.022,-0.015,3.111,0.7188,0.006,0.212,
+tide_got410_m,dev_pct,site_year,37,16,18,0.151,0.023,0.04,0.032,4.822,0.6514,0.059,0.273,
+tide_position_0low_1high,dev_pct,site_year,37,16,18,-0.03,0.001,-0.074,-0.11,-1.239,0.9174,-0.086,0.028,
+strict_water_pct,strict_dev_pct,site_year,34,15,15,0.106,0.011,0.101,-0.028,0.244,0.5734,0.009,0.27,
+water_swir_rule_pct,strict_dev_pct,site_year,34,15,15,-0.099,0.01,-0.027,-0.177,-0.365,0.9158,-0.248,0.074,
+tide_eot20_m,strict_dev_pct,site_year,34,15,15,0.186,0.035,0.126,0.094,5.881,0.5367,0.126,0.253,
+tide_got410_m,strict_dev_pct,site_year,34,15,15,0.232,0.054,0.146,0.144,7.808,0.4929,0.181,0.292,
+tide_position_0low_1high,strict_dev_pct,site_year,34,15,15,0.032,0.001,0.001,-0.019,1.412,0.9156,0.002,0.089,
+water_all_years_pct,dev_all_years_pct,site,40,6,18,-0.21,0.044,-0.103,-0.141,-0.488,0.4366,-0.257,-0.105,old definition: against the site's average over all years
+tide_eot20_m,dev_all_years_pct,site,40,6,18,-0.085,0.007,-0.078,-0.098,-2.914,0.7226,-0.204,0.013,old definition: against the site's average over all years
+water_pct,rf_miss_pct_of_gmw,site_year,17,6,8,0.017,0.0,0.1,0.149,0.028,0.9098,-0.043,0.212,
+tide_eot20_m,rf_miss_pct_of_gmw,site_year,17,6,8,0.167,0.028,0.071,0.034,3.883,0.7531,-0.101,0.353,
+water_pct,rf_false_alarm_pct_of_gmw,site_year,17,6,8,0.295,0.087,0.196,-0.113,0.684,0.7811,0.028,0.536,
+tide_eot20_m,rf_false_alarm_pct_of_gmw,site_year,17,6,8,0.35,0.122,0.306,-0.041,11.421,0.6442,0.155,0.459,
+water_pct,all3_miss_pct_of_gmw,site_year,17,6,8,0.09,0.008,0.287,0.439,0.102,0.6438,0.054,0.233,
+tide_eot20_m,all3_miss_pct_of_gmw,site_year,17,6,8,0.049,0.002,0.076,0.238,0.786,0.9338,-0.05,0.243,
+water_pct,all3_false_alarm_pct_of_gmw,site_year,17,6,8,-0.005,0.0,-0.071,-0.101,-0.007,0.9545,-0.125,0.043,
+tide_eot20_m,all3_false_alarm_pct_of_gmw,site_year,17,6,8,0.227,0.052,0.282,0.154,4.703,0.6117,-0.067,0.304,
+tide_eot20_m,water_pct,site_year,37,16,18,0.719,0.517,0.883,0.945,9.533,0.0008,0.685,0.77,
+tide_got410_m,water_pct,site_year,37,16,18,0.727,0.528,0.876,0.945,10.278,0.0007,0.696,0.784,
+water_pct,dev_pct,site_year,25,11,16,0.035,0.001,0.056,0.069,0.084,0.8458,-0.059,0.22,only scenes with at least 5 chip cells
+water_pct,dev_pct,site_year,35,15,18,0.003,0.0,-0.051,-0.11,0.009,0.9806,-0.048,0.102,without Al Nouf (few chips)
+water_pct,dev_pct,site_year,33,16,17,0.174,0.03,0.126,0.007,0.293,0.5371,0.052,0.392,without the 18 May 2020 pass
+tide_eot20_m,dev_pct,site_year,25,11,16,0.288,0.083,0.213,0.239,10.741,0.3743,0.262,0.349,only scenes with at least 5 chip cells
+tide_eot20_m,dev_pct,site_year,35,15,18,0.07,0.005,-0.028,-0.066,2.096,0.8082,-0.061,0.175,without Al Nouf (few chips)
+tide_eot20_m,dev_pct,site_year,33,16,17,0.171,0.029,-0.01,-0.044,3.825,0.6338,0.051,0.331,without the 18 May 2020 pass
+sun_elevation,dev_pct,site_year,37,16,18,-0.624,0.389,-0.699,-0.37,-0.82,0.0599,-0.687,-0.567,
+sun_elevation,tide_eot20_m,site_year,39,17,18,-0.51,0.26,-0.416,-0.611,-0.022,,-0.542,-0.474,
+sun_elevation,water_pct,site_year,37,16,18,-0.372,0.139,-0.336,-0.533,-0.218,,-0.42,-0.297,
+november,dev_pct,site_year,37,16,18,0.455,0.207,0.409,0.26,10.948,0.203,0.4,0.58,
+november,tide_eot20_m,site_year,39,17,18,0.838,0.702,0.797,0.798,0.666,,0.805,0.9,
+november,water_pct,site_year,37,16,18,0.651,0.424,0.724,0.688,6.953,,0.638,0.683,
+interior_ndvi,dev_pct,site_year,36,16,17,0.512,0.262,0.429,0.506,105.143,0.1603,0.457,0.546,
+interior_ndvi,tide_eot20_m,site_year,36,16,17,-0.32,0.102,-0.343,-0.152,-2.123,,-0.344,-0.269,
+interior_ndvi,water_pct,site_year,36,16,17,-0.229,0.052,-0.262,-0.251,-21.126,,-0.32,-0.161,
+east_looking,dev_pct,site_year,37,16,18,-0.638,0.407,-0.508,-0.858,-32.248,0.3366,-0.696,-0.565,
+east_looking,tide_eot20_m,site_year,39,17,18,0.049,0.002,0.048,0.144,0.084,,0.019,0.058,
+east_looking,water_pct,site_year,37,16,18,0.048,0.002,0.098,0.309,1.083,,0.022,0.059,
+dark_water_red,dev_pct,site_year,37,16,18,-0.61,0.372,-0.552,-0.354,-645.142,0.1589,-0.811,-0.482,
+dark_water_red,tide_eot20_m,site_year,39,17,18,-0.24,0.058,-0.182,-0.316,-8.589,,-0.332,-0.164,
+dark_water_red,water_pct,site_year,37,16,18,-0.269,0.073,-0.266,-0.362,-126.669,,-0.35,-0.162,

@@ -1,5 +1,8 @@
 """Shared helpers for the image differences test. Same two-way tables and the same shuffled-dates test
-as the tide test (../tide/04_analysis.py), kept here so parts b and c use one copy."""
+as the tide test (../tide/04_analysis.py), kept here so parts b and c use one copy.
+
+Every comparison removes the average of the same site and the same year first (column site_year), so a scene is only
+compared with the other dates of its own site and year."""
 from pathlib import Path
 
 import numpy as np
@@ -115,13 +118,13 @@ def additive(V, M, w):
 
 
 # ---------------------------------------------------------------- statistics (as in the tide check)
-def demean(d, cols, by="site"):
+def demean(d, cols, by="site_year"):
     return d[cols] - d.groupby(by)[cols].transform("mean")
 
 
-def perm_p(d, x, y, by="site", n_perm=20000, seed=0):
-    """Chance of a within-site correlation at least this strong if x had nothing to do with y. x is shuffled between the
-    dates of each site. Sites that share a calendar date get the same shuffle, because they share the same image pass."""
+def perm_p(d, x, y, by="site_year", n_perm=20000, seed=0):
+    """Chance of a correlation at least this strong if x had nothing to do with y. x is shuffled between the dates of
+    the same site and year. Sites that share a calendar date get the same shuffle, because they share the same image pass."""
     rng = np.random.default_rng(seed)
     d = d.dropna(subset=[x, y]).sort_values([by, "date"]).reset_index(drop=True)
     yd = demean(d, [y], by)[y].values
@@ -140,7 +143,7 @@ def perm_p(d, x, y, by="site", n_perm=20000, seed=0):
     return (hits + 1) / (n_perm + 1)
 
 
-def pooled(d, x, y, by="site", perm=True):
+def pooled(d, x, y, by="site_year", perm=True):
     d = d.dropna(subset=[x, y])
     d = d[d.groupby(by)[x].transform("size") >= 2]
     dm = demean(d, [x, y], by)
@@ -150,12 +153,12 @@ def pooled(d, x, y, by="site", perm=True):
     loo = [np.corrcoef(*demean(d[d["site"] != s], [x, y], by).values.T)[0, 1] for s in d["site"].unique()]
     return {"x": x, "y": y, "scenes": len(d), "dates": d["date"].nunique(), "r_within": round(r, 3), "share_explained": round(r * r, 3),
             "spearman_within": round(stats.spearmanr(dm[x], dm[y])[0], 3),
-            "r_each_site_equal_weight": round(np.corrcoef(zz[x], zz[y])[0, 1], 3) if len(zz) > 3 else np.nan,
+            "r_each_group_equal_weight": round(np.corrcoef(zz[x], zz[y])[0, 1], 3) if len(zz) > 3 else np.nan,
             "p_shuffle_dates": round(perm_p(d, x, y, by), 4) if perm else np.nan,
             "leave_one_site_out_r_min": round(min(loo), 3), "leave_one_site_out_r_max": round(max(loo), 3)}
 
 
-def r2_within(d, y, xs, by="site"):
+def r2_within(d, y, xs, by="site_year"):
     d = d.dropna(subset=[y] + xs)
     dm = demean(d, [y] + xs, by)
     X = dm[xs].values
