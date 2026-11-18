@@ -1,0 +1,7 @@
+fold,site,threshold,train_chips,best_epoch,heldout_iou_site,heldout_iou_fold,committed_unet_fold_iou
+1,eastern_mangroves,0.6,107,87,0.867,0.867,0.8604
+2,jubail_island,0.8,56,44,0.5516,0.5516,0.5526
+3,ras_ghurab,0.65,85,43,0.7057,0.7057,0.7112
+4,ghantoot,0.45,85,26,0.7846,0.7846,0.7702
+5,al_aryam_islands,0.65,97,50,0.6105,0.6575,0.6264
+5,al_nouf,0.65,97,50,0.7009,0.6575,0.6264

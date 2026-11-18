@@ -1,0 +1,7 @@
+site,same_year_pairs,rf_noise_min,rf_noise_max,rf_noise_worst,rf_noise_median_abs,rf_pixels_changed_median_pct,rf_heldout_iou,rf_change_net_pct,rf_change_net_ha,rf_change_chips,rf_above_noise,unet_noise_min,unet_noise_max,unet_noise_worst,unet_noise_median_abs,unet_pixels_changed_median_pct,unet_heldout_iou,unet_change_net_pct,unet_change_net_ha,unet_change_chips,unet_above_noise,unet_steadier
+eastern_mangroves,5,-30.9,37.9,37.9,12.8,17.9,0.82,2.0,7.41,3,False,-16.2,7.9,16.2,7.9,13.2,0.87,3.5,14.34,3,False,True
+jubail_island,5,-17.0,92.2,92.2,39.2,51.2,0.56,-11.1,-134.55,25,False,-22.8,106.6,106.6,23.8,36.8,0.55,-14.5,-179.06,25,False,False
+ras_ghurab,5,-15.3,36.9,36.9,15.3,28.6,0.7,3.0,34.11,17,False,-30.6,53.8,53.8,30.6,31.1,0.71,10.7,123.24,17,False,False
+ghantoot,5,-3.7,17.8,17.8,4.6,17.6,0.78,25.1,212.41,11,True,-7.0,22.0,22.0,7.0,15.5,0.78,36.6,313.41,11,True,False
+al_aryam_islands,5,-28.0,10.9,28.0,10.6,32.1,0.64,-25.1,-40.88,7,False,-5.7,104.6,104.6,16.5,41.4,0.61,-13.7,-18.31,7,False,False
+al_nouf,1,19.6,19.6,19.6,19.6,33.1,0.68,-10.5,-7.62,1,False,-12.2,-12.2,12.2,12.2,26.4,0.7,23.2,9.75,1,True,True

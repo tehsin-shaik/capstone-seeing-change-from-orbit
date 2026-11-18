@@ -1,0 +1,6 @@
+fold,held_site,chips,committed_iou,committed_ci_lo,committed_ci_hi,rf_b2_iou,run1_iou,run1_minus_committed,run1_inside_committed_ci,run1_threshold,run1_best_epoch,run2_iou,run2_minus_committed,run2_inside_committed_ci,run2_threshold,run2_best_epoch
+1,eastern_mangroves,8,0.8604,0.8218,0.9,0.8206,0.867,0.0066,True,0.6,87/100,0.8648,0.0044,True,0.45,39/54
+2,jubail_island,80,0.5526,0.4863,0.6135,0.5616,0.5516,-0.001,True,0.8,44/59,0.5531,0.0005,True,0.75,33/48
+3,ras_ghurab,50,0.7112,0.6798,0.74,0.6966,0.7057,-0.0055,True,0.65,43/58,0.6903,-0.0209,True,0.55,36/51
+4,ghantoot,41,0.7702,0.7154,0.8103,0.7774,0.7846,0.0144,True,0.45,26/41,0.7674,-0.0028,True,0.5,26/41
+5,"al_aryam_islands,al_nouf",36,0.6264,0.5819,0.6683,0.6631,0.6575,0.0311,True,0.65,50/65,0.6538,0.0274,True,0.45,64/79
