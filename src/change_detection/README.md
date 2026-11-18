@@ -8,6 +8,7 @@ These scripts make a 2018 to 2025 mangrove change map for one training site with
 - `train_rf.py` trains the random forest with one site held out.
 - `change_map.py` predicts that site, builds the change map, runs the checks and draws the figure.
 - `noise_floor_all_sites.py` runs the same-year check for every site.
+- `new_bare_ground.py` maps land that turned into bare or built ground near the mangroves, with a band rule and no trained model.
 - `common.py` holds the shared helpers.
 
 ## What they depend on
