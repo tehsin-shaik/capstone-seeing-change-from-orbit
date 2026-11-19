@@ -104,3 +104,47 @@ def test_real_results_load_with_matching_folds():
     table = cm.load_fold_iou()
     assert len(table) == 5
     assert table["Random forest"].mean() == pytest.approx(0.704, abs=5e-4)
+
+
+def write_per_chip(path: Path, rows):
+    pd.DataFrame(rows, columns=["chip_id", "fold", "model", "TP", "FP", "FN"]).to_csv(path, index=False)
+
+
+def toy_per_chip_rows(gap=0):
+    # 2 folds, 3 spots each, 2 dates per spot. "good" finds `gap` more TP per chip than "bad".
+    rows = []
+    for fold in (1, 2):
+        for spot in range(3):
+            for date in ("2020-01-01", "2020-06-01"):
+                cid = f"site{fold}_{date}_r{spot:05d}_c00000"
+                rows.append((cid, fold, "good", 80 + gap, 10, 10 - gap))
+                rows.append((cid, fold, "bad", 80, 10, 10))
+    return rows
+
+
+def test_location_of_drops_the_date():
+    assert cm.location_of("jubail_island_2020-05-18_r00256_c01024") == "jubail_island_r00256_c01024"
+
+
+def test_per_chip_matches_pooled_iou(tmp_path):
+    f = tmp_path / "pc.csv"; write_per_chip(f, toy_per_chip_rows(gap=5))
+    models, folds = cm.load_per_chip(f)
+    assert [len(c) for c in folds] == [3, 3]                    # 2 dates of a spot become one location
+    means = dict(zip(models, cm.mean_fold_iou(folds)))
+    assert means["bad"] == pytest.approx(80 / 100)
+    assert means["good"] == pytest.approx(85 / 100)
+
+
+def test_per_chip_bootstrap_finds_a_real_gap_and_not_a_fake_one(tmp_path):
+    f = tmp_path / "pc.csv"; write_per_chip(f, toy_per_chip_rows(gap=5))
+    pairs = cm.per_chip_pairwise(*cm.load_per_chip(f), reps=200)
+    assert pairs.iloc[0].model_a == "good" and pairs.iloc[0].clear_difference
+    write_per_chip(f, toy_per_chip_rows(gap=0))
+    pairs = cm.per_chip_pairwise(*cm.load_per_chip(f), reps=200)
+    assert not pairs.iloc[0].clear_difference
+
+
+def test_per_chip_needs_the_same_chips_for_every_model(tmp_path):
+    f = tmp_path / "pc.csv"; write_per_chip(f, toy_per_chip_rows()[:-1])
+    with pytest.raises(ValueError, match="same chips"):
+        cm.load_per_chip(f)
