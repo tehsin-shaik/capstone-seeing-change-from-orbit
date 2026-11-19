@@ -28,8 +28,8 @@ Short names used for sources:
 | baselines cv_results | [results/mangrove_segmentation/baselines/cv_results.csv](../results/mangrove_segmentation/baselines/cv_results.csv) |
 | data README | [data/README.md](../data/README.md) |
 | registration README | [src/registration/README.md](../src/registration/README.md) |
-| test-chip zip | `seeing-orbit-test-chips-inputs-only.zip` (its `README.txt`, `manifest_test.csv`, `SOURCE_ATTRIBUTION.txt`, and the arrays inside) |
-| U-Net report | `Seeing_Orbit_Mangrove_U-Net_Report.pdf` |
+| test-chip zip | [data/test_chips/seeing-orbit-test-chips-inputs-only.zip](../data/test_chips/seeing-orbit-test-chips-inputs-only.zip) (its `README.txt`, `manifest_test.csv`, `SOURCE_ATTRIBUTION.txt`, and the arrays inside) |
+| U-Net report | [docs/reports/Seeing_Orbit_Mangrove_U-Net_Report.pdf](reports/Seeing_Orbit_Mangrove_U-Net_Report.pdf) |
 | hand label | [data/hand_labels/KAB_2020_07.gpkg](../data/hand_labels/KAB_2020_07.gpkg), read with `ogrinfo` |
 
 ## 1. There are two separate datasets in this repository
@@ -38,7 +38,7 @@ This is the most important thing to know before reading further. The two are eas
 
 | | **Main pipeline** | **"Seeing Orbit" set** |
 | --- | --- | --- |
-| Where | Code in `src/mangrove_segmentation/`, results in `results/mangrove_segmentation/` | `seeing-orbit-test-chips-inputs-only.zip` and the U-Net report PDF |
+| Where | Code in `src/mangrove_segmentation/`, results in `results/mangrove_segmentation/` | `data/test_chips/seeing-orbit-test-chips-inputs-only.zip` and the U-Net report PDF in `docs/reports/` |
 | Area | 13 UAE sites | Eastern Mangroves only |
 | Dates | 8 per site: four in 2020, plus March and November of 2018 and 2025 | 5 Nov 2018 and 1 Nov 2025 |
 | Channels per chip | 8: B02, B03, B04, B08, B11, B12, NDVI, **MNDWI** | 6: blue, green, red, NIR, NDVI, **NDWI** |

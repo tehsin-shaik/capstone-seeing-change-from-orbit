@@ -11,7 +11,7 @@ from pathlib import Path
 import numpy as np
 import pytest
 
-sys.path.insert(0, str(Path(__file__).resolve().parents[1] / "src" / "registration"))
+sys.path.insert(0, str(Path(__file__).resolve().parents[1]))
 import affine_alignment as aa  # noqa: E402
 
 # 50 random points roughly inside the Jubail scene, in UTM metres

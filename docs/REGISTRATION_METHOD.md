@@ -6,7 +6,7 @@ line up the 2025 image with the 2018 image and measure how far off it still is.
 
 - Code: [`src/registration/affine_alignment.py`](../src/registration/affine_alignment.py)
   and [`src/registration/real_raster_check.py`](../src/registration/real_raster_check.py)
-- Tests: [`tests/test_affine_alignment.py`](../tests/test_affine_alignment.py)
+- Tests: [`src/registration/tests/test_affine_alignment.py`](../src/registration/tests/test_affine_alignment.py)
 - Results: `results/registration/`
 
 ## Why we need this
@@ -117,7 +117,7 @@ experiment shows why the minimum number of points isn't enough.
 ```
 pip install -r src/registration/requirements.txt pytest
 python src/registration/affine_alignment.py experiment     # 2 vs 3 results and figures
-python -m pytest -q tests
+python -m pytest -q src/registration/tests
 python src/registration/real_raster_check.py               # needs the two GeoTIFFs in data/raw/
 python src/registration/affine_alignment.py warp --moving 2025.tif --reference 2018.tif --out 2025_aligned.tif
 ```
