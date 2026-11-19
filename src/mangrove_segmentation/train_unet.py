@@ -13,6 +13,7 @@ Same protocol as the baselines (results/baselines/scripts/run_cv.py):
 Usage (from the SDP folder, or via run_all.py --step unet):
   python 2_Code/train_unet.py --preset cpu         # what was run on 2 CPU cores -> 4_Results/Unet
   python 2_Code/train_unet.py --preset gpu         # NVIDIA GPU / Colab          -> 4_Results/Unet_gpu
+  python 2_Code/train_unet.py --preset gpu_b8      # same as gpu but base width 8 -> 4_Results/Unet_gpu_b8
   python 2_Code/train_unet.py --folds 2 3          # only some folds; earlier folds' rows are kept
   python 2_Code/train_unet.py --bench              # time a few training steps and exit
 Paths come from paths.py. Uses the GPU automatically when PyTorch can see one (--device cpu to force CPU).
@@ -48,13 +49,19 @@ PRESETS = {
     "cpu": dict(base=16, crop=128, crops_per_chip=3, batch=16, epochs=40, patience=8, lr=1e-3),
     "gpu": dict(base=32, crop=256, crops_per_chip=1, batch=16, epochs=100, patience=15, lr=1e-3),
 }
+# Smaller U-Nets for the efficiency study: same settings as "gpu", only the base width changes.
+# Parameters go up with roughly base^2, so 16 / 8 / 4 is about 1/4, 1/16 and 1/64 of the gpu model.
+for _b in (16, 8, 4):
+    PRESETS[f"gpu_b{_b}"] = dict(PRESETS["gpu"], base=_b)
 
 
 # ----------------------------------------------------------------------------- data
 def load_cat() -> pd.DataFrame:
     cat = pd.read_csv(TV / "catalog.csv")
     cat = cat[cat["year"] == 2020].copy()
-    qa = pd.read_csv(QA_CSV)[["site", "date", "water_b04_p5"]]
+    # QA_download.csv isn't always shipped, but Train_Val_Dataset has the same columns in hazy_scenes.csv
+    qa_path = QA_CSV if Path(QA_CSV).exists() else TV / "hazy_scenes.csv"
+    qa = pd.read_csv(qa_path)[["site", "date", "water_b04_p5"]].drop_duplicates(["site", "date"])
     cat = cat.merge(qa, on=["site", "date"], how="left")
     cat["hazy"] = cat["water_b04_p5"] > HAZE_P5
     b = cat["bounds_epsg32640"].str.split(",", expand=True).astype(float)
@@ -243,6 +250,8 @@ def run(preset: str, out: Path, folds=None, max_minutes_per_fold=None, device=No
         tr = drop_near(train[train.fold != inner], iv)
         tr_ids, iv_ids = list(tr.chip_id), list(iv.chip_id)
         mean, std = fold_stats(tr_ids, data)
+        if DEVICE.type == "cuda":
+            torch.cuda.reset_peak_memory_stats(DEVICE)
         model = UNet(8, cfg["base"]).to(DEVICE)
         opt = torch.optim.Adam(model.parameters(), lr=cfg["lr"])
         sched = torch.optim.lr_scheduler.CosineAnnealingLR(opt, T_max=cfg["epochs"])
@@ -278,13 +287,19 @@ def run(preset: str, out: Path, folds=None, max_minutes_per_fold=None, device=No
         grid = np.round(np.arange(0.05, 0.951, 0.05), 2)
         ious = [iou_at(probs, iv_ids, data, t) for t in grid]
         thr = float(grid[int(np.argmax(ious))])
+        # time the held-out prediction too, so models can be compared on speed and not just IoU
+        tp = time.time()
         hp = predict_prob(model, list(held.chip_id), data, mean, std)
+        predict_ms = (time.time() - tp) * 1000 / max(1, len(held))
         for cid, p in hp.items():
             save_mask(rdir / "preds" / f"UNET_{variant}", cid, p > thr)
         rec = {"variant": variant, "fold": int(k), "held_site": ",".join(sorted(held.site.unique())),
                "held_chips": len(held), "train_chips": len(tr_ids), "inner_fold": inner, "inner_chips": len(iv_ids),
                "best_epoch": best_ep, "epochs_run": ep, "inner_iou@0.5": round(best, 4), "threshold": thr,
-               "inner_iou@thr": round(float(max(ious)), 4), "minutes": round((time.time() - t0) / 60, 1)}
+               "inner_iou@thr": round(float(max(ious)), 4), "minutes": round((time.time() - t0) / 60, 1),
+               "params": sum(p.numel() for p in model.parameters()), "device": str(DEVICE),
+               "predict_ms_per_chip": round(predict_ms, 1),
+               "peak_gpu_mb": round(torch.cuda.max_memory_allocated(DEVICE) / 2**20) if DEVICE.type == "cuda" else None}
         fits.append(rec); print(rec, flush=True); done.add(int(k))
         merge_rows(out / "fold_fits.csv", fits, done).to_csv(out / "fold_fits.csv", index=False)
         merge_rows(out / "history.csv", hist, done).to_csv(out / "history.csv", index=False)
