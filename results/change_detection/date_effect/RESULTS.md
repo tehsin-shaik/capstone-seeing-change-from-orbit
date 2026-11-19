@@ -16,6 +16,16 @@ The time of year goes with the same-year swing more than tide does: November aga
 
 Figures: [all sites](tide/test1_all_sites.png), [site by site](tide/test1_per_site.png).
 
+### Tide gauge check
+
+The tide heights come from a model, so we looked for real tide gauge records to check them against. There is no public tide gauge for the UAE in the open archives (UHSLC, GESLA, IOC). The nearest ones with data on our dates are in Oman (2018 and 2020 dates) and Kuwait (2025 dates), 180 to 830 km from our sites.
+
+At those gauges the model is typically within about 10 cm of the measured level at the overpass times (4 cm at Muscat and Majis, 11 cm at Khawr Wudam and in Kuwait), while the level itself changes by more than a metre from date to date. But these gauges are in different waters. The Oman ones are on the Gulf of Oman, where the tide is about 4 hours ahead of the tide at our sites, and Kuwait is at the other end of the Gulf. So this checks the model and our timing, not the water level at our sites.
+
+The same-year test still shows tide explains about 1%. Putting the gauge readings in place of the model, or adding the gauge's difference from the model to our heights, gives nothing different from chance. UAE gauge data does exist: a network of 34 water level stations was [installed for Bayanat in 2017](https://www.hydro-international.com/content/article/tide-gauge-and-water-temperature-monitoring-network-for-the-uae). It is not public and would have to be requested from them.
+
+Tables: [stations found](tide/gauge/stations_found.csv), [gauge against model](tide/gauge/gauge_vs_model.csv), [same-year test](tide/gauge/gauge_same_year_test.csv). Figure: [gauges at the overpass times](tide/gauge/gauge_vs_model.png).
+
 ## 2. Image differences
 
 Next we checked whether the images themselves are comparable between dates. We picked pixels that shouldn't change (deep water, and bright bare ground that is stable on every date) using band rules only, no labels. They do change. Within the same site and year, bright ground is up to 12% darker or brighter than the year's average, and on 17 November 2020 a quarter to a third of the pixels at three sites have a band at or below zero.
@@ -50,7 +60,7 @@ An earlier version of sections 1 and 2 measured each scene against the site's av
 ## What none of this shows
 
 - It doesn't show what the cause is. Image differences go with the same-year swings, but that is a link over 18 dates that could still be chance. Both image measures also rise and fall with the height of the sun (r about 0.6), which explains nearly as much on its own, so we can't tell the two apart.
-- The tide heights were not checked against a tide gauge. UNVERIFIED.
+- The tide heights at our sites were not checked against a tide gauge, because no UAE gauge is public. The model was only checked at gauges in Oman and Kuwait. UNVERIFIED.
 - Only the random forest was tested. The U-Net and DINOv3 may react differently.
 - Only one simple correction and one augmentation setting were tried. A better one might work.
 - There is no ground truth, so we can't say which date is right.

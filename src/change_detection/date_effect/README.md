@@ -2,7 +2,7 @@
 
 These scripts test three possible reasons why the random forest's mangrove area changes with the image date. The results are in [results/change_detection/date_effect/RESULTS.md](../../../results/change_detection/date_effect/RESULTS.md).
 
-- `tide/` compares the swings with the water level, from the image and from a tide model.
+- `tide/` compares the swings with the water level, from the image and from a tide model. Scripts 06 to 12 check the tide model against tide gauges.
 - `image_differences/` measures how much the images differ on pixels that shouldn't change, corrects the images and runs the forests again.
 - `robustness/` compares four versions of the forest (current, trained with brightness changes, indices only, area from probabilities).
 
@@ -12,9 +12,10 @@ Run the folders in that order. The later ones read tables written by the earlier
 
 - The Train/Val dataset (`catalog.csv`, `hazy_scenes.csv`, `chips/`), which is not in the repository.
 - `common.py` in `src/change_detection` (and through it `baseline_rf.py` and `chipio.py`). It is found automatically. Use `--code` if it is somewhere else.
-- For `tide/01` and `tide/03` only: the `pyTMD` package (3.1.0 was used) and `pyproj`.
-- For `tide/03` only: two open tide models, which are not in the repository. EOT20 ocean tides from https://doi.org/10.17882/79489 unpacked as `<models>/EOT20/ocean_tides/*.nc`, and GOT4.10c from NASA GSFC unpacked as `<models>/GOT4.10c/grids_oceantide/*.d`. Neither needs a login.
+- For `tide/01`, `tide/03` and `tide/09` only: the `pyTMD` package (3.1.0 was used) and `pyproj`.
+- For `tide/03` and `tide/09` only: two open tide models, which are not in the repository. EOT20 ocean tides from https://doi.org/10.17882/79489 unpacked as `<models>/EOT20/ocean_tides/*.nc`, and GOT4.10c from NASA GSFC unpacked as `<models>/GOT4.10c/grids_oceantide/*.d`. Neither needs a login.
 - `tide/01` and `image_differences/01` look up each scene in the public Sentinel-2 archive (Earth Search) to get the sensing time and the processing version. They read the record only, no imagery.
+- `tide/06` to `tide/08` download station lists and about 50 MB of tide gauge records from the IOC and UHSLC servers into the work folder. No login is needed.
 
 ## How to run
 
@@ -27,6 +28,13 @@ python 02_predict_all_scenes.py --train-val <Train_Val_Dataset> --work <tide wor
 python 03_tide_model.py         --models <models> --out <tide out>
 python 04_analysis.py           --work <tide work> --out <tide out> --train-val <Train_Val_Dataset> --disagreement <repo>/results/mangrove_segmentation/model_disagreement/per_site_date.csv
 python 05_figures.py            --out <tide out>
+python 06_gauge_stations.py        --scenes <tide out>/scenes.csv --work <gauge work>
+python 07_gauge_probe.py           --scenes <tide out>/scenes.csv --work <gauge work>
+python 08_gauge_download.py        --scenes <tide out>/scenes.csv --work <gauge work>
+python 09_gauge_model.py           --models <models> --scenes <tide out>/scenes.csv --work <gauge work>
+python 10_gauge_levels.py          --work <gauge work> --tide-out <tide out> --out <tide out>/gauge
+python 11_gauge_same_year_test.py  --work <gauge work> --tide-out <tide out> --out <tide out>/gauge
+python 12_gauge_station_table.py   --work <gauge work> --out <tide out>/gauge
 
 cd ../image_differences
 python 01_scene_meta.py         --train-val <Train_Val_Dataset> --out <images out>
@@ -44,7 +52,7 @@ python 03_figures.py            --out <robustness out>
 python 04_after_checks.py       --out <robustness out>
 ```
 
-Everything runs on a CPU. Most steps take a few minutes. `image_differences/05` takes about 12 minutes, and `robustness/01` and `robustness/02` about 20 minutes each.
+Everything runs on a CPU. Most steps take a few minutes. `image_differences/05` takes about 12 minutes, and `robustness/01` and `robustness/02` about 20 minutes each. `tide/07` and `tide/08` take about an hour together because the IOC server is slow.
 
 ## How the swing is measured
 
@@ -61,5 +69,6 @@ The swing is always a same-year swing. In `tide/04` and `image_differences/04` a
 
 - `tide/02` and `image_differences/02` print each forest's held-out IoU next to the committed one. They should be the same.
 - `image_differences/05` and `robustness/02` stop if the same-year pairs on the images as they are don't match `results/change_detection/all_sites/noise_floor_all_pairs.csv`. `robustness/02` also stops if the current forest doesn't give the committed IoU per fold.
+- `tide/11` stops if the tide heights it has for the sites are not the ones the tide test used.
 - `robustness/01` first trains with no change at all and stops if that does not give the current forest again.
 - `image_differences/07` and `robustness/04` were added after the results were seen, to understand them. They are not part of the tests.

@@ -1,0 +1,15 @@
+height,what_it_is,scenes,site_years,passes,years,r_same_year,share_of_same_year_swing_pct,chance_shuffled_dates_pct
+"EOT20 model at the site, all scenes",the test as it stands,37,16,18,2018 2020 2025,0.104,1.1,72.3
+"Muscat, Oman (UHSLC hourly): gauge height itself","level in other water, not at our sites",27,11,13,2018 2020,0.264,7.0,68.2
+"Muscat, Oman (UHSLC hourly): model at the site + gauge difference",model plus the weather effect seen at the gauge,27,11,13,2018 2020,0.148,2.2,70.4
+"Muscat, Oman (UHSLC hourly): model at the site, same scenes",like-for-like comparison,27,11,13,2018 2020,0.167,2.8,65.6
+"Majis, Oman (IOC): gauge height itself","level in other water, not at our sites",25,10,11,2018 2020,0.276,7.6,67.8
+"Majis, Oman (IOC): model at the site + gauge difference",model plus the weather effect seen at the gauge,25,10,11,2018 2020,0.16,2.6,70.7
+"Majis, Oman (IOC): model at the site, same scenes",like-for-like comparison,25,10,11,2018 2020,0.178,3.2,65.2
+"Khawr Wudam, Oman (IOC): gauge height itself","level in other water, not at our sites",16,6,7,2020,0.39,15.2,52.6
+"Khawr Wudam, Oman (IOC): model at the site + gauge difference",model plus the weather effect seen at the gauge,16,6,7,2020,-0.004,0.0,100.0
+"Khawr Wudam, Oman (IOC): model at the site, same scenes",like-for-like comparison,16,6,7,2020,0.177,3.1,81.2
+"Salmiya, Kuwait (IOC): gauge height itself","level in other water, not at our sites",10,5,5,2025,-0.714,51.0,33.0
+"Salmiya, Kuwait (IOC): model at the site + gauge difference",model plus the weather effect seen at the gauge,10,5,5,2025,-0.197,3.9,100.0
+"Salmiya, Kuwait (IOC): model at the site, same scenes",like-for-like comparison,10,5,5,2025,-0.149,2.2,100.0
+"Model at the site + gauge difference, all scenes (Muscat for 2018 and 2020, Kuwait for 2025)",model plus the weather effect seen at the gauge,37,16,18,2018 2020 2025,0.076,0.6,78.8
