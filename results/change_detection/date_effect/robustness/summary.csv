@@ -1,7 +1,5 @@
-version,asked_for,six_site_mean_abs_swing_pct,change_against_A_pct,all_pairs_mean_abs_swing_pct,sites_with_smaller_swing_than_A,iou_mean_of_5_folds_all_2020_chips,iou_change_against_A,iou_mean_of_5_folds_non_hazy,helps_by_the_rule
-A,True,19.7564,0.0,19.7869,,0.7039,0.0,0.7171,
-B,True,18.4449,-6.6381,18.3651,2.0,0.7056,0.0017,0.7182,False
-C,True,18.9708,-3.9761,21.7094,2.0,0.6566,-0.0473,0.6673,False
-D,True,13.9841,-29.2172,15.3403,5.0,0.7039,0.0,0.7171,True
-B with probability sum,False,13.7029,-30.6405,14.8113,5.0,0.7056,0.0017,0.7182,True
-C with probability sum,False,20.3502,3.0056,20.0988,2.0,0.6566,-0.0473,0.6673,False
+version,what,average_same_year_swing_pct,change_against_A_pct,heldout_iou,iou_change_against_A,helps_by_the_rule,average_same_year_swing_ha,area_measure_over_thresholded_area_of_A,area_change_when_images_10pct_darker_pct,area_change_when_images_10pct_brighter_pct
+A,current forest,19.76,0.0,0.7039,0.0,,95.7,1.0,6.9,-4.1
+B,trained with brightness copies,18.44,-6.6,0.7056,0.0017,False,89.5,0.991,,
+C,trained on NDVI and MNDWI only,18.97,-4.0,0.6566,-0.0473,False,128.6,1.04,,
+D,"forest A, area from the sum of probabilities",13.98,-29.2,0.7039,0.0,True,118.6,1.665,,

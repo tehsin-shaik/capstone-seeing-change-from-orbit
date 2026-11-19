@@ -1,0 +1,7 @@
+gauge,water,km_to_nearest_site,km_to_farthest_site,scene_dates,years,typical_difference_from_model_cm,largest_difference_from_model_cm,range_of_levels_at_overpass_m,r_with_model_at_gauge,hours_gauge_tide_is_ahead_of_tide_at_our_sites,r_with_model_heights_at_our_sites,same_year_test_scenes,share_of_swing_gauge_itself_pct,chance_gauge_itself_pct,share_of_swing_model_plus_gauge_difference_pct,chance_model_plus_gauge_difference_pct,share_of_swing_model_same_scenes_pct,chance_model_same_scenes_pct
+"Muscat, Oman (UHSLC hourly)",Gulf of Oman,409,458,13,2018 2020,3.5,6.6,1.58,0.998,4.0,0.06,27,7.0,67.9,2.2,70.4,2.8,65.6
+"Majis, Oman (IOC)",Gulf of Oman,190,255,12,2018 2020,4.2,7.8,1.65,0.998,4.0,0.21,25,7.6,67.9,2.6,69.4,3.2,65.3
+"Diba, Oman (IOC)",Gulf of Oman,179,267,4,2018,7.3,13.0,1.09,0.996,3.7,0.28,,,,,,,
+"Khawr Wudam, Oman (IOC)",Gulf of Oman,302,350,10,2018 2020,11.0,25.7,1.91,0.99,4.1,0.03,16,15.2,53.1,0.0,100.0,3.1,80.7
+"Salmiya, Kuwait (IOC)","the Gulf, north end",823,831,5,2025,11.3,22.4,1.27,0.991,0.0,0.06,10,51.0,33.0,3.9,100.0,2.2,100.0
+"all scenes (Muscat for 2018 and 2020, Kuwait for 2025)",,,,,,,,,,,,37,,,0.6,79.0,1.1,72.3
