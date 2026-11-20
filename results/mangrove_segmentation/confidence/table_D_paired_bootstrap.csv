@@ -1,0 +1,10 @@
+first,second,first_minus_second,bootstrap_mean,ci95_lo,ci95_hi,includes_zero,positions_ci95_lo,positions_ci95_hi,positions_includes_zero
+Random forest,DINOv3 + LoRA,0.0094,0.0097,-0.0039,0.024,True,-0.009,0.0326,True
+Random forest,U-Net,-0.0094,-0.0095,-0.0235,0.0044,True,-0.0176,-0.0007,False
+Random forest,SVM RBF,0.0015,0.0017,-0.0055,0.0086,True,-0.0046,0.0088,True
+SVM RBF,SVM linear,0.1055,0.1057,0.0842,0.1272,False,0.0852,0.1267,False
+Random forest,"Random forest, RGB",0.1449,0.1453,0.124,0.17,False,0.12,0.1722,False
+SVM RBF,"SVM RBF, RGB",0.175,0.175,0.1484,0.2042,False,0.1447,0.2066,False
+DINOv3 + LoRA,"DINOv3 + LoRA, RGB, branch removed",0.1115,0.1113,0.0964,0.1278,False,0.092,0.1289,False
+DINOv3 + LoRA,"DINOv3 + LoRA, RGB, branch fed RGB",0.068,0.0678,0.0543,0.0816,False,0.049,0.086,False
+DINOv3 frozen,"DINOv3 frozen, RGB, branch removed",0.1325,0.1328,0.1166,0.1517,False,0.1108,0.1575,False
