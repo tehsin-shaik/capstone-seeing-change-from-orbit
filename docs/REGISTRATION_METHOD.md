@@ -103,8 +103,10 @@ not misalignment.
 
 ## Limits
 
-- Only one place (Jubail) and one date pair so far. Other sites and Sentinel-1
-  still need to be checked.
+- The SIFT checks cover Jubail and Eastern Mangroves (see `results/registration/`).
+  A second check without SIFT, at all 6 training sites, is in
+  [`results/registration/phase_correlation/`](../results/registration/phase_correlation/RESULTS.md).
+  Sentinel-1 still needs to be checked.
 - Errors compare 2025 with 2018, not with true ground positions.
 - An affine is one transform for the whole image, so local distortion isn't fixed.
 - The known-warp numbers depend on how big Khaled's random warps are.

@@ -1,0 +1,11 @@
+site,pair,chips,east_m,north_m,shift_m,shift_ci95,shift_px,chip_spread_m,enough_chips
+al_aryam_islands,2018-03-08 vs 2025-03-31,2,1.95,6.4,6.69,6.51 to 6.87,0.67,0.21,False
+al_aryam_islands,2018-11-23 vs 2025-11-01,1,1.1,4.2,4.34,4.34 to 4.34,0.43,0.0,False
+eastern_mangroves,2018-03-18 vs 2025-03-18,1,2.0,0.1,2.0,2.00 to 2.00,0.2,0.0,False
+eastern_mangroves,2018-11-23 vs 2025-11-16,2,1.4,0.4,1.46,1.46 to 2.55,0.15,1.75,False
+ghantoot,2018-03-20 vs 2025-03-18,8,1.1,0.3,1.14,0.50 to 1.35,0.11,0.34,True
+ghantoot,2018-11-05 vs 2025-11-13,8,2.8,-0.8,2.91,1.92 to 4.30,0.29,1.26,True
+jubail_island,2018-03-18 vs 2025-03-18,7,1.9,1.4,2.36,1.35 to 3.61,0.24,1.58,True
+jubail_island,2018-11-23 vs 2025-11-16,12,0.95,0.0,0.95,0.22 to 2.96,0.1,1.76,True
+ras_ghurab,2018-03-18 vs 2025-03-18,5,2.7,0.5,2.75,1.77 to 3.45,0.27,0.72,True
+ras_ghurab,2018-11-23 vs 2025-11-16,12,1.35,-0.35,1.39,0.36 to 1.78,0.14,1.29,True

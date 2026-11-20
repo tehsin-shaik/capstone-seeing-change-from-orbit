@@ -1,3 +1,7 @@
+<p align="center">
+  <img src="docs/images/banner_jubail.gif" alt="Jubail Island from Sentinel-2, 2018 to 2025" width="100%">
+</p>
+
 # Seeing Change from Orbit
 
 **Detecting Coastal and Urban Change over Abu Dhabi from Satellite Imagery**
