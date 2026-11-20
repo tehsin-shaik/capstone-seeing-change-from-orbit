@@ -1,0 +1,15 @@
+quantity,value,unit,scenes,chance_shuffled_dates_pct
+scenes with a same-year swing,37.0,scenes,,
+sites and years they are in,16.0,site-years,,
+different dates,18.0,dates,,
+share of the same-year swing that goes with tide height (EOT20 model),1.1,%,37,72.3
+share of the same-year swing that goes with the water share seen in the image,1.0,%,37,60.1
+"water share in the image against tide height, correlation",0.719,r,37,
+share of the same-year swing that goes with November or not,20.7,%,37,20.0
+share of the same-year swing that goes with the height of the sun,38.9,%,37,6.3
+"share of the same-year swing that goes with the height of the sun, without the 18 May 2020 pass",9.9,%,33,
+"November or not against tide height, correlation",0.838,r,39,
+pixels that flip between dates of the same year: share in or next to the strip that is sometimes water,26.4,%,,
+all pixels: share in or next to that strip (what chance would give),15.2,%,,
+all years (older version): share of the swing that goes with tide height,0.7,%,40,
+all years (older version): share of the swing that goes with the water share,4.4,%,40,

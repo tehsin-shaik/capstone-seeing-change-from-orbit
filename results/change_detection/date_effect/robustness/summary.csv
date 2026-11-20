@@ -1,0 +1,5 @@
+version,what,average_same_year_swing_pct,change_against_A_pct,heldout_iou,iou_change_against_A,helps_by_the_rule,average_same_year_swing_ha,area_measure_over_thresholded_area_of_A,area_change_when_images_10pct_darker_pct,area_change_when_images_10pct_brighter_pct
+A,current forest,19.76,0.0,0.7039,0.0,,95.7,1.0,6.9,-4.1
+B,trained with brightness copies,18.44,-6.6,0.7056,0.0017,False,89.5,0.991,,
+C,trained on NDVI and MNDWI only,18.97,-4.0,0.6566,-0.0473,False,128.6,1.04,,
+D,"forest A, area from the sum of probabilities",13.98,-29.2,0.7039,0.0,True,118.6,1.665,,

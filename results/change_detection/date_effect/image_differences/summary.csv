@@ -1,0 +1,34 @@
+quantity,value,unit,scenes,chance_shuffled_dates_pct
+bright stable ground: darkest scene against the average of its site and year,-12.1,%,,
+bright stable ground: brightest scene against the average of its site and year,11.5,%,,
+"pixels with a band at or below zero on 2020-11-17, al_nouf",7.6,%,,
+"pixels with a band at or below zero on 2020-11-17, eastern_mangroves",32.5,%,,
+"pixels with a band at or below zero on 2020-11-17, jubail_island",35.0,%,,
+"pixels with a band at or below zero on 2020-11-17, ras_ghurab",24.3,%,,
+sites and years whose scenes have more than one processing version,0.0,site-years,,
+share of the same-year swing that goes with deep water (red band) and bright stable ground together,46.1,%,37,14.1
+share of the same-year swing that goes with deep water (red band) alone,30.3,%,37,4.8
+share of the same-year swing that goes with bright stable ground alone,23.5,%,37,29.0
+"share of the same-year swing that goes with deep water, bright stable ground and tide height together",46.7,%,37,14.6
+"deep water (red band) against the height of the sun, correlation",0.609,r,37,
+"bright stable ground against the height of the sun, correlation",0.594,r,37,
+all years (older version): share of the swing that goes with deep water and bright stable ground together,47.4,%,38,0.4
+"average same-year swing per site, images as they are (mean of the six sites)",19.76,%,,
+"the same without Al Nouf, images as they are",19.8,%,,
+"held-out IoU on the non-hazy 2020 chips, images as they are (mean of the five folds)",0.7171,IoU,,
+"average same-year swing, images as they are, al_aryam_islands",11.4,%,,
+"average same-year swing, images as they are, al_nouf",19.6,%,,
+"average same-year swing, images as they are, eastern_mangroves",17.3,%,,
+"average same-year swing, images as they are, ghantoot",8.5,%,,
+"average same-year swing, images as they are, jubail_island",43.4,%,,
+"average same-year swing, images as they are, ras_ghurab",18.3,%,,
+"average same-year swing per site, after the correction (mean of the six sites)",15.17,%,,
+"the same without Al Nouf, after the correction",17.16,%,,
+"held-out IoU on the non-hazy 2020 chips, after the correction (mean of the five folds)",0.7184,IoU,,
+"average same-year swing, after the correction, al_aryam_islands",9.8,%,,
+"average same-year swing, after the correction, al_nouf",5.2,%,,
+"average same-year swing, after the correction, eastern_mangroves",12.6,%,,
+"average same-year swing, after the correction, ghantoot",9.0,%,,
+"average same-year swing, after the correction, jubail_island",35.3,%,,
+"average same-year swing, after the correction, ras_ghurab",19.1,%,,
+fall in the average same-year swing after the correction (a quarter was needed to count as helping),23.2,%,,
