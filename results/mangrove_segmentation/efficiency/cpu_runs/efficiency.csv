@@ -1,0 +1,3 @@
+preset,base,params,folds,mean_iou,iou_sd,train_min_per_fold,predict_ms_per_chip,peak_gpu_mb,device
+gpu_b8,8,486913,5,0.6865,0.1363,4.5,24.7,,cpu
+gpu_b4,4,122273,5,0.6071,0.2253,1.3,4.7,,cpu

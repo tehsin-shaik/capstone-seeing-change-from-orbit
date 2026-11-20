@@ -78,3 +78,25 @@ def test_small_presets_only_change_the_width():
         sizes.append(sum(p.numel() for p in U.UNet(8, base).parameters()))
     assert sizes == sorted(sizes, reverse=True)
     assert sizes[0] == 7_764_481                       # the gpu model in results/mangrove_segmentation/unet
+
+
+def test_paired_vs_committed_lines_up_with_the_real_folds():
+    committed = eff.REPO_RESULTS / "unet" / "cv_results.csv"
+    if not committed.exists():
+        pytest.skip("committed results not present")
+    full = pd.read_csv(committed).query("model == 'UNET' and variant == 'b_no_haze'")
+    small = full.assign(model="UNET_gpu_b8", iou=full["iou"] - 0.02)
+    folds, pairs = eff.paired_vs_committed({"gpu_b8": small})
+    assert list(folds.columns) == ["held_site", "U-Net (full)", "Random forest", "U-Net gpu_b8"]
+    row = pairs[(pairs.model_a == "U-Net (full)") & (pairs.model_b == "U-Net gpu_b8")].iloc[0]
+    assert row.mean_diff == pytest.approx(0.02) and row.a_wins == 5
+
+
+def test_paired_vs_committed_refuses_mismatched_folds():
+    committed = eff.REPO_RESULTS / "unet" / "cv_results.csv"
+    if not committed.exists():
+        pytest.skip("committed results not present")
+    full = pd.read_csv(committed).query("model == 'UNET' and variant == 'b_no_haze'")
+    wrong = full.assign(held_site=list(reversed(full["held_site"])))
+    with pytest.raises(ValueError, match="different folds"):
+        eff.paired_vs_committed({"gpu_b8": wrong})

@@ -17,7 +17,7 @@ separate the models, not that they're the same.
 
 We call a difference clear only if A wins every fold and the interval is above 0. The models that
 aren't clearly worse than the best one make up the top group, and the simplest of them is the
-suggested pick (26 Oct meeting: simpler model on a tie).
+suggested pick (simpler model on a tie).
 
 Per-chip version (--per-chip): with only 5 folds the test above is weak, so if we have TP/FP/FN per
 chip we can do a bootstrap over chips instead. Chips from the same spot on different dates are almost

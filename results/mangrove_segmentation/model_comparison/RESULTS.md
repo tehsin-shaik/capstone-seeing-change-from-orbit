@@ -8,7 +8,7 @@ RF, SVM (approx. RBF), U-Net, frozen DINOv3 and DINOv3 LoRA are tied on our 5 fo
 
 All five beat the NDVI rule and the linear SVM on every fold, by roughly 0.09 to 0.11 IoU.
 
-From the 26 Oct meeting: pick the final model from CV only, and take the simpler one if there's a tie. So the pick should be RF or SVM (approx. RBF). Which of those two is "simpler" is up for discussion, since `model_size.py` can't compare their sizes directly.
+We pick the final model from CV only, and take the simpler one if there's a tie, since a simpler model is easier to explain, faster to run and less likely to overfit. So the pick should be RF or SVM (approx. RBF). Which of those two is "simpler" is up for discussion, since `model_size.py` can't compare their sizes directly.
 
 ## IoU per held-out fold
 

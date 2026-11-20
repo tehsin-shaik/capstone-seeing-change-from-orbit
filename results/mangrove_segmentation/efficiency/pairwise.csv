@@ -1,0 +1,7 @@
+model_a,model_b,mean_diff,ci95_lo,ci95_hi,a_wins,folds,wilcoxon_p,wilcoxon_p_holm,clear_difference
+U-Net base 32,U-Net base 16,0.0094,-0.0116,0.0343,3,5,0.8125,1.0,False
+U-Net base 32,U-Net base 8,0.0252,0.0093,0.0431,4,5,0.125,0.625,False
+U-Net base 32,U-Net base 4,0.093,0.009,0.2347,5,5,0.0625,0.375,True
+U-Net base 16,U-Net base 8,0.0159,0.0031,0.0283,4,5,0.1875,0.75,False
+U-Net base 16,U-Net base 4,0.0837,0.0013,0.2405,4,5,0.1875,0.75,False
+U-Net base 8,U-Net base 4,0.0678,-0.0101,0.214,3,5,1.0,1.0,False

@@ -1,0 +1,6 @@
+fold,held_site,U-Net base 32,U-Net base 16,U-Net base 8,U-Net base 4
+1,eastern_mangroves,0.8537,0.8566,0.8548,0.8498
+2,jubail_island,0.5692,0.5123,0.5151,0.5146
+3,ras_ghurab,0.7005,0.7002,0.681,0.6981
+4,ghantoot,0.7841,0.767,0.7449,0.7516
+5,"al_aryam_islands,al_nouf",0.6349,0.6595,0.6204,0.2632

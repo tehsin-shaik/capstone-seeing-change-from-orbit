@@ -1,0 +1,12 @@
+{
+ "preset": "gpu",
+ "base": 32,
+ "crop": 256,
+ "crops_per_chip": 1,
+ "batch": 16,
+ "epochs": 100,
+ "patience": 15,
+ "lr": 0.001,
+ "device": "cuda",
+ "params": 7764481
+}
