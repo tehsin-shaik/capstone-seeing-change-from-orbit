@@ -1,7 +1,7 @@
 # Track A: Aligning the 2018 and 2025 images
 
 This is the second half of Track A, done by Tehsin Shaik. Khaled finds the matching
-landmarks (`src/registration/landmarks.py`, see its README). Tehsin's part uses them to
+landmarks (`src/registration/landmarks.py`, see [LANDMARK_DETECTION.md](LANDMARK_DETECTION.md)). Tehsin's part uses them to
 line up the 2025 image with the 2018 image and measure how far off it still is.
 
 - Code: [`src/registration/affine_alignment.py`](../src/registration/affine_alignment.py)

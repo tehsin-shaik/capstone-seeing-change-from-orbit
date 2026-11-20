@@ -22,7 +22,7 @@ The earlier checks used image pairs taken at about the same tide. This runs `src
 | Kept landmarks, dry land / shoreline | not worked out | 151 / 114 | 77 / 125 | 211 / 132 | 98 / 81 |
 | Shoreline matches that RANSAC kept | not worked out | 84% | 65% | 86% | 74% |
 
-The first column is the Earth Engine export in `docs/REGISTRATION_METHOD.md`, with the water share from `src/registration/README.md`. The new Jubail pair is a collect.py download on the same grid as the different-tide pair. Water shares in the table are at 10 m, so they differ a little from the 40 m scan. Shoreline means within 30 m of water in either image (`tide_landmark_zones.py`). At Jubail the flats that flood count as shoreline, so that zone grows from 27% to 65% of the non-water area and the counts move with it.
+The first column is the Earth Engine export in `docs/REGISTRATION_METHOD.md`, with the water share from `docs/LANDMARK_DETECTION.md`. The new Jubail pair is a collect.py download on the same grid as the different-tide pair. Water shares in the table are at 10 m, so they differ a little from the 40 m scan. Shoreline means within 30 m of water in either image (`tide_landmark_zones.py`). At Jubail the flats that flood count as shoreline, so that zone grows from 27% to 65% of the non-water area and the counts move with it.
 
 Two more different-tide pairs agree. Jubail 20 March 2018 / 27 January 2025: 288 matches, 218 inliers, 5.75 m, shift 2.34 m. Eastern 22 August 2018 / 10 January 2025: 253 matches, 196 inliers, 5.08 m, shift 1.48 m.
 
