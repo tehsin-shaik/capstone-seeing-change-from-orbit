@@ -29,6 +29,7 @@ Each shows the 2018 image, the 2025 image and the change map.
 - It doesn't show that Ghantoot really gained mangrove. No ground truth or hand label was used. An error shared by both scenes of a year would pass the same-year check.
 - It doesn't show that the new green pixels at Ghantoot are mangrove. The forest can call other vegetation mangrove.
 - It doesn't explain the swings. November 2020 scenes read higher than February or May at most sites, and the cause has not been checked.
+- Al Aryam's 2025 images are about half a pixel off from 2018. Correcting that removes about 3 ha of fake gain but doesn't change the result for the site ([Al Aryam registration check](../registration/al_aryam/RESULTS.md)). The other sites were within the correction rule.
 - The noise floor is rough. Each site has at most five same-year pairs, and some compare only 1 or 2 chips. Only one model was tried.
 
 ## Everything else

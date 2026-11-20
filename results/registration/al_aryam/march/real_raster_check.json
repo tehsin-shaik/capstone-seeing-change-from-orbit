@@ -1,0 +1,36 @@
+{
+  "gee_pair": {
+    "matches": 535,
+    "ransac_inliers": 393,
+    "selected": "translation",
+    "reason": "best held-out model 'translation' improves RMSE by 2.068 m (>= 1.0 m threshold)",
+    "ransac_transform_shift_px_mean": 0.5096361833292088,
+    "ransac_transform_shift_px_max": 0.6342141271855777,
+    "baseline": {
+      "none": {
+        "insample_rmse_m": 7.9554256255452644,
+        "cv_rmse_m": 7.9554256255452644
+      },
+      "translation": {
+        "insample_rmse_m": 5.863131836275646,
+        "cv_rmse_m": 5.887587743764912
+      },
+      "similarity": {
+        "insample_rmse_m": 5.854424021404843,
+        "cv_rmse_m": 5.895581017256557
+      },
+      "affine": {
+        "insample_rmse_m": 5.845504758155852,
+        "cv_rmse_m": 5.90472896306734
+      }
+    }
+  },
+  "known_warp_roundtrip": {
+    "trials": 5,
+    "recovery_error_m_median": 0.08814438324193687,
+    "recovery_error_m_max": 0.1807608264951949
+  },
+  "identity_warp_exact": true,
+  "identity_warp_metadata_kept": true,
+  "aligned_output": "../aryam/ras/2025-03-31_6band_aligned.tif"
+}

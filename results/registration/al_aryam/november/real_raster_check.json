@@ -1,0 +1,36 @@
+{
+  "gee_pair": {
+    "matches": 396,
+    "ransac_inliers": 282,
+    "selected": "affine",
+    "reason": "best held-out model 'affine' improves RMSE by 1.341 m (>= 1.0 m threshold)",
+    "ransac_transform_shift_px_mean": 0.39895059154041645,
+    "ransac_transform_shift_px_max": 0.5734856609579349,
+    "baseline": {
+      "none": {
+        "insample_rmse_m": 7.431491347000771,
+        "cv_rmse_m": 7.431491347000771
+      },
+      "translation": {
+        "insample_rmse_m": 6.08474628576094,
+        "cv_rmse_m": 6.108326980377523
+      },
+      "similarity": {
+        "insample_rmse_m": 6.056334913707694,
+        "cv_rmse_m": 6.095067863728649
+      },
+      "affine": {
+        "insample_rmse_m": 6.033290068454037,
+        "cv_rmse_m": 6.090804941028896
+      }
+    }
+  },
+  "known_warp_roundtrip": {
+    "trials": 5,
+    "recovery_error_m_median": 0.10123366877458262,
+    "recovery_error_m_max": 0.16417776032167125
+  },
+  "identity_warp_exact": true,
+  "identity_warp_metadata_kept": true,
+  "aligned_output": "../aryam/ras/2025-11-01_6band_aligned.tif"
+}

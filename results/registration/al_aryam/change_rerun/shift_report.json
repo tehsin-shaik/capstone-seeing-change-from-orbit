@@ -1,0 +1,26 @@
+{
+  "2025-03-31": {
+    "reference": "2018-03-08",
+    "tx_m": -1.7138,
+    "ty_m": -5.0966,
+    "shift_px_row_col": [
+      0.50966,
+      -0.17138
+    ],
+    "chips_checked": 7,
+    "median_offset_before_m": 5.099019527435303,
+    "median_offset_after_m": 0.7071068286895752
+  },
+  "2025-11-01": {
+    "reference": "2018-11-23",
+    "tx_m": -1.87,
+    "ty_m": -3.8349,
+    "shift_px_row_col": [
+      0.38349,
+      -0.187
+    ],
+    "chips_checked": 2,
+    "median_offset_before_m": 3.8294460773468018,
+    "median_offset_after_m": 0.9125704169273376
+  }
+}

@@ -26,6 +26,7 @@ Before two years can be compared, the 2018 and 2025 images have to line up, so t
 | **Known warp** | On the real 6-band images, warps of 151 to 236 m are undone to within 0.11 to 0.16 m. | [Method](../../docs/REGISTRATION_METHOD.md#check-on-the-real-6-band-images) |
 | **Real pairs** | At Jubail and Eastern Mangroves the held-out error is about half a pixel (4.8 to 5.8 m) and no fitted model beats no correction, so none is applied. The same holds at different tides, with fewer landmarks. | [Eastern Mangroves](../../results/registration/eastern_mangroves/RESULTS.md) · [different tides](../../results/registration/different_tides/RESULTS.md) |
 | **Cross-check** | Phase correlation finds shifts of 0.8 to 4.5 m at all 6 sites, within about 0.5 m of SIFT where both were run. Al Aryam in March (4.5 m) is the largest. | [Phase correlation](../../results/registration/phase_correlation/RESULTS.md) |
+| **Al Aryam** | The one site that needs a correction: 2025 is about 5 m north of 2018, and a shift lowers the held-out error by 2.1 m in March and 1.3 m in November. Shifting the 2025 chips removes about 3 ha of fake gain, and the change still doesn't beat the same-year noise. | [Al Aryam](../../results/registration/al_aryam/RESULTS.md) |
 
 ## Code
 
@@ -39,6 +40,7 @@ Before two years can be compared, the 2018 and 2025 images have to line up, so t
 | `make_6band_copy.py` | Makes 6-band copies of downloads for the real-pair check |
 | `tide_scene_scan.py` | Finds 2018 and 2025 scenes with different water levels |
 | `tide_landmark_zones.py` | Splits landmarks into dry land and shoreline |
+| `shift_chips.py` | Copies the dataset with one site's chips moved by a fitted shift |
 | `tests/` | Run with `pytest src/registration/tests` |
 
 How to run each script is at the end of its write-up.
