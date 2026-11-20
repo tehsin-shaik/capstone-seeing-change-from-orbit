@@ -11,11 +11,9 @@ WHAT IS REUSED (no model is written again here)
   * NDVI rule: baseline_ndvi.py, thresholds fitted on the training folds as in run_cv.py.
   * Random forest and SVM with another seed: rgb_only.py (run_rf, use_channels) and baseline_svm.run_cv.
     The seed sets which pixels are sampled and the model's own random numbers.
-  * U-Net with another seed: train_unet.py, gpu preset, file not edited. It seeds fold k with the number k.
-    Seed N here means fold k is seeded with k + 100 * N, so seed 0 is the committed setting.
-  * DINOv3 + LoRA with another seed: dinov3/train_dinov3_lora.py --seed N (same rule), run on its own:
-      python dinov3/train_dinov3_lora.py --seed 1 --run-name lora_all8_seed1 --out <runs>/dinov3 ...
-      add --no-spectral with --run-name lora_nospec_seed1, or --rgb-branch with lora_rgbbranch_seed1
+  * U-Net and DINOv3 + LoRA with another seed: train_unet.py (gpu preset) and dinov3/train_dinov3_lora.py
+    (default settings), files not edited. Both seed fold k with the number k. Seed N here means fold k is
+    seeded with k + 100 * N, so seed 0 is the committed setting.
 
 COMMANDS
   python confidence.py scores --train-val <Train_Val_Dataset> --per-chip <per_chip_scores_with_rgb.csv>
@@ -23,9 +21,10 @@ COMMANDS
       adds the NDVI rule and the linear SVM to the per-chip file -> <out>/per_chip_scores_all.csv
   python confidence.py tables --per-chip <per_chip_scores_all.csv> --out results/mangrove_segmentation/confidence
       tables A to D
-  python confidence.py seed --model rf|svm|unet --channels all8|rgb --seed N --train-val <Train_Val_Dataset>
+  python confidence.py seed --model rf|svm|unet|lora --channels all8|rgb --seed N --train-val <Train_Val_Dataset>
       --out <runs folder outside the repo>
-      (unet: set MANGROVE_ROOT to a folder outside the repo first, weights and masks go there)
+      lora takes --channels all8 (8 channel decoder branch), nospec (branch removed) or rgbbranch (branch fed RGB)
+      unet and lora: set MANGROVE_ROOT to a folder outside the repo first
   python confidence.py seed-table --runs <runs folder> --out results/mangrove_segmentation/confidence
       table E
 The per-chip file has one row per held-out chip and model: chip_id, site, date, fold, model, TP, FP, FN, channels.
@@ -275,7 +274,7 @@ def tables(a) -> None:
 
 # ----------------------------------------------------------------- other seeds (table E)
 def shifted_numpy(shift: int):
-    """numpy as train_unet.py sees it, with default_rng(fold) turned into default_rng(fold + shift)."""
+    """numpy as a training script sees it, with default_rng(fold) turned into default_rng(fold + shift)."""
     rnd = types.SimpleNamespace(seed=np.random.seed, default_rng=lambda s: np.random.default_rng(s + shift))
 
     class Numpy:
@@ -300,6 +299,17 @@ def seed_run(a) -> None:
         cv = fold_table(score_masks(U.run_dir(out) / "preds" / f"UNET_{V}", tv, out / "work"))
         cv.insert(0, "variant", V); cv.insert(0, "model", "UNET")
         cv.to_csv(out / "cv_results.csv", index=False)
+    elif a.model == "lora":
+        sys.path.insert(0, str(HERE / "dinov3"))
+        import train_dinov3_lora as L
+        first = L.T.seed_all
+        L.T.seed_all = lambda k: first(k + 100 * s)
+        L.np = shifted_numpy(100 * s)
+        flag = {"all8": [], "nospec": ["--no-spectral"], "rgbbranch": ["--rgb-branch"]}[a.channels]
+        out = L.run(L.parse([*flag, "--run-name", f"lora_{a.channels}_seed{s}", "--train-val", str(tv),
+                             "--qa", str(tv / "hazy_scenes.csv"), "--out", str(runs / "dinov3"),
+                             "--frozen-results", str(REPO_RESULTS / "dinov3")]))
+        cv = pd.read_csv(out / "cv_results.csv")
     else:
         import rgb_only as R
         from chipio import DEFAULT_CHANNELS
@@ -324,7 +334,7 @@ def seed_table(a) -> None:
     rows, folds = [], []
     for name, folder, where in SEED_ROWS:
         com = committed(*where) if isinstance(where, tuple) else committed(where)
-        per = {0: com}                                               # seed -> IoU of folds 1 to 5
+        per, again = {0: com}, None                                  # seed -> IoU of folds 1 to 5
         for f in sorted(runs.glob(f"{folder}_seed*/cv_results.csv")):
             s = int(f.parent.name.rsplit("_seed", 1)[1])
             cv = pd.read_csv(f)
@@ -334,8 +344,6 @@ def seed_table(a) -> None:
                 continue
             if s == 0:                                               # the committed setting run again: a check, not a new seed
                 again = cv.iou.astype(float)
-                folds.append({"model": name, "run": "seed 0 run again", **{f"fold{k}": again[k] for k in com.index},
-                              "mean": again.mean()})
             else:
                 per[s] = cv.iou.astype(float)
         t = pd.DataFrame(per)                                        # rows folds, columns seeds
@@ -346,11 +354,11 @@ def seed_table(a) -> None:
                "mean_over_seeds": t.mean().mean(), "sd_over_seeds": t.mean().std() if t.shape[1] > 1 else np.nan,
                "sd_over_folds": t.std().mean(),                      # sd of the 5 folds, averaged over the seeds
                "sd_over_seeds_within_a_fold": t.std(axis=1).mean() if t.shape[1] > 1 else np.nan}
-        hit = [r for r in folds if r["model"] == name and r["run"] == "seed 0 run again"]
-        if hit:
-            diff = pd.Series({k: hit[0][f"fold{k}"] - com[k] for k in com.index})
-            row.update({"seed0_again_mean": hit[0]["mean"], "seed0_again_minus_committed": hit[0]["mean"] - com.mean(),
-                        "seed0_again_largest_fold_change": diff.abs().max()})
+        if again is not None:
+            folds.append({"model": name, "run": "seed 0 run again", **{f"fold{k}": again[k] for k in com.index},
+                          "mean": again.mean()})
+            row.update({"seed0_again_mean": again.mean(), "seed0_again_minus_committed": again.mean() - com.mean(),
+                        "seed0_again_largest_fold_change": (again - com).abs().max()})
         rows.append(row)
     E = pd.DataFrame(rows)
     per_seed = sorted(c for c in E.columns if c.startswith("mean_iou_seed"))
@@ -375,16 +383,18 @@ def main():
     t = sub.add_parser("tables")
     t.add_argument("--per-chip", required=True); t.add_argument("--out", required=True)
     r = sub.add_parser("seed")
-    r.add_argument("--model", required=True, choices=["rf", "svm", "unet"])
-    r.add_argument("--channels", choices=["all8", "rgb"], default="all8")
+    r.add_argument("--model", required=True, choices=["rf", "svm", "unet", "lora"])
+    r.add_argument("--channels", choices=["all8", "rgb", "nospec", "rgbbranch"], default="all8")
     r.add_argument("--seed", type=int, required=True, help="0 = the committed setting")
     r.add_argument("--train-val", required=True, help=tv_help)
     r.add_argument("--out", required=True, help="runs folder; keep it outside the repository")
     e = sub.add_parser("seed-table")
     e.add_argument("--runs", required=True); e.add_argument("--out", required=True)
     a = ap.parse_args()
-    if a.cmd == "seed" and a.model == "unet" and a.channels != "all8":
-        ap.error("the U-Net only has an 8 channel run")
+    if a.cmd == "seed":
+        allowed = {"rf": ["all8", "rgb"], "svm": ["all8", "rgb"], "unet": ["all8"], "lora": ["all8", "nospec", "rgbbranch"]}
+        if a.channels not in allowed[a.model]:
+            ap.error(f"--model {a.model} takes --channels {' or '.join(allowed[a.model])}")
     {"scores": scores, "tables": tables, "seed": seed_run, "seed-table": seed_table}[a.cmd](a)
 
 
