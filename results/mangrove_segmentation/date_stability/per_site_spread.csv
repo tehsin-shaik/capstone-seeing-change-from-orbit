@@ -1,0 +1,31 @@
+site,model,mean,sd,min,max
+al_aryam_islands,DINOv3 LoRA,0.5315,0.1406,0.332,0.6476
+al_aryam_islands,DINOv3 frozen,0.5115,0.1084,0.3686,0.6267
+al_aryam_islands,Random forest,0.6403,0.0232,0.6159,0.6717
+al_aryam_islands,SVM (approx. RBF),0.6413,0.033,0.6101,0.6846
+al_aryam_islands,U-Net,0.5592,0.1382,0.3647,0.6699
+al_nouf,DINOv3 LoRA,0.6462,0.0742,0.5633,0.7149
+al_nouf,DINOv3 frozen,0.6146,0.1137,0.4575,0.6984
+al_nouf,Random forest,0.6674,0.0752,0.5913,0.7702
+al_nouf,SVM (approx. RBF),0.6492,0.0759,0.5594,0.7395
+al_nouf,U-Net,0.6734,0.0989,0.5784,0.766
+eastern_mangroves,DINOv3 LoRA,0.8413,0.0721,0.7677,0.9067
+eastern_mangroves,DINOv3 frozen,0.7944,0.0642,0.7104,0.8638
+eastern_mangroves,Random forest,0.8181,0.08,0.726,0.8892
+eastern_mangroves,SVM (approx. RBF),0.8284,0.0456,0.7648,0.8658
+eastern_mangroves,U-Net,0.8679,0.0221,0.843,0.8913
+ghantoot,DINOv3 LoRA,0.7545,0.0287,0.7225,0.7884
+ghantoot,DINOv3 frozen,0.7793,0.0255,0.7413,0.796
+ghantoot,Random forest,0.7752,0.0462,0.7167,0.8123
+ghantoot,SVM (approx. RBF),0.7768,0.0385,0.7264,0.8165
+ghantoot,U-Net,0.7874,0.0479,0.7317,0.8355
+jubail_island,DINOv3 LoRA,0.5536,0.0519,0.506,0.6141
+jubail_island,DINOv3 frozen,0.5609,0.0725,0.4847,0.6402
+jubail_island,Random forest,0.5547,0.0585,0.5016,0.6379
+jubail_island,SVM (approx. RBF),0.5474,0.0651,0.4717,0.6268
+jubail_island,U-Net,0.5548,0.0936,0.4524,0.663
+ras_ghurab,DINOv3 LoRA,0.6962,0.0171,0.6727,0.7115
+ras_ghurab,DINOv3 frozen,0.6971,0.0119,0.6858,0.7102
+ras_ghurab,Random forest,0.6946,0.0151,0.6787,0.7142
+ras_ghurab,SVM (approx. RBF),0.688,0.0048,0.6817,0.6933
+ras_ghurab,U-Net,0.7029,0.0499,0.6312,0.7451
