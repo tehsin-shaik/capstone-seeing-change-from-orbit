@@ -22,5 +22,8 @@ U-Net,seed 1,0.8657,0.5515,0.71,0.7614,0.6702,0.7118
 U-Net,seed 2,0.8598,0.5232,0.6958,0.7796,0.6691,0.7055
 U-Net,seed 0 run again,0.8551,0.5484,0.6961,0.7812,0.6434,0.7048
 DINOv3 + LoRA,seed 0 (committed),0.8417,0.5497,0.6974,0.7537,0.6297,0.6944
+DINOv3 + LoRA,seed 0 run again,0.8437,0.55,0.6971,0.7537,0.6268,0.6943
 "DINOv3 + LoRA, RGB, branch removed",seed 0 (committed),0.7153,0.461,0.5984,0.6731,0.4668,0.5829
+"DINOv3 + LoRA, RGB, branch removed",seed 0 run again,0.7136,0.4609,0.5979,0.6736,0.467,0.5826
 "DINOv3 + LoRA, RGB, branch fed RGB",seed 0 (committed),0.7519,0.526,0.5923,0.6974,0.5644,0.6264
+"DINOv3 + LoRA, RGB, branch fed RGB",seed 0 run again,0.7439,0.5042,0.6239,0.6979,0.5649,0.627
