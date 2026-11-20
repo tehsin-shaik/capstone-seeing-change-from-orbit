@@ -1,0 +1,5 @@
+preset,base,params,folds,mean_iou,iou_sd,train_min_per_fold,predict_ms_per_chip,peak_gpu_mb,device
+gpu,32,7764481,5,0.7085,0.1137,1.5,5.8,3039.0,cuda
+gpu_b16,16,1943297,5,0.6991,0.1283,1.0,4.0,1510.0,cuda
+gpu_b8,8,486913,5,0.6832,0.1279,0.8,5.3,767.0,cuda
+gpu_b4,4,122273,5,0.6155,0.2316,0.7,3.8,401.0,cuda

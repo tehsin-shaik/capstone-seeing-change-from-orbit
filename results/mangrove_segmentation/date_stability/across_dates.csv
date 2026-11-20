@@ -1,0 +1,6 @@
+model,site_dates,mean,sd,min,max,worst
+DINOv3 LoRA,24,0.6705,0.1293,0.332,0.9067,al_aryam_islands 2020-11-12
+DINOv3 frozen,24,0.6596,0.1277,0.3686,0.8638,al_aryam_islands 2020-11-12
+Random forest,24,0.6917,0.1011,0.5016,0.8892,jubail_island 2020-08-24
+SVM (approx. RBF),24,0.6885,0.1039,0.4717,0.8658,jubail_island 2020-08-24
+U-Net,24,0.6909,0.1378,0.3647,0.8913,al_aryam_islands 2020-11-12

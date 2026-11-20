@@ -1,0 +1,6 @@
+variant,fold,held_site,held_chips,train_chips,inner_fold,inner_chips,best_epoch,epochs_run,inner_iou@0.5,threshold,inner_iou@thr,minutes,params,device,predict_ms_per_chip,peak_gpu_mb
+b_no_haze,1,eastern_mangroves,8,107,3,40,56,71,0.7187,0.45,0.72,1.4,1943297,cuda,4.1,1508
+b_no_haze,2,jubail_island,80,56,3,33,29,44,0.6308,0.75,0.6731,0.5,1943297,cuda,3.9,1509
+b_no_haze,3,ras_ghurab,50,85,4,34,62,77,0.7883,0.55,0.7886,1.2,1943297,cuda,3.9,1510
+b_no_haze,4,ghantoot,41,85,3,40,26,41,0.701,0.5,0.701,0.6,1943297,cuda,4.0,1509
+b_no_haze,5,"al_aryam_islands,al_nouf",36,97,3,40,64,79,0.7217,0.5,0.7217,1.4,1943297,cuda,4.3,1509

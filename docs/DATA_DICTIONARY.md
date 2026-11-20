@@ -27,9 +27,9 @@ Short names used for sources:
 | baselines RESULTS | [results/mangrove_segmentation/baselines/RESULTS.md](../results/mangrove_segmentation/baselines/RESULTS.md) |
 | baselines cv_results | [results/mangrove_segmentation/baselines/cv_results.csv](../results/mangrove_segmentation/baselines/cv_results.csv) |
 | data README | [data/README.md](../data/README.md) |
-| registration README | [src/registration/README.md](../src/registration/README.md) |
-| test-chip zip | `seeing-orbit-test-chips-inputs-only.zip` (its `README.txt`, `manifest_test.csv`, `SOURCE_ATTRIBUTION.txt`, and the arrays inside) |
-| U-Net report | `Seeing_Orbit_Mangrove_U-Net_Report.pdf` |
+| landmark write-up | [docs/LANDMARK_DETECTION.md](LANDMARK_DETECTION.md) |
+| test-chip zip | [data/test_chips/seeing-orbit-test-chips-inputs-only.zip](../data/test_chips/seeing-orbit-test-chips-inputs-only.zip) (its `README.txt`, `manifest_test.csv`, `SOURCE_ATTRIBUTION.txt`, and the arrays inside) |
+| U-Net report | [docs/reports/Seeing_Orbit_Mangrove_U-Net_Report.pdf](reports/Seeing_Orbit_Mangrove_U-Net_Report.pdf) |
 | hand label | [data/hand_labels/KAB_2020_07.gpkg](../data/hand_labels/KAB_2020_07.gpkg), read with `ogrinfo` |
 
 ## 1. There are two separate datasets in this repository
@@ -38,7 +38,7 @@ This is the most important thing to know before reading further. The two are eas
 
 | | **Main pipeline** | **"Seeing Orbit" set** |
 | --- | --- | --- |
-| Where | Code in `src/mangrove_segmentation/`, results in `results/mangrove_segmentation/` | `seeing-orbit-test-chips-inputs-only.zip` and the U-Net report PDF |
+| Where | Code in `src/mangrove_segmentation/`, results in `results/mangrove_segmentation/` | `data/test_chips/seeing-orbit-test-chips-inputs-only.zip` and the U-Net report PDF in `docs/reports/` |
 | Area | 13 UAE sites | Eastern Mangroves only |
 | Dates | 8 per site: four in 2020, plus March and November of 2018 and 2025 | 5 Nov 2018 and 1 Nov 2025 |
 | Channels per chip | 8: B02, B03, B04, B08, B11, B12, NDVI, **MNDWI** | 6: blue, green, red, NIR, NDVI, **NDWI** |
@@ -159,7 +159,7 @@ One row per raw image. Source: `collect.py` (`MANIFEST_FIELDS` and `process`).
 | Catalog | Chip box stored in the column `bounds_epsg32640` | `prepare.py` |
 | Land cover | Warped onto each chip's EPSG:32640 grid | `landcover.py` |
 | Hand label | `KAB_2020_07.gpkg` is in EPSG:32640 | hand label (`ogrinfo`) |
-| Registration images | EPSG:32640 | registration README |
+| Registration images | EPSG:32640 | landmark write-up |
 | Inputs in other systems | `sites.geojson` and ESA WorldCover are longitude/latitude (EPSG:4326). The GMW label rasters are read in whatever CRS they carry (a code comment says EPSG:4326) and warped to the chip grid | `collect.py`, `landcover.py`, `prepare.py` |
 
 **On EPSG:32639:** the number 32639 does not appear anywhere in this repository, in code, documents, notebooks or results. A possible origin: the pipeline README says the site `al_aryam_islands` sits where tiles 39QZG, 39RZH, 40QBM and 40RBN meet. Sentinel-2 tiles whose code starts with 39 are delivered in UTM zone 39N, which is EPSG:32639 (general Sentinel-2 knowledge, not stated in the repository). `collect.py` does not keep that: it warps every tile to EPSG:32640, and when choosing between tiles it prefers the zone-40 one. So any file made by this pipeline is in 32640. Whether a file made some other way is in 32639 is **UNVERIFIED**.
@@ -353,7 +353,7 @@ Everything in this section is from the test-chip zip and the U-Net report. This 
 
 The image IDs above are written in a different style from the main pipeline's (`S2A_40RBN_20181105_1_L2A` against `S2A_T40RBN_20201117T070153_L2A`), which suggests they came from a different collection of the archive. Which collection these chips came from, and how their reflectance was scaled, are **UNVERIFIED**.
 
-A third, separate set of images was used for the registration work: Copernicus Browser exports of Al Jubail Island for 10 Dec 2018 and 10 Dec 2025, bands B02, B03, B04 and B08, 1836 × 1096 pixels, EPSG:32640 (registration README). Those files are not in the repository either.
+A third, separate set of images was used for the registration work: Copernicus Browser exports of Al Jubail Island for 10 Dec 2018 and 10 Dec 2025, bands B02, B03, B04 and B08, 1836 × 1096 pixels, EPSG:32640 (landmark write-up). Those files are not in the repository either.
 
 ## 11. Where code and documents disagree
 

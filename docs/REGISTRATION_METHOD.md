@@ -1,12 +1,12 @@
 # Track A: Aligning the 2018 and 2025 images
 
 This is the second half of Track A, done by Tehsin Shaik. Khaled finds the matching
-landmarks (`src/registration/landmarks.py`, see its README). Tehsin's part uses them to
+landmarks (`src/registration/landmarks.py`, see [LANDMARK_DETECTION.md](LANDMARK_DETECTION.md)). Tehsin's part uses them to
 line up the 2025 image with the 2018 image and measure how far off it still is.
 
 - Code: [`src/registration/affine_alignment.py`](../src/registration/affine_alignment.py)
   and [`src/registration/real_raster_check.py`](../src/registration/real_raster_check.py)
-- Tests: [`tests/test_affine_alignment.py`](../tests/test_affine_alignment.py)
+- Tests: [`src/registration/tests/test_affine_alignment.py`](../src/registration/tests/test_affine_alignment.py)
 - Results: `results/registration/`
 
 ## Why we need this
@@ -103,8 +103,10 @@ not misalignment.
 
 ## Limits
 
-- Only one place (Jubail) and one date pair so far. Other sites and Sentinel-1
-  still need to be checked.
+- The SIFT checks cover Jubail and Eastern Mangroves (see `results/registration/`).
+  A second check without SIFT, at all 6 training sites, is in
+  [`results/registration/phase_correlation/`](../results/registration/phase_correlation/RESULTS.md).
+  Sentinel-1 still needs to be checked.
 - Errors compare 2025 with 2018, not with true ground positions.
 - An affine is one transform for the whole image, so local distortion isn't fixed.
 - The known-warp numbers depend on how big Khaled's random warps are.
@@ -117,7 +119,7 @@ experiment shows why the minimum number of points isn't enough.
 ```
 pip install -r src/registration/requirements.txt pytest
 python src/registration/affine_alignment.py experiment     # 2 vs 3 results and figures
-python -m pytest -q tests
+python -m pytest -q src/registration/tests
 python src/registration/real_raster_check.py               # needs the two GeoTIFFs in data/raw/
 python src/registration/affine_alignment.py warp --moving 2025.tif --reference 2018.tif --out 2025_aligned.tif
 ```

@@ -1,0 +1,11 @@
+model_a,model_b,mean_diff,ci95_lo,ci95_hi,share_a_better,clear_difference
+Random forest,SVM (approx. RBF),0.0015,-0.0051,0.0091,0.687,False
+U-Net,Random forest,0.0094,-0.0001,0.0178,0.974,False
+Random forest,DINOv3 LoRA,0.0094,-0.0081,0.0352,0.8405,False
+Random forest,DINOv3 frozen,0.0185,-0.0047,0.0441,0.9395,False
+U-Net,SVM (approx. RBF),0.0109,-0.0011,0.023,0.962,False
+SVM (approx. RBF),DINOv3 LoRA,0.008,-0.0117,0.034,0.7775,False
+SVM (approx. RBF),DINOv3 frozen,0.017,-0.0053,0.043,0.927,False
+U-Net,DINOv3 LoRA,0.0189,0.0026,0.0422,0.9885,True
+U-Net,DINOv3 frozen,0.0279,0.0052,0.0525,0.993,True
+DINOv3 LoRA,DINOv3 frozen,0.0091,-0.0133,0.0305,0.7545,False

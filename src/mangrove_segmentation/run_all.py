@@ -128,7 +128,8 @@ def main(argv=None):
     ap.add_argument("--skip", nargs="+", choices=STEPS, default=[], help="steps to leave out")
     ap.add_argument("--sites", nargs="+", help="only these sites (download, landcover); for quick trials")
     ap.add_argument("--dates", nargs="+", help="only image dates starting with these, e.g. 2020 or 202002 or 2020-11")
-    ap.add_argument("--preset", choices=["cpu", "gpu"], default="cpu", help="U-Net size (default cpu)")
+    ap.add_argument("--preset", choices=["cpu", "gpu", "gpu_b16", "gpu_b8", "gpu_b4"], default="cpu",
+                    help="U-Net size (default cpu). gpu_b16/b8/b4 are the smaller models for the efficiency study")
     ap.add_argument("--epochs", type=int, help="U-Net epochs (default: the preset's value)")
     ap.add_argument("--device", choices=["cpu", "cuda"], help="U-Net device (default: cuda if available)")
     ap.add_argument("--fast", action="store_true", help="baselines with small samples / few trees (trial only)")
