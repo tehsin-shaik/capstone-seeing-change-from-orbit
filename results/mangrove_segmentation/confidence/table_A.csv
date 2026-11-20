@@ -1,0 +1,13 @@
+model,site_dates,mean,sd,min,max,lowest,highest
+NDVI rule,24,0.5908,0.1347,0.1375,0.763,al_aryam_islands 2020-11-12,eastern_mangroves 2020-02-16
+SVM linear,24,0.578,0.1528,0.1396,0.7804,al_aryam_islands 2020-11-12,eastern_mangroves 2020-02-16
+SVM RBF,24,0.6885,0.1039,0.4717,0.8658,jubail_island 2020-08-24,eastern_mangroves 2020-11-17
+Random forest,24,0.6917,0.1011,0.5016,0.8892,jubail_island 2020-08-24,eastern_mangroves 2020-11-17
+U-Net,24,0.6909,0.1378,0.3647,0.8913,al_aryam_islands 2020-11-12,eastern_mangroves 2020-05-18
+DINOv3 + LoRA,24,0.6705,0.1293,0.332,0.9067,al_aryam_islands 2020-11-12,eastern_mangroves 2020-11-17
+DINOv3 frozen,24,0.6596,0.1277,0.3686,0.8638,al_aryam_islands 2020-11-12,eastern_mangroves 2020-11-17
+"Random forest, RGB",24,0.5322,0.1287,0.1224,0.7013,al_aryam_islands 2020-11-12,ghantoot 2020-11-09
+"SVM RBF, RGB",24,0.5057,0.1295,0.0992,0.6765,al_aryam_islands 2020-11-12,ghantoot 2020-05-18
+"DINOv3 + LoRA, RGB, branch removed",24,0.5526,0.1355,0.2677,0.7927,al_aryam_islands 2020-11-12,eastern_mangroves 2020-02-16
+"DINOv3 + LoRA, RGB, branch fed RGB",24,0.5979,0.1323,0.2206,0.8126,al_aryam_islands 2020-11-12,eastern_mangroves 2020-02-16
+"DINOv3 frozen, RGB, branch removed",24,0.5122,0.1541,0.1436,0.7092,al_aryam_islands 2020-11-12,ghantoot 2020-08-31
