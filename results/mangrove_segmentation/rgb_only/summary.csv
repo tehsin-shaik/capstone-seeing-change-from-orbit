@@ -1,0 +1,10 @@
+model,channels,iou_fold1,iou_fold2,iou_fold3,iou_fold4,iou_fold5,mean,sd
+Random forest,"RGB (B04, B03, B02)",0.6099,0.4666,0.581,0.6631,0.4744,0.559,0.086
+Random forest,all 8,0.8206,0.5616,0.6966,0.7774,0.6631,0.7039,0.1012
+"SVM, approximate RBF","RGB (B04, B03, B02)",0.5563,0.438,0.5602,0.6446,0.4379,0.5274,0.089
+"SVM, approximate RBF",all 8,0.8299,0.5584,0.689,0.7743,0.6603,0.7024,0.105
+"DINOv3 + LoRA, decoder branch removed","RGB (B04, B03, B02)",0.7153,0.461,0.5984,0.6731,0.4668,0.5829,0.1165
+"DINOv3 + LoRA, decoder branch on all 8","RGB into DINOv3, all 8 into the decoder branch",0.8417,0.5497,0.6974,0.7537,0.6297,0.6944,0.1122
+"DINOv3 + LoRA, decoder branch fed RGB","RGB (B04, B03, B02)",0.7519,0.526,0.5923,0.6974,0.5644,0.6264,0.0947
+"DINOv3 frozen, decoder branch removed","RGB (B04, B03, B02)",0.6774,0.4645,0.5821,0.6412,0.3991,0.5529,0.1179
+"DINOv3 frozen, decoder branch on all 8","RGB into DINOv3, all 8 into the decoder branch",0.7968,0.5503,0.6982,0.779,0.6057,0.686,0.1072
