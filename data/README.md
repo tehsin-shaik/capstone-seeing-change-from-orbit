@@ -1,82 +1,72 @@
-# Project Data
+# Data
 
-This folder documents the datasets, satellite imagery, and reference data used throughout the project. Large raster files are stored in shared team storage and are not committed to the Git repository.
+This folder contains the data dictionary and hand-labelled reference annotations. Large satellite images, generated datasets and model outputs are stored outside the repository to keep Git lightweight.
 
-## Study Area
+![One Sentinel-2 chip from each of the six training sites, with the GMW v4.0.19 mangrove outline](../docs/images/data_sites_preview.jpg)
 
-The initial study area is Eastern Mangroves, Abu Dhabi. Additional locations, such as Jubail and Reem Island, may be included in later experiments.
+## In this folder
 
-## Satellite Imagery
+| Folder | What it holds |
+| --- | --- |
+| [`DATA_DICTIONARY.md`](DATA_DICTIONARY.md) | Every dataset, file, column and naming rule |
+| [`hand_labels/`](hand_labels/README.md) | Mangrove outlines independently drawn by team members, used to evaluate GMW and model predictions against human interpretation |
 
-The project primarily uses Sentinel-2 multispectral imagery to study changes in mangrove extent over time. 
+## Sites
 
-Different image pairs may be used for exploratory analysis, testing, and the main long-term comparison. These experiments should be documented separately, including their acquisition dates, processing details, and intended purpose.
+| Use | Sites |
+| --- | --- |
+| Training and cross-validation | Eastern Mangroves, Jubail Island, Ras Ghurab, Ghantoot, Al Aryam Islands, Al Nouf |
+| Locked test | Abu Al Abyad, Marawah |
+| Locked external test | Ras Al Khor, Al Zorah, Khor Al Beida, Ras Al Khaimah creek, Khor Kalba |
 
-## Sentinel-2 Bands
+The six training sites are located in Abu Dhabi and are grouped into five cross-validation folds:
 
-The current multispectral plan uses:
+| Fold | Site |
+| --- | --- |
+| 1 | Eastern Mangroves |
+| 2 | Jubail Island |
+| 3 | Ras Ghurab |
+| 4 | Ghantoot |
+| 5 | Al Aryam Islands + Al Nouf |
 
-| Band | Measurement | Native resolution |
+Al Aryam Islands and Al Nouf share a fold because they are approximately 1.5 km apart. Each fold is held out entirely during its corresponding validation run. Locked test sites are excluded from training, model selection and hyperparameter tuning. Their data and reference labels are reserved for final evaluation.
+
+## Satellite imagery
+
+- **Source:** Sentinel-2 Level-2A surface reflectance, from the Earth Search v1 STAC collection `sentinel-2-c1-l2a` (public, no login).
+- **Dates:** Eight acquisitions selected per site: four from 2020, two from 2018 (March and November) and two from 2025 (March and November).
+- **Cloud:** filtered in two stages. First, scene selection keeps scenes with less than 10% scene-level cloud cover (the Sentinel-2 `eo:cloud_cover` value for the whole scene). Then, at the chip level, cloud and shadow are identified with the SCL band, and any chip with more than 5% cloud or shadow (or more than 10% no data) is dropped. A scene can pass the first stage and still give no usable chips if its clouds sit over the site.
+- **Grid:** 10 m pixels in EPSG:32640 (UTM zone 40N), cut into 256 × 256 chips.
+- **Model inputs:** 8 channels per chip: 6 downloaded Sentinel-2 bands and 2 indices calculated from them:
+
+| Channel | Band | Description |
 | --- | --- | --- |
-| B2 | Blue | 10 m |
-| B3 | Green | 10 m |
-| B4 | Red | 10 m |
-| B8 | Near-infrared | 10 m |
-| B11 | Shortwave infrared 1 | 20 m |
-| B12 | Shortwave infrared 2 | 20 m |
+| 0 to 3 | B02, B03, B04, B08 | Blue, green, red and near-infrared (10 m) |
+| 4 to 5 | B11, B12 | Shortwave infrared (20 m, resampled to 10 m) |
+| 6 | NDVI | Normalised Difference Vegetation Index |
+| 7 | MNDWI | Modified Normalised Difference Water Index |
 
-B11 and B12 must be resampled when they are placed on the common 10 m grid; this changes the grid spacing but does not create additional spatial detail.
+## Labels
 
-The exact Sentinel collection or product ID, processing level, scale factors, no-data value, cloud-filtering criteria, and export script still need to be recorded before the dataset is considered reproducible.
+- **Global Mangrove Watch (GMW):** a publicly available global dataset mapping mangrove extent. Two releases are used across the datasets, and which one is available, and what it is used for, depends on the acquisition year:
+  - **v4.0.19** (10 m, 2020 only): the training label, and the reference for cross-validation scores.
+  - **v4.1.12** (~30 m, 2018, 2020 and 2025): used as a secondary reference on 2020 chips and as the reference for 2018 and 2025 change mapping.
 
-## External Raster Data
+  On the 2020 chips, where both releases are available, their mangrove masks have a pooled IoU of 0.67 over all 215 chips. On the six hand-labelled chips, using the same pixels and the same pooled method, the two releases agree at 0.80 and the two human annotators at 0.69. This highlights variability in the reference data and motivates using independent hand labels to evaluate both GMW and model predictions.
+- **Hand labels:** Independently drawn mangrove annotations used to assess agreement between GMW, model predictions and human interpretation. See [`hand_labels/`](hand_labels/README.md).
 
-Large satellite rasters and other source datasets are stored outside Git.
+## Getting the data
 
-For each external dataset, the project should maintain metadata such as:
+The scripts in [`src/mangrove_segmentation`](../src/mangrove_segmentation/README.md) rebuild the datasets:
 
-- File or dataset name
-- Acquisition date or time period
-- Study area
-- Source and product/collection
-- Processing level
-- Spatial resolution
-- Coordinate reference system
-- File size
-- SHA-256 checksum
-- Download or export instructions
-- Licence and attribution requirements
+1. `collect.py` downloads the Sentinel-2 images for each site and date.
+2. `prepare.py` cuts them into chips and adds the GMW masks.
+3. `make_datasets.py` writes `Train_Val_Dataset` and the locked `Test_Dataset`.
 
-This information allows the data used in experiments to be identified and reproduced without storing large raster files in the repository.
+The other scripts read `Train_Val_Dataset` through `--train-val`. Keep it and all outputs outside the repository.
 
-## Reference and Benchmark Data
+## Rules
 
-- Sentinel-1 radar imagery
-- Sentinel-2 optical imagery
-- Global Mangrove Watch reference maps
-- LEVIR-CD and S2Looking change-detection benchmarks
-- Other labelled datasets identified through the literature review
-
-Datasets will be selected based on their relevance to mangrove mapping, change detection, segmentation, and model evaluation.
-
-## Data Organization
-
-Data should be separated according to their role in the project:
-
-- Source data: original satellite imagery and reference datasets
-- Processed data: resampled, aligned, or otherwise preprocessed imagery
-- Training data: regions used for model development
-- Validation data: regions used for model selection and tuning
-- Test data: held-out regions used for final evaluation
-
-Training, validation, and test regions should remain geographically separate to reduce spatial leakage and provide a more meaningful evaluation of model generalization.
-
-A final hand-verified test set should be frozen before final evaluation and must not be used for training or model development.
-
-## Repository Data Policy
-
-- Do not commit raw or processed satellite rasters, dataset archives, model weights, or credentials to normal Git history.
-- Commit source metadata, licences, checksums, download or export instructions, and reproducible preprocessing code.
-- Small sample patches may be added later only when their licence permits redistribution and their purpose is documented.
-- Training, validation, and test regions must remain geographically separate.
-- A future hand-verified test set must be frozen before final evaluation and must never be used for training.
+- Don't commit satellite images, dataset archives, model weights or credentials.
+- Do commit small labels, metadata, checksums and the code that makes the data.
+- Don't train or tune on locked test sites.
