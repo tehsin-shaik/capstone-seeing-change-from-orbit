@@ -4,9 +4,11 @@
 - [Progress log](PROGRESS.md)
 - [Meeting minutes](meetings/README.md)
 - [Proposal](proposal/SDP_Proposal_Seeing_Change_from_Orbit.pdf)
-- [Data dictionary](DATA_DICTIONARY.md)
+- [Data dictionary](../data/DATA_DICTIONARY.md)
+- [Hand labels](../data/hand_labels/README.md)
 - [Registration method (Track A)](REGISTRATION_METHOD.md)
 - [U-Net report](reports/Seeing_Orbit_Mangrove_U-Net_Report.pdf)
+- [Final deliverables](final/README.md)
 
 Results for each experiment are in `results/`, each with its own `RESULTS.md`.
 

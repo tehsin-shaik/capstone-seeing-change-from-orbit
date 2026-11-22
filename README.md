@@ -46,6 +46,7 @@ All data and tools are freely available. We use Sentinel-2 imagery from the Euro
 | **Registration** | 2018 and 2025 images line up to within half a pixel (under 5 m) at all 6 sites, so no correction is needed. Two unrelated methods (SIFT landmarks and phase correlation) agree. | [SIFT](results/registration/eastern_mangroves/RESULTS.md) · [phase correlation](results/registration/phase_correlation/RESULTS.md) |
 | **Segmentation** | Random forest, SVM, U-Net and DINOv3 all tie at about 0.70 IoU against Global Mangrove Watch. The simple NDVI rule gets 0.60. | [Model comparison](results/mangrove_segmentation/model_comparison/RESULTS.md) |
 | **Efficiency** | A U-Net with a quarter of the parameters (1.9M) matches the full one (0.699 vs 0.709 IoU) with half the GPU memory. | [Efficiency study](results/mangrove_segmentation/efficiency/RESULTS.md) |
+| **Hand labels** | Two people labelled the same 6 chips and agree at 0.69 IoU. GMW scores 0.70 against each of them, so it is about as good as a second labeller, and the models' ~0.70 against GMW is near the human level. | [Hand labels](results/mangrove_segmentation/hand_labels/RESULTS.md) |
 | **Steadiness** | RF and SVM vary the least across image dates. U-Net and DINOv3 all drop on the same image (Al Aryam, 12 Nov 2020). | [Across dates](results/mangrove_segmentation/date_stability/RESULTS.md) |
 | **Change** | Ghantoot gained about 25% mangrove area (+212 ha), the only site where the change is bigger than the same-year noise. | [Change maps](results/change_detection/RESULTS.md) |
 
@@ -60,12 +61,32 @@ Each step has its own write-up with the full method, numbers and figures.
 
 | Step | Write-ups |
 | --- | --- |
-| **Data** | [Data sources](data/README.md) · [data dictionary](docs/DATA_DICTIONARY.md) · [download and prep](src/mangrove_segmentation/README.md) |
+| **Data** | [Data sources](data/README.md) · [data dictionary](data/DATA_DICTIONARY.md) · [download and prep](src/mangrove_segmentation/README.md) · [hand labels](data/hand_labels/README.md) |
 | **Registration** | [Overview](src/registration/README.md) · [landmark detection](docs/LANDMARK_DETECTION.md) · [alignment method](docs/REGISTRATION_METHOD.md) · [SIFT landmarks](results/registration/eastern_mangroves/RESULTS.md) · [phase correlation](results/registration/phase_correlation/RESULTS.md) · [different tides](results/registration/different_tides/RESULTS.md) · [Al Aryam](results/registration/al_aryam/RESULTS.md) |
 | **Segmentation** | [Code](src/mangrove_segmentation/README.md) · [baselines](results/mangrove_segmentation/baselines/RESULTS.md) · [SVM](results/mangrove_segmentation/svm/RESULTS.md) · [U-Net](results/mangrove_segmentation/unet/RESULTS.md) · [DINOv3](results/mangrove_segmentation/dinov3/RESULTS.md) · [DINOv3 LoRA](results/mangrove_segmentation/dinov3_lora/RESULTS.md) · [U-Net report (PDF)](docs/reports/Seeing_Orbit_Mangrove_U-Net_Report.pdf) |
-| **Model evaluation** | [Model comparison](results/mangrove_segmentation/model_comparison/RESULTS.md) · [where models disagree](results/mangrove_segmentation/model_disagreement/RESULTS.md) · [across dates](results/mangrove_segmentation/date_stability/RESULTS.md) · [multi-date vote](results/mangrove_segmentation/multi_date_vote/RESULTS.md) · [efficiency](results/mangrove_segmentation/efficiency/RESULTS.md) |
+| **Model evaluation** | [Model comparison](results/mangrove_segmentation/model_comparison/RESULTS.md) · [where models disagree](results/mangrove_segmentation/model_disagreement/RESULTS.md) · [across dates](results/mangrove_segmentation/date_stability/RESULTS.md) · [multi-date vote](results/mangrove_segmentation/multi_date_vote/RESULTS.md) · [efficiency](results/mangrove_segmentation/efficiency/RESULTS.md) · [against hand labels](results/mangrove_segmentation/hand_labels/RESULTS.md) |
 | **Change detection** | [Code](src/change_detection/README.md) · [change maps](results/change_detection/RESULTS.md) · [U-Net noise check](results/change_detection/unet/RESULTS.md) · [new bare or built ground](results/change_detection/human_activity/RESULTS.md) |
-| **Project records** | [Proposal (PDF)](docs/proposal/SDP_Proposal_Seeing_Change_from_Orbit.pdf) · [project plan](docs/PROJECT_PLAN.md) · [progress log](docs/PROGRESS.md) · [meeting minutes](docs/meetings/README.md) · [docs index](docs/README.md) |
+| **Project records** | [Proposal (PDF)](docs/proposal/SDP_Proposal_Seeing_Change_from_Orbit.pdf) · [project plan](docs/PROJECT_PLAN.md) · [progress log](docs/PROGRESS.md) · [meeting minutes](docs/meetings/README.md) · [final deliverables](docs/final/README.md) · [docs index](docs/README.md) |
+
+## Setup and running
+
+Python 3.11. Satellite images are not stored in Git. [Getting the data](data/README.md#getting-the-data) explains how to rebuild them.
+
+```bash
+# main environment: data prep, segmentation and change detection
+conda env create -f src/mangrove_segmentation/environment.yml
+conda activate mangrove
+pip install torch    # or the CUDA build from pytorch.org
+
+# extras
+pip install -r src/registration/requirements.txt                          # registration
+pip install -r src/mangrove_segmentation/dinov3/requirements_dinov3.txt   # DINOv3 only
+
+# tests (from the repository root)
+pytest src/registration/tests src/mangrove_segmentation/tests
+```
+
+Most analysis scripts take `--train-val <Train_Val_Dataset>` and `--out <folder>`. Keep the output folder outside the repository. The exact commands for each step are in its write-up, linked above.
 
 ## Repository layout
 
@@ -77,6 +98,7 @@ Each step has its own write-up with the full method, numbers and figures.
 ├── results/                     # one RESULTS.md per experiment
 ├── data/                        # hand labels and test chips
 └── docs/                        # proposal, plan, minutes, reports
+    └── final/                   # final report, slides and demo
 ```
 
 ## Acknowledgements
