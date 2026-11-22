@@ -115,12 +115,10 @@ What the team did each month, with links to the code and results.
 
 #### Hand Labels
 
-- Hand-labelled 6 chips in QGIS, with uncertain areas marked separately: Jubail Island (3 chips), Ras Ghurab, Eastern Mangroves and Ghantoot (Tehsin, Khaled). See [data/hand_labels](../data/hand_labels/README.md).
-- Compared Tehsin's labels with Khaled's on the same 6 chips, and scored GMW and the models against both (Tehsin). The two people agree at 0.687 IoU, and GMW scores 0.699 and 0.706 against them, so GMW is about as good as a second labeller. Khaled draws wider edges; the random forest is closest to Tehsin (0.845) and the U-Net to Khaled (0.742). See [hand_labels](../results/mangrove_segmentation/hand_labels/RESULTS.md).
+- Hand-labelled 6 chips in QGIS, with uncertain areas marked separately: Jubail Island (3 chips), Ras Ghurab, Eastern Mangroves and Ghantoot (Tehsin, Khaled, Zain, Ayesha). See [data/hand_labels](../data/hand_labels/README.md).
+- Compared the four labellers on the same 6 chips, and scored GMW and the models against each of them and against their majority (Tehsin). The people agree with each other at 0.72–0.83 IoU, and GMW scores 0.70–0.75 against each, slightly below human agreement. Against the majority label the random forest scores 0.864 and the U-Net 0.820, against 0.736 for GMW. Tehsin draws the tightest edges and Khaled the widest; the random forest is closest to Tehsin (0.862) and the U-Net to Khaled (0.760). See [hand_labels](../results/mangrove_segmentation/hand_labels/RESULTS.md).
+- Merged the four hand labels into one ground truth per chip, using the majority (at least three of four). See [data/hand_labels/majority](../data/hand_labels/README.md#majority-ground-truth).
 
 ## Next Steps
 
-1. Finish the team's hand labels and merge them into one ground truth per chip: the agreed area or the union.
-2. Choose between the random forest and the approximate RBF SVM, then run the Test_Dataset once.
-3. Try multi-month composites to reduce the same-year swing.
-4. Write the SDP I final report and prepare the presentation and demo.
+1. Choose between the random forest and the approximate RBF SVM, then run the Test_Dataset once.

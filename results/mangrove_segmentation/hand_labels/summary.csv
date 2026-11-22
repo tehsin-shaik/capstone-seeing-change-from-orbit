@@ -1,0 +1,29 @@
+reference,compared,chips,pooled_iou,mean_chip_iou,precision,recall
+Ayesha,GMW 4.0.19,6,0.749,0.76,0.793,0.931
+Ayesha,GMW 4.1.12,6,0.725,0.74,0.769,0.927
+Ayesha,Random forest,6,0.82,0.828,0.911,0.892
+Ayesha,U-Net base 8,6,0.801,0.807,0.869,0.911
+Khaled,GMW 4.0.19,6,0.717,0.714,0.833,0.837
+Khaled,GMW 4.1.12,6,0.715,0.718,0.821,0.847
+Khaled,Random forest,6,0.736,0.735,0.929,0.779
+Khaled,U-Net base 8,6,0.76,0.763,0.913,0.819
+Tehsin,GMW 4.0.19,6,0.726,0.745,0.75,0.958
+Tehsin,GMW 4.1.12,6,0.692,0.711,0.721,0.945
+Tehsin,Random forest,6,0.862,0.868,0.898,0.956
+Tehsin,U-Net base 8,6,0.81,0.811,0.84,0.957
+Zain,GMW 4.0.19,6,0.695,0.698,0.78,0.865
+Zain,GMW 4.1.12,6,0.678,0.692,0.759,0.864
+Zain,Random forest,6,0.779,0.776,0.911,0.843
+Zain,U-Net base 8,6,0.768,0.769,0.873,0.864
+agreed,GMW 4.0.19,6,0.635,0.666,0.651,0.963
+agreed,GMW 4.1.12,6,0.611,0.639,0.629,0.955
+agreed,Random forest,6,0.771,0.782,0.788,0.973
+agreed,U-Net base 8,6,0.721,0.727,0.736,0.972
+majority,GMW 4.0.19,6,0.736,0.752,0.765,0.951
+majority,GMW 4.1.12,6,0.704,0.724,0.737,0.941
+majority,Random forest,6,0.864,0.869,0.91,0.945
+majority,U-Net base 8,6,0.82,0.822,0.856,0.95
+union,GMW 4.0.19,6,0.746,0.734,0.901,0.813
+union,GMW 4.1.12,6,0.746,0.745,0.889,0.823
+union,Random forest,6,0.737,0.733,0.989,0.744
+union,U-Net base 8,6,0.765,0.766,0.972,0.783
