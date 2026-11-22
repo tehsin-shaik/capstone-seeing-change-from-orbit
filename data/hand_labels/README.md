@@ -2,7 +2,9 @@
 
 Mangrove canopy outlines manually delineated on individual 256 × 256 pixel chips (2.56 km × 2.56 km at 10 m resolution). They provide an independent visual reference for comparing GMW classifications and model predictions with human interpretation of the imagery. They are manually interpreted reference labels, not ground truth. All files are GeoPackages in EPSG:32640.
 
-![Hand labels on the six shared chips](../../docs/images/hand_labels_preview.jpg)
+![Tehsin's hand labels on the six shared chips](../../docs/images/hand_labels_preview.jpg)
+
+![Khaled's hand labels on the six shared chips](../../docs/images/hand_labels_preview_khaled.jpg)
 
 ## Files
 

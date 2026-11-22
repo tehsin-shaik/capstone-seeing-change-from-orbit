@@ -22,6 +22,8 @@ Sentinel-2 Level-2A over Al Jubail Island, Abu Dhabi, taken on **2018-12-10** an
 5. **Rejecting bad corners with RANSAC.** RANSAC finds the single affine transformation that most matches agree with (within 1.5 px, which is 15 m) and rejects the rest. Corners on buildings that were built or demolished between 2018 and 2025 have no true partner, so they are rejected here.
 6. **Evaluation with a known answer.** The downloaded pair turns out to be already aligned to within about 0.1–0.3 px (see results). So the 2025 image is deliberately misaligned with a random but known affine transformation: up to ±15 px shift, ±2° rotation, ±2 % scale and ±1 % shear. This is done 20 times, and the error is measured as the average distance between where the recovered and the true transformation place each pixel.
 
+<p align="center"><img src="../results/registration/fig_search_areas.png" alt="Where each filter lets the corner detector look on the 2018 image" width="100%"></p>
+
 ## Results
 
 **1. The real 2018/2025 pair is already aligned.** Every detector estimates less than 0.4 px (4 m) of movement between the two dates. Sentinel-2 L2A products are already corrected onto a common geometric reference. On the Sentinel-2 archive, the registration step is therefore a safeguard and a check rather than a large correction. It will matter more for other sources: Sentinel-1 radar, Landsat, or high-resolution imagery.
@@ -38,7 +40,13 @@ Sentinel-2 Level-2A over Al Jubail Island, Abu Dhabi, taken on **2018-12-10** an
 
 The full table is in `results/registration/summary.csv`, and the per-trial rows are in `results_synthetic.csv`. The median errors are close to the ~0.1 px natural offset between the two dates, which is the accuracy limit of this test. SIFT and ORB results can differ slightly between computers, in the second decimal place, because OpenCV uses processor-specific optimisations for them. The other detectors reproduce exactly.
 
+<p align="center"><img src="../results/registration/fig_detector_comparison.png" alt="Median and worst error recovering a known misalignment, by detector and filter" width="100%"></p>
+
+<p align="center"><img src="../results/registration/fig_checkerboard.png" alt="Checkerboard of the two dates before and after alignment from the landmarks" width="100%"></p>
+
 **3. The textbook filter makes things worse here.** Keeping only built-up and bare ground was the worst filter for every detector. It lowered the share of good matches for all six detectors and produced the only failures. The reason is that between 2018 and 2025 the "stable" built-up land is exactly what changed: Jubail Island, Saadiyat and Ramhan Island were all developed. Meanwhile the mangrove creek network barely moved. On the unfiltered matches, shoreline corners survived RANSAC 78–85 % of the time, versus 63–70 % for built-up and bare ground.
+
+<p align="center"><img src="../results/registration/fig_landmarks.png" alt="SIFT landmarks kept and rejected by RANSAC on both dates" width="100%"></p>
 
 **4. Caveat: tide.** The creek and shoreline landmarks only work because both images happen to have almost the same tide: water covers 46.6 % of the 2018 image and 45.7 % of the 2025 one. At a different tide the waterline moves, and those corners would stop being fixed points. **The next test is a pair taken at clearly different tides.**
 

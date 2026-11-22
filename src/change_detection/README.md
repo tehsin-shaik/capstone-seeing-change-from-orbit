@@ -14,7 +14,7 @@ These scripts make a 2018 to 2025 mangrove change map for one training site with
 ## What they depend on
 
 - `baseline_rf.py` and `chipio.py` in `src/mangrove_segmentation`, imported unchanged.
-- The team's script `run_cv.py`, which is not in this repository. The scripts do not need the file to run. Its steps for one fold are written out again in `common.py`. As a check, each forest's held-out IoU matches `results/mangrove_segmentation/baselines/cv_results.csv` to four decimals.
+- The team's script [`run_cv.py`](../mangrove_segmentation/supporting_scripts/baselines/run_cv.py). The scripts here do not need it to run. Its steps for one fold are written out again in `common.py`. As a check, each forest's held-out IoU matches `results/mangrove_segmentation/baselines/cv_results.csv` to four decimals.
 - The Train/Val dataset (`catalog.csv`, `hazy_scenes.csv`, `chips/`), which is not in the repository.
 
 ## How to run
