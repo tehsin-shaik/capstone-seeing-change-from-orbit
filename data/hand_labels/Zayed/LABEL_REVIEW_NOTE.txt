@@ -1,9 +1,0 @@
-PRELIMINARY IMAGE-BASED LABEL DRAFT — REVIEW REQUIRED
-
-The uploaded GeoPackage files contain preliminary polygons derived from the supplied false-colour imagery.
-
-IMPORTANT: These are computer-assisted candidate outlines, NOT independently hand-traced or verified ground-truth labels. Open each GeoPackage in QGIS, compare its true- and false-colour image, correct mangrove boundaries, move ambiguous areas to the "unsure" layer, and add missed patches before using the files as final hand-verified labels.
-
-The layers are "mangrove" and "unsure". These candidate labels must not be included in a frozen hand-verified test set without independent review.
-
-Current repository upload: chips 1–4 of 6; chips 5–6 not yet uploaded.
