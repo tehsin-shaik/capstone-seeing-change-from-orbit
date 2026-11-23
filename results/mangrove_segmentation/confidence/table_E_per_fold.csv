@@ -1,0 +1,38 @@
+model,run,fold1,fold2,fold3,fold4,fold5,mean
+Random forest,seed 0 (committed),0.8206,0.5616,0.6966,0.7774,0.6631,0.7039
+Random forest,seed 1,0.8173,0.5507,0.6948,0.776,0.6644,0.7006
+Random forest,seed 2,0.814,0.5422,0.6984,0.7744,0.6699,0.6998
+Random forest,seed 3,0.8164,0.5654,0.6953,0.7764,0.6619,0.7031
+Random forest,seed 0 run again,0.8206,0.5616,0.6966,0.7774,0.6631,0.7039
+"Random forest, RGB",seed 0 (committed),0.6099,0.4666,0.581,0.6631,0.4744,0.559
+"Random forest, RGB",seed 1,0.6041,0.4671,0.5802,0.6657,0.4745,0.5583
+"Random forest, RGB",seed 2,0.6157,0.4687,0.5787,0.6593,0.476,0.5597
+"Random forest, RGB",seed 3,0.6117,0.4673,0.5812,0.6626,0.4718,0.5589
+"Random forest, RGB",seed 0 run again,0.6099,0.4666,0.581,0.6631,0.4744,0.559
+SVM RBF,seed 0 (committed),0.8299,0.5584,0.689,0.7743,0.6603,0.7024
+SVM RBF,seed 1,0.8289,0.5562,0.6883,0.7758,0.6629,0.7024
+SVM RBF,seed 2,0.8278,0.5577,0.6889,0.7743,0.6607,0.7019
+SVM RBF,seed 0 run again,0.8299,0.5584,0.689,0.7743,0.6603,0.7024
+"SVM RBF, RGB",seed 0 (committed),0.5563,0.438,0.5602,0.6446,0.4379,0.5274
+"SVM RBF, RGB",seed 1,0.5548,0.4378,0.5585,0.648,0.4386,0.5275
+"SVM RBF, RGB",seed 2,0.5538,0.4394,0.5605,0.6465,0.439,0.5278
+"SVM RBF, RGB",seed 0 run again,0.5563,0.438,0.5602,0.6446,0.4379,0.5274
+U-Net,seed 0 (committed),0.8604,0.5526,0.7112,0.7702,0.6264,0.7042
+U-Net,seed 1,0.8657,0.5515,0.71,0.7614,0.6702,0.7118
+U-Net,seed 2,0.8598,0.5232,0.6958,0.7796,0.6691,0.7055
+U-Net,seed 0 run again,0.8551,0.5484,0.6961,0.7812,0.6434,0.7048
+DINOv3 + LoRA,seed 0 (committed),0.8417,0.5497,0.6974,0.7537,0.6297,0.6944
+DINOv3 + LoRA,seed 1,0.799,0.5238,0.7108,0.7701,0.6326,0.6873
+DINOv3 + LoRA,seed 2,0.8169,0.5195,0.6909,0.7737,0.6548,0.6912
+DINOv3 + LoRA,seed 3,0.8044,0.511,0.7051,0.7655,0.6239,0.682
+DINOv3 + LoRA,seed 0 run again,0.8437,0.55,0.6971,0.7537,0.6268,0.6943
+"DINOv3 + LoRA, RGB, branch removed",seed 0 (committed),0.7153,0.461,0.5984,0.6731,0.4668,0.5829
+"DINOv3 + LoRA, RGB, branch removed",seed 1,0.6636,0.4808,0.5969,0.6632,0.5031,0.5815
+"DINOv3 + LoRA, RGB, branch removed",seed 2,0.5436,0.4598,0.573,0.6724,0.4756,0.5449
+"DINOv3 + LoRA, RGB, branch removed",seed 3,0.5597,0.4685,0.5932,0.6803,0.4826,0.5569
+"DINOv3 + LoRA, RGB, branch removed",seed 0 run again,0.7136,0.4609,0.5979,0.6736,0.467,0.5826
+"DINOv3 + LoRA, RGB, branch fed RGB",seed 0 (committed),0.7519,0.526,0.5923,0.6974,0.5644,0.6264
+"DINOv3 + LoRA, RGB, branch fed RGB",seed 1,0.7318,0.4932,0.6411,0.7057,0.5579,0.6259
+"DINOv3 + LoRA, RGB, branch fed RGB",seed 2,0.6929,0.493,0.6131,0.7099,0.5745,0.6167
+"DINOv3 + LoRA, RGB, branch fed RGB",seed 3,0.7237,0.4897,0.6203,0.6941,0.558,0.6172
+"DINOv3 + LoRA, RGB, branch fed RGB",seed 0 run again,0.7439,0.5042,0.6239,0.6979,0.5649,0.627
