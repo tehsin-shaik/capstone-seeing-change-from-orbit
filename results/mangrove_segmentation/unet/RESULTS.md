@@ -1,4 +1,4 @@
-# Stage 5, M1: U-Net (gpu preset), leave-one-site-out CV
+# U-Net (GPU preset): leave-one-site-out CV
 
 Train_Val_Dataset only (Test_Dataset never read). 2020 chips, label GMW v4.0.19 (10 m), hazy scenes dropped from training
 (variant b, the same rule as the baselines). The same 5 folds, 1-chip buffer and scoring code (`evaluate.py`) as B1/B2.
@@ -43,5 +43,4 @@ Pooled out-of-fold U-Net IoU is 0.686 (95% CI 0.652–0.716).
 3. **Few chips:** 56–107 training chips per fold after dropping hazy scenes and the buffer. More augmentation, or keeping the hazy scenes (B2 barely differed between a and b), may help.
 4. **One seed per fold;** fold-to-fold spread is large (sd above), so differences under about 0.03 are within noise.
 
-Files: `cv_results.csv`, `per_chip.csv`, `fold_fits.csv`, `history.csv`, `figs/` (iou_per_fold, training_curves, examples).
-Model weights and predictions: `6_Work/runs/Unet_gpu/` (`unet_fold*.pt`, `preds/`).
+Files: `cv_results.csv`, [iou_per_fold.png](iou_per_fold.png), [training_curves.png](training_curves.png), [examples.png](examples.png). The model weights and predictions are too big for the repository.

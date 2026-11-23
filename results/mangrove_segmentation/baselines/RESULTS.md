@@ -1,6 +1,6 @@
-# Stage 4 baselines: leave-one-site-out results (Train/Val only)
+# Baselines (NDVI rule and random forest): leave-one-site-out results (Train/Val only)
 
-23 Oct 2026. Label: GMW v4.0.19 (10 m), 2020 chips only (215 chips, 6 Abu Dhabi sites, 5 folds). Test_Dataset was not opened. Scores from `code/evaluate.py` (pixel-pooled per fold, 95% bootstrap CI over chips).
+23 Oct 2026. Label: GMW v4.0.19 (10 m), 2020 chips only (215 chips, 6 Abu Dhabi sites, 5 folds). Test_Dataset was not opened. Scores from [`evaluate.py`](../../../src/mangrove_segmentation/evaluate.py) (pixel-pooled per fold, 95% bootstrap CI over chips).
 
 **Bar for the U-Net: mean leave-one-site-out IoU 0.70 (B2 random forest, variant b: hazy scenes dropped from training; ±0.10 across folds; pooled out-of-fold IoU 0.686, 95% CI 0.653–0.713).**
 
@@ -23,13 +23,13 @@
 | 4 | ghantoot | 41 | 0.695 | 0.695 | 0.792 | 0.777 | 41 | 0 |
 | 5 | al aryam islands,al nouf | 36 | 0.583 | 0.583 | 0.653 | 0.663 | 34 | 0 |
 
-Fold 5 per site (B2 b): Al Aryam 0.638, Al Nouf 0.684. Fold 1 (Eastern Mangroves) has only 8 chips, so its score is the least stable. Per-site IoU for every model: `per_site_iou.csv`. Fitted thresholds and RF settings per fold: `fold_fits.csv`.
+Fold 5 per site (B2 b): Al Aryam 0.638, Al Nouf 0.684. Fold 1 (Eastern Mangroves) has only 8 chips, so its score is the least stable. Per-site IoU for every model is in `cv_results.csv`.
 
 ## What this shows
 
 - **B2 adds about +0.10 IoU over B1** (0.70 vs 0.60 mean), and wins on every fold. The gain is mostly precision (0.78–0.81 vs 0.72) with higher recall too. The RF almost removes look-alike vegetation errors (table below).
 - **Dropping hazy scenes helps only slightly:** +0.004 mean IoU for B2 and +0.003 for B1, with pooled OOF IoU 0.686 vs 0.673 for B2, well inside the CIs. It trades recall for precision and helps most at Jubail (+0.03 for B2). Rule used: dark-water red (5th percentile B04 over water) above 0.05. That drops 33–46 training chips per fold, mostly the August/September dates plus Al Aryam 2020-04-01 and Al Nouf May/August. Keep variant (b) as the default, but it is not a big lever.
-- **Jubail is the hardest site** (B1 0.44–0.46, B2 0.53–0.56). Many thin, scattered patches show up as false positives along creeks (see `figs/examples.png`, row 1), and EDA found its reference maps agree only at 0.60.
+- **Jubail is the hardest site** (B1 0.44–0.46, B2 0.53–0.56). Many thin, scattered patches show up as false positives along creeks (see [`examples.png`](examples.png), row 1), and EDA found its reference maps agree only at 0.60.
 - **Not comparable to the EDA's 0.33:** that number was NDVI-only on GMW v4.1.12 (~30 m) across all years for the old fixed val sites. These are 10 m labels, 2020 only, with a water-index rule and thresholds fit across 4 sites.
 
 ## Where the false positives are (out-of-fold, variant a; ESA WorldCover class of each pixel)
@@ -51,18 +51,15 @@ Fold 5 per site (B2 b): Al Aryam 0.638, Al Nouf 0.684. Fold 1 (Eastern Mangroves
 
 ## Random forest notes
 
-- **Feature importance** (mean over folds, variant a): NDVI 0.33, B08 0.14, B02 0.12, B11 0.10, B04 0.10, B03 0.09, B12 0.08, MNDWI 0.05 (`figs/rf_feature_importance.png`).
-- **Decision threshold:** baseline_rf.py's grid stopped at 0.8 and fold 1 first picked 0.8. The grid was extended to 0.95 in the wrapper (`scripts/run_cv.py`; code/ unchanged) and everything re-run. Chosen thresholds are now 0.80–0.90 and none sits at the 0.95 edge.
-- **Calibration** (`rf_calibration_inner.csv`, inner-validation fold, natural class mix, about 10% mangrove): balanced pixel sampling makes the RF over-confident. Pixels scored 0.5–0.6 are mangrove 17% of the time, 0.8–0.9 → 47%, 0.9–1.0 → 85%. So the high optimal thresholds are expected (prior shift from 50% to about 10% mangrove), not a grid artefact. Any model trained with balanced or weighted loss (e.g. the U-Net) must tune its threshold on validation, not use 0.5.
+- **Feature importance** (mean over folds, variant a): NDVI 0.33, B08 0.14, B02 0.12, B11 0.10, B04 0.10, B03 0.09, B12 0.08, MNDWI 0.05 ([figure](rf_feature_importance.png)).
+- **Decision threshold:** baseline_rf.py's grid stopped at 0.8 and fold 1 first picked 0.8. The grid was extended to 0.95 in the wrapper ([`run_cv.py`](../../../src/mangrove_segmentation/supporting_scripts/baselines/run_cv.py); `baseline_rf.py` unchanged) and everything re-run. Chosen thresholds are now 0.80–0.90 and none sits at the 0.95 edge.
+- **Calibration** (inner-validation fold, natural class mix, about 10% mangrove): balanced pixel sampling makes the RF over-confident. Pixels scored 0.5–0.6 are mangrove 17% of the time, 0.8–0.9 → 47%, 0.9–1.0 → 85%. So the high optimal thresholds are expected (prior shift from 50% to about 10% mangrove), not a grid artefact. Any model trained with balanced or weighted loss (e.g. the U-Net) must tune its threshold on validation, not use 0.5.
 
 ## Files
 
 - `cv_results.csv`: per model × variant × fold, IoU/F1/precision/recall, IoU CI, per-site IoU.
-- `per_chip.csv`: out-of-fold confusion counts and IoU per chip.
-- `oof_pooled.csv`: pooled out-of-fold scores (all chips and non-hazy chips).
-- `per_site_iou.csv`, `landcover_errors.csv`, `fold_fits.csv`, `rf_feature_importances.csv`, `rf_calibration_inner.csv`.
-- `figs/iou_per_fold.png`, `figs/rf_feature_importance.png`, `figs/examples.png`.
-- `preds/<model>_<variant>/`: out-of-fold masks.
-- `scripts/run_cv.py` (fit and predict) and `scripts/score.py` (scoring and figures). Seeds fixed at 0.
+- [iou_per_fold.png](iou_per_fold.png), [rf_feature_importance.png](rf_feature_importance.png), [examples.png](examples.png).
+- Code: [`run_cv.py`](../../../src/mangrove_segmentation/supporting_scripts/baselines/run_cv.py) (fit and predict) and [`score.py`](../../../src/mangrove_segmentation/supporting_scripts/baselines/score.py) (scoring and figures). Seeds fixed at 0.
+- The per-chip tables and out-of-fold masks are not in the repository.
 
 Method: per held-out fold, B1 thresholds (NDVI > t, MNDWI < w) are grid-searched on the 4 training folds. B2 is tuned (3 depth/leaf settings × thresholds 0.20–0.95, 100 trees, 100k balanced pixels) on an inner split: train on 3 folds, validate on the first of folds 3, 4, 5, 2, 1 that is not held out. It is then refit with 200 trees on 200k balanced pixels from all 4 training folds. Training chips within one chip (2,560 m) of any held-out chip are dropped: 8 when Eastern Mangroves is held out, 16 for Jubail and 8 for Ras Ghurab.

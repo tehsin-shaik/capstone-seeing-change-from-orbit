@@ -1,28 +1,55 @@
-# Mangrove pipeline code
+# Mangrove segmentation code
 
-> **Running on your own PC?** Read `RUN_LOCALLY.md` in the SDP folder. In short, from the SDP folder:
-> `conda env create -f 2_Code\environment.yml`, `conda activate mangrove`, `python 2_Code\run_all.py`.
-> Every path comes from `paths.py` (inputs in `3_Data`, big files in `6_Work`, results in `4_Results`);
-> `make_datasets.py` builds the Train/Val and locked Test datasets, `landcover.py` the WorldCover chips.
+This folder makes the mangrove maps. It downloads Sentinel-2 images, cuts them into small 256 x 256 chips,
+trains models to mark which pixels are mangrove, and scores them against the GMW map.
 
-## Data collection
+![Example chips: image, GMW label, random forest and U-Net](../../results/mangrove_segmentation/unet/examples.png)
 
-Two scripts that do the same job: pull Sentinel-2 surface reflectance for each site and date onto one grid
-(EPSG:32640, 10 m). **Use one of them for the whole project, not both.**
+*Each row is one chip: the image, the GMW label, and what the random forest and U-Net predicted.*
 
-| Script | Source | Login | Labels / radar | Runs where |
-| --- | --- | --- | --- | --- |
-| `collect.py` (default) | Earth Search v1, `sentinel-2-c1-l2a` (public COGs on AWS) | none | no (add GMW in Stage 2) | laptop, Colab, server |
-| `collect_gee.py` | GEE `COPERNICUS/S2_SR_HARMONIZED` | Earth Engine account | GMW label band, optional Sentinel-1 VV/VH | Colab |
+## How it fits together
 
-## Install
+1. `collect.py` downloads the images.
+2. `prepare.py` cuts them into chips and adds the GMW label.
+3. `make_datasets.py` splits the chips into Train/Val and a locked Test set.
+4. The model scripts train on Train/Val (each site is held out once).
+5. `evaluate.py` scores every model the same way.
+
+## Run it
 
 ```bash
-pip install pystac-client rasterio shapely pyproj numpy      # collect.py
-pip install earthengine-api                                  # collect_gee.py
+conda env create -f environment.yml
+conda activate mangrove
+python run_all.py            # whole pipeline; see python run_all.py --help
 ```
 
-## Usage
+Paths are set in `paths.py`. Tests: `pytest src/mangrove_segmentation/tests` from the repository root.
+
+## Scripts
+
+| Script | What it does | Results |
+| --- | --- | --- |
+| `baseline_ndvi.py` | NDVI rule (B1) | [baselines](../../results/mangrove_segmentation/baselines/RESULTS.md) |
+| `baseline_rf.py` | Random forest (B2) | [baselines](../../results/mangrove_segmentation/baselines/RESULTS.md) |
+| `baseline_svm.py` | SVM (B3) | [SVM](../../results/mangrove_segmentation/svm/RESULTS.md) |
+| `train_unet.py` | U-Net | [U-Net](../../results/mangrove_segmentation/unet/RESULTS.md) |
+| [`dinov3/`](dinov3) | DINOv3, frozen and LoRA | [DINOv3](../../results/mangrove_segmentation/dinov3/RESULTS.md) |
+| `compare_models.py`, `model_size.py` | All models side by side | [comparison](../../results/mangrove_segmentation/model_comparison/RESULTS.md) |
+| `confidence.py` | How sure the scores are | [confidence](../../results/mangrove_segmentation/confidence/RESULTS.md) |
+| `date_stability.py`, `multi_date_vote.py` | Effect of the image date | [dates](../../results/mangrove_segmentation/date_stability/RESULTS.md), [vote](../../results/mangrove_segmentation/multi_date_vote/RESULTS.md) |
+| `model_disagreement.py` | Where models and GMW disagree | [disagreement](../../results/mangrove_segmentation/model_disagreement/RESULTS.md) |
+| `efficiency.py`, `rgb_only.py` | Smaller U-Nets, RGB-only models | [efficiency](../../results/mangrove_segmentation/efficiency/RESULTS.md), [RGB](../../results/mangrove_segmentation/rgb_only/RESULTS.md) |
+| `label_agreement.py` | Hand labels vs GMW and models | [hand labels](../../results/mangrove_segmentation/hand_labels/RESULTS.md) |
+
+Helpers: `paths.py`, `chipio.py`, `landcover.py`, `make_checksums.py` ([CHECKSUMS.md](CHECKSUMS.md)). Notes on the SVM: [SVM_BASELINE.md](SVM_BASELINE.md). Also [`notebooks/`](notebooks) (the same
+steps as notebooks), [`supporting_scripts/`](supporting_scripts) (cross-validation runners) and [`tests/`](tests).
+
+## Details
+
+Click to open.
+
+<details>
+<summary>Downloading images (<code>collect.py</code>)</summary>
 
 `sites.geojson` = lon/lat FeatureCollection, one feature per site with a `name` property.
 
@@ -42,14 +69,6 @@ python collect.py --sites sites.geojson --start 2025-10-01 --end 2025-12-31 --pe
 `--per-site` picks the least-cloudy dates, which can all fall in one season. For season coverage, run it once per
 season window, or write `scenes.csv` by hand from the `--dry-run` list. Re-runs skip files that already exist.
 
-GEE (in Colab, after `ee.Authenticate(); ee.Initialize(project=...)`):
-
-```python
-%run collect_gee.py --sites sites.geojson --start 2020-01-01 --end 2021-01-01 --per-site 4 --s1
-```
-
-## Outputs (`collect.py`)
-
 ```
 data/raw/<site>/<YYYY-MM-DD>.tif     7 bands, float32, NaN = no data
                                      1-6: B02 B03 B04 B08 B11 B12 surface reflectance (B11/B12 bilinear from 20 m)
@@ -60,7 +79,17 @@ data/raw_manifest.csv                site, date, item_id, tile, cloud_cover, pro
 
 Size: about 8 MB per site-date for a 7 x 5.7 km site (721 x 568 px). Download time: a few seconds per scene.
 
-## The offset rule (read this)
+**Sites on a tile edge.** Some sites sit where several MGRS tiles meet (e.g. `al_aryam_islands`, at the corner of 39QZG, 39RZH, 40QBM and
+40RBN), so no single item covers them. In `--scenes` mode, list every item of the same acquisition date on its own
+row with the same site name; `collect.py` groups rows by (site, date) and mosaics them. Each pixel comes from the
+first listed item that has valid data there, and each item's own scale/offset is applied to its own pixels, once.
+The manifest's `item_id` and `tile` then hold the item ids / tiles joined with `+`. A single item per row works as
+before.
+
+</details>
+
+<details>
+<summary>Reflectance offset (read before changing <code>collect.py</code>)</summary>
 
 Earth Search Collection-1 files store raw numbers (DN). Every scene, including 2018 and 2020 (reprocessed as
 baseline 05.00), carries ESA's offset, and each file's STAC metadata says so: `scale 0.0001, offset -0.1`.
@@ -70,11 +99,12 @@ The manifest's `offset_applied` column records it.
 - Do **not** subtract 0.1 again later, and do **not** clip negatives to 0. Dark water legitimately comes out
   slightly below 0 (around 14% of B04 pixels in the 2020 test scene). Clipping makes NDVI = 1 over water.
 - The GEE harmonized collection is already shifted, so there it is DN / 10000 with no extra offset.
-- Earlier team data that used `DN / 10000` on Earth Search C1 files was **0.1 too bright**. That matches the
-  Seeing Orbit symptom: their chips read about 0.1 darker than ours, with dark pixels at 0. Check
-  `so_prepare.py` before blaming their chips.
+- Earlier team data that used `DN / 10000` on Earth Search C1 files was **0.1 too bright**.
 
-## Test run (23 Oct 2026, `test_run/`)
+</details>
+
+<details>
+<summary>Test run, 23 Oct 2026</summary>
 
 Eastern Mangroves AOI 54.40-54.47E, 24.43-24.48N, tile 40RBN, two November scenes:
 
@@ -87,7 +117,10 @@ Water and vegetation are both in the expected ranges. 2025 is brighter in the re
 probably haze, so NDVI thresholds will not transfer between dates. Normalise per scene, or let models learn it.
 There are 25 scenes under 2% cloud in 2020 alone for this site, so imagery is not a limit.
 
-## prepare.py (Stage 2: raw files -> chips)
+</details>
+
+<details>
+<summary>Making chips (<code>prepare.py</code>)</summary>
 
 Turns the per-site/date GeoTIFFs from `collect.py` into 256 x 256 training chips that every model reads.
 
@@ -134,46 +167,10 @@ Notes: chips are cut on a grid starting at the raster's top-left corner, so a na
 same place appears once per date (all dates of a site share its split, so this does not leak). Tested 23 Oct on
 Eastern Mangroves 2020-11-17 and 2025-11-20: 8 chips, ~3 s, ~1.3 MB per chip.
 
-## Sentinel-1
+</details>
 
-`collect_s1.py` adds radar (VV, VH) for the Stage 7 fusion experiment, on the **exact grid of each Sentinel-2 file**
-so the two stack pixel for pixel.
-
-- Source: Microsoft Planetary Computer `sentinel-1-rtc` (terrain-corrected gamma0, linear power). URLs are signed by
-  the `planetary-computer` package; no account or key needed. `pip install planetary-computer pystac-client rasterio`
-- It imports the grid and GDAL settings from `collect.py`, so keep both files in the same folder.
-
-```bash
-# mode 1 (recommended): one radar scene per Sentinel-2 file, closest in time within ±6 days
-python collect_s1.py --manifest data/raw_manifest.csv --out data/ [--orbit descending] [--max-gap 6]
-
-# mode 2: every radar scene per site in a window, on collect.py's site grid
-python collect_s1.py --sites sites.geojson --start 2020-11-01 --end 2020-11-30 --out data/
-```
-
-Output: `data/s1/<site>/<date>.tif`, float32, NaN = no data. Bands: 1 VV, 2 VH (linear), 3 VV_dB, 4 VH_dB.
-In mode 1 the date in the file name is the **Sentinel-2** date; the radar date is in `data/s1_manifest.csv`
-(`s1_datetime`, `gap_days`, `orbit_state`, `relative_orbit`, `item_id`, `valid_fraction`).
-Scenes covering less than 90% of the grid are skipped (`--min-valid`). No speckle filter is applied.
-
-**Pass direction matters.** Ascending (afternoon) and descending (early morning) passes see the coast from
-different angles and at different tide states. The nearest scene can switch direction between dates
-(the test picked descending for 2020 and ascending for 2025). For change detection, fix one with `--orbit`.
-
-Test (Eastern Mangroves, 23 Oct): 2020-11-17 matched a 2020-11-14 descending pass (3.2 days earlier),
-2025-11-20 matched a 2025-11-21 ascending pass (1.3 days later); about 5 MB per file, about 20 s per date.
-Median backscatter: water VV −17 dB / VH −21 dB; vegetation (S2 NDVI > 0.5) VV −8 dB / VH −15 dB.
-
-## Sites on a tile edge: same-date mosaics (added 23 Oct)
-
-Some sites sit where several MGRS tiles meet (e.g. `al_aryam_islands`, at the corner of 39QZG, 39RZH, 40QBM and
-40RBN), so no single item covers them. In `--scenes` mode, list every item of the same acquisition date on its own
-row with the same site name; `collect.py` groups rows by (site, date) and mosaics them. Each pixel comes from the
-first listed item that has valid data there, and each item's own scale/offset is applied to its own pixels, once.
-The manifest's `item_id` and `tile` then hold the item ids / tiles joined with `+`. A single item per row works as
-before. The selection used for the full download is in `../data/scripts/select_scenes.py` and `select_mosaic.py`.
-
-## Evaluate and baselines
+<details>
+<summary>Scoring and baselines (<code>evaluate.py</code>)</summary>
 
 Every model is scored by the same script, against the same frozen split. Files: `evaluate.py`, `baseline_ndvi.py` (B1),
 `baseline_rf.py` (B2), `chipio.py` (shared chip loading), `tests/test_evaluate.py`.
@@ -213,4 +210,4 @@ python evaluate.py --compare results/ndvi/results.json results/rf/results.json -
 
 `--chips` accepts either the prepare.py output folder or its `chips/` subfolder.
 
-Tests: `python -m pytest -q tests/` (6 tests, known-answer IoU on synthetic chips, prepare.py chip format).
+</details>

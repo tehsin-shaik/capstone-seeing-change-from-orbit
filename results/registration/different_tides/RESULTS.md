@@ -48,3 +48,5 @@ python src/registration/tide_scene_scan.py --sites <sites.geojson> --out <scenes
 python src/registration/real_raster_check.py --reference <2018_6band.tif> --moving <2025_6band.tif> --out <pair folder> --rasters <folder outside the repo>
 python src/registration/tide_landmark_zones.py --reference <2018 download.tif> --moving <2025 download.tif> --landmarks <pair folder>/landmarks_gee_pair.csv --out <pair folder>
 ```
+
+Figure: [landmarks at Jubail Island at the two tides](fig_tide_landmarks_jubail.png).

@@ -8,7 +8,7 @@ These scripts test why the random forest's mangrove area changes with the image 
 - `gauge_check.py` checks the tide model against tide gauges in Oman and Kuwait.
 - `shared.py` holds what they share: the held-out forests, the same-year swing and the shuffled-dates test.
 
-Each script writes one `summary.csv` with the numbers RESULTS.md quotes. The working tables, the figure scripts, the scripts that found and downloaded the gauge records and the extra checks were left out to keep the repo small. They are in this branch's history, in the commit before "Trim date effect analysis to the essentials".
+Each script writes one `summary.csv` with the numbers RESULTS.md quotes. The working tables, the figure scripts, the gauge download scripts and the extra checks were left out to keep the repo small.
 
 ## What they need
 

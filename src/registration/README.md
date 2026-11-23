@@ -43,4 +43,4 @@ Before two years can be compared, the 2018 and 2025 images have to line up, so t
 | `shift_chips.py` | Copies the dataset with one site's chips moved by a fitted shift |
 | `tests/` | Run with `pytest src/registration/tests` |
 
-How to run each script is at the end of its write-up.
+Install with `pip install -r src/registration/requirements.txt`. How to run each script is at the end of its write-up.

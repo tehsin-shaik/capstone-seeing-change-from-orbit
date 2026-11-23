@@ -35,4 +35,4 @@ Train_Val_Dataset only (Test_Dataset never read). 2020 chips, label GMW v4.0.19 
 - **Threshold:** chosen on the inner-validation fold (grid 0.05–0.95): F1 0.55, F2 0.7, F3 0.5, F4 0.45, F5 0.6.
 - **Runtime:** 2 min of training (feature extraction not included).
 
-Files: `cv_results.csv`, `per_chip.csv`, `fold_fits.csv`, `history.csv`, `config.json`, `figs/`, `dinov3_fold*.pt`, `preds/`.
+Files: `cv_results.csv`, [iou_per_fold.png](iou_per_fold.png), [training_curves.png](training_curves.png), [examples.png](examples.png). The model weights and predictions are too big for the repository.

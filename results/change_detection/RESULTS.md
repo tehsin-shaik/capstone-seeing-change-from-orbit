@@ -2,6 +2,8 @@
 
 For each training site, the random forest baseline (B2) was trained on the 2020 chips of the other folds, so it had never seen the site. It then predicted the site's 2018 and 2025 scenes, and each year's mask is a per-pixel vote over that year's scenes. To see how much of the "change" is model noise, two dates of the same year were compared in the same way, where nothing real can have changed much. At five of the six sites the 2018 to 2025 change is no bigger than the largest same-year swing. Only Ghantoot is above its noise, by a small margin.
 
+> **Update:** this was the first pass. The [fusion window check](fusion_window/RESULTS.md), which uses the same months in both years, gives a smaller gain at Ghantoot (+8% to +17%) and a gain at Ras Ghurab (+6% to +21%).
+
 ## Result per site
 
 Net change is gain minus loss, as a percent of the first date's mangrove area.
