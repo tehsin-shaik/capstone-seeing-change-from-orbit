@@ -2,7 +2,9 @@
 
 The translation is the `translation` row of a `gee_pair_baseline.csv` written by real_raster_check.py
 (tx_m, ty_m in EPSG:32640, moving -> reference). Every other chip is linked, not copied, so the new folder
-can be passed as --train-val to the change detection scripts.
+can be passed as --train-val to the change detection scripts. Links are symbolic where the system allows it;
+otherwise (for example on Windows without admin rights or Developer Mode) files are hard-linked, or copied
+if the output is on another drive.
 
     python src/registration/shift_chips.py --train-val <Train_Val_Dataset> --out <new folder> \
         --site al_aryam_islands \
@@ -12,6 +14,7 @@ can be passed as --train-val to the change detection scripts.
 import argparse
 import json
 import os
+import shutil
 from pathlib import Path
 
 import numpy as np
@@ -42,16 +45,33 @@ def offset_m(ref, mov):
     return float(np.hypot(*d) * PIXEL_M)
 
 
+def link(p, q):
+    """Symlink q -> p; fall back to a hard link, then a copy, where symlinks are not allowed."""
+    p = p.resolve()
+    try:
+        os.symlink(p, q, target_is_directory=p.is_dir())
+        return
+    except OSError:
+        pass
+    if p.is_dir():
+        shutil.copytree(p, q)
+        return
+    try:
+        os.link(p, q)
+    except OSError:
+        shutil.copy2(p, q)
+
+
 def link_dataset(src, dst):
     dst.mkdir(parents=True, exist_ok=True)
     for p in src.iterdir():
         if p.name != "chips" and not (dst / p.name).exists():
-            os.symlink(p.resolve(), dst / p.name)
+            link(p, dst / p.name)
     (dst / "chips").mkdir(exist_ok=True)
     for p in (src / "chips").iterdir():
         q = dst / "chips" / p.name
         if not q.exists() and not q.is_symlink():
-            os.symlink(p.resolve(), q)
+            link(p, q)
 
 
 def main(argv=None):
