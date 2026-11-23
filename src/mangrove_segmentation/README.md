@@ -40,6 +40,7 @@ Paths are set in `paths.py`. Tests: `pytest src/mangrove_segmentation/tests` fro
 | `model_disagreement.py` | Where models and GMW disagree | [disagreement](../../results/mangrove_segmentation/model_disagreement/RESULTS.md) |
 | `efficiency.py`, `rgb_only.py` | Smaller U-Nets, RGB-only models | [efficiency](../../results/mangrove_segmentation/efficiency/RESULTS.md), [RGB](../../results/mangrove_segmentation/rgb_only/RESULTS.md) |
 | `label_agreement.py` | Hand labels vs GMW and models | [hand labels](../../results/mangrove_segmentation/hand_labels/RESULTS.md) |
+| `final_test.py` | The one run on the locked test set | [final test](../../results/mangrove_segmentation/final_test/RESULTS.md), [plan](../../results/mangrove_segmentation/final_test/PLAN.md) |
 
 Helpers: `paths.py`, `chipio.py`, `landcover.py`, `make_checksums.py` ([CHECKSUMS.md](CHECKSUMS.md)). Notes on the SVM: [SVM_BASELINE.md](SVM_BASELINE.md). Also [`notebooks/`](notebooks) (the same
 steps as notebooks), [`supporting_scripts/`](supporting_scripts) (cross-validation runners) and [`tests/`](tests).

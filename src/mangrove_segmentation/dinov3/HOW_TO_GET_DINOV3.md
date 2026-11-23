@@ -18,7 +18,7 @@ DINOv3 licence and log in to Hugging Face once. After that, the code downloads t
 2. Open the **Anaconda Prompt**, then:
    ```
    conda activate mangrove
-   pip install -r %USERPROFILE%\Desktop\SDP\2_Code\dinov3\requirements_dinov3.txt
+   pip install -r src\mangrove_segmentation\dinov3\requirements_dinov3.txt
    huggingface-cli login
    ```
 3. Paste the token **into the Anaconda Prompt** when it asks (nothing is shown while you paste, that's normal), press
@@ -39,23 +39,23 @@ still helps at that resolution is part of the research question.
 
 ## 4. Run it
 
-From the SDP folder in the Anaconda Prompt (`cd %USERPROFILE%\Desktop\SDP`, environment active):
+From the repository root in the Anaconda Prompt, with the environment active. The data folder is set by `MANGROVE_ROOT` (see `paths.py`):
 
 | Command | What it does | Expected time |
 | --- | --- | --- |
-| `python 2_Code\dinov3\train_dinov3.py --mode frozen` | Stage A, all 5 folds, satellite ViT-L | feature extraction once: about 5–15 min on a CPU for the 215 chips (seconds on a GPU); then about 5–15 min per fold on a CPU |
-| `python 2_Code\dinov3\train_dinov3.py --mode frozen --no-spectral` | ablation: DINOv3 RGB only | reuses the cached features, so training time only |
-| `python 2_Code\dinov3\train_dinov3.py --model-id facebook/dinov3-vits16-pretrain-lvd1689m` | small model | a few minutes of extraction |
-| `python 2_Code\dinov3\train_dinov3.py --mode lora` | Stage B, LoRA r=8 on attention q/v | **NVIDIA GPU only**: about 8 GB of GPU memory for ViT-L (use `--batch 2` if it runs out); tens of minutes per fold |
+| `python src\mangrove_segmentation\dinov3\train_dinov3.py --mode frozen` | frozen DINOv3, all 5 folds, satellite ViT-L | feature extraction once: about 5–15 min on a CPU for the 215 chips (seconds on a GPU); then about 5–15 min per fold on a CPU |
+| `python src\mangrove_segmentation\dinov3\train_dinov3.py --mode frozen --no-spectral` | ablation: DINOv3 RGB only | reuses the cached features, so training time only |
+| `python src\mangrove_segmentation\dinov3\train_dinov3.py --model-id facebook/dinov3-vits16-pretrain-lvd1689m` | small model | a few minutes of extraction |
+| `python src\mangrove_segmentation\dinov3\train_dinov3.py --mode lora` | LoRA r=8 on attention q/v | **NVIDIA GPU only**: about 8 GB of GPU memory for ViT-L (use `--batch 2` if it runs out); tens of minutes per fold |
 
-Or use the notebook `2_Code\notebooks\04_dinov3.ipynb`, which has the same choices as switches.
+Or use the notebook `src\mangrove_segmentation\notebooks\04_dinov3.ipynb`, which has the same choices as switches.
 
 Notes
-- The data must exist first: `python 2_Code\run_all.py --step download`, then `--step prepare` and `--step datasets`
-  (or notebook 00). DINOv3 reads only `6_Work\datasets\Train_Val_Dataset`. The test set stays locked.
-- Features are cached in `6_Work\dinov3_cache` (about 450 MB for ViT-L, 170 MB for ViT-S). Delete that folder to
+- The data must exist first: `python src\mangrove_segmentation\run_all.py --step download`, then `--step prepare` and `--step datasets`
+  (or notebook 00). DINOv3 reads only `6_Work\datasets\Train_Val_Dataset` inside the data folder. The test set stays locked.
+- Features are cached in `6_Work\dinov3_cache` inside the data folder (about 450 MB for ViT-L, 170 MB for ViT-S). Delete that folder to
   re-extract them.
-- Results: `4_Results\DINOv3\<run name>\RESULTS.md`, with the comparison against B1, B2 (0.704) and the U-Net, per-fold
+- Results go to `4_Results\DINOv3\<run name>\RESULTS.md` inside the data folder, with the comparison against B1, B2 (0.704) and the U-Net, per-fold
   scores, figures and the saved decoders.
 - To test the code without any weights or login: `--smoke --out %TEMP%\dino_smoke` (a tiny random model; the numbers mean nothing).
 

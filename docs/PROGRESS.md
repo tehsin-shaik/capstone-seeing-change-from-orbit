@@ -92,6 +92,7 @@ What the team did each month, with links to the code and results.
 
 - Produced 2018 to 2025 mangrove change maps for all 6 sites with the random forest, and measured the swing between two dates of the same year as the noise level (Zain). Only Ghantoot (+25%) changes more than that swing. See [change_detection](../results/change_detection/RESULTS.md).
 - Repeated the change maps with the U-Net (Zain). It is not steadier across dates than the random forest, and Ghantoot is again the only site above the swing (+37%). See [unet](../results/change_detection/unet/RESULTS.md).
+- Checked which image dates to combine for each year (Tehsin, the fusion window check). With the same months in both years (February to April, and October to December), Ghantoot gains +8% to +17% and Ras Ghurab +6% to +21%, less than in the first maps. Eastern Mangroves and Jubail are unclear. It has not been checked against independent labels. See [fusion_window](../results/change_detection/fusion_window/RESULTS.md).
 - Mapped new bare or built ground around the mangroves at Jubail Island and Ghantoot (Zain). At Jubail it is above the same-year noise in every zone, and twice as common within 500 m of the mangroves as further away. The rule cannot tell construction from sand. See [human_activity](../results/change_detection/human_activity/RESULTS.md).
 
 ### 19 to 22 November: Model Choice, Same-Year Swings, Registration Cross-Check and Hand Labels
@@ -119,6 +120,6 @@ What the team did each month, with links to the code and results.
 - Compared the four labellers on the same 6 chips, and scored GMW and the models against each of them and against their majority (Tehsin). The people agree with each other at 0.72–0.83 IoU, and GMW scores 0.70–0.75 against each, slightly below human agreement. Against the majority label the random forest scores 0.864 and the U-Net 0.820, against 0.736 for GMW. Tehsin draws the tightest edges and Khaled the widest; the random forest is closest to Tehsin (0.862) and the U-Net to Khaled (0.760). See [hand_labels](../results/mangrove_segmentation/hand_labels/RESULTS.md).
 - Merged the four hand labels into one ground truth per chip, using the majority (at least three of four). See [data/hand_labels/majority](../data/hand_labels/README.md#majority-ground-truth).
 
-## Next Steps
+#### Final Test
 
-1. Choose between the random forest and the approximate RBF SVM, then run the Test_Dataset once.
+- Froze the random forest (variant b, threshold 0.85) in a plan committed before the run, then ran it once on the 7 locked sites (Zain). It scores 0.763 IoU on fixed_test (2 sites) and 0.811 on external (5 sites), against 0.686 in cross-validation (pixel-pooled). The scores are against GMW and cover 2020 only. See [final_test](../results/mangrove_segmentation/final_test/RESULTS.md).

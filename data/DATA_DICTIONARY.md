@@ -60,7 +60,7 @@ The pipeline uses **13 UAE sites** (notebook 00: "104 Sentinel-2 images (13 UAE 
 - The six cross-validation sites are in Abu Dhabi and hold 215 chips from 2020 (baselines RESULTS). Al Aryam and Al Nouf are 1.5 km apart and share fold 5 (notebook 02).
 - "Locked" means the test data must not be visually inspected, explored, used for training, or used for model selection or hyperparameter tuning. Predictions are evaluated against the reference labels once, after the model and evaluation procedure have been finalised (`make_datasets.py`).
 - The locked sites' chips are in the locked `Test_Dataset`, so their dates, chip counts and reference data are not described here (section 9).
-- Site boundaries come from `3_Data/sites/sites.geojson`, a longitude/latitude (EPSG:4326) file with one feature per site, a `name` property and a `proposed_split` property (`collect.py`, `prepare.py`). Each chip's position is recorded in the `bounds_epsg32640` column of the catalog.
+- Site boundaries come from `3_Data/sites/sites.geojson` (not in the repository), a longitude/latitude (EPSG:4326) file with one feature per site, a `name` property and a `proposed_split` property (`collect.py`, `prepare.py`). Each chip's position is recorded in the `bounds_epsg32640` column of the catalog.
 - The fold and role of each site come from `folds_site_cv.csv` (columns `site`, `fold`, `role`). The copy in the Train_Val dataset lists the six cross-validation sites with the folds above, all with role `cv`.
 
 ## 2. Satellite imagery

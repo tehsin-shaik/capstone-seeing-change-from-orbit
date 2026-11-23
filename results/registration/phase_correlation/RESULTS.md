@@ -43,7 +43,7 @@ Yes. Two methods that share nothing (landmarks + RANSAC vs whole-tile frequency 
 ## Things we noticed
 
 - Al Aryam March is the biggest shift, 4.5 m, mostly north. That's above the roughly 3.3 to 3.5 m where the SIFT script's rule would start applying a correction (see the Eastern Mangroves write-up), so Al Aryam is worth running through `real_raster_check.py` before using its change map. It was, and it does need a correction ([Al Aryam](../al_aryam/RESULTS.md)).
-- March pairs come out a bit bigger than November pairs at most sites (about 2 to 2.5 m vs 0.8 to 2.9 m). We don't know why yet. Several of the 2018 and 2025 scenes come from different tiles (T40RBN vs T39RZH), which are in different UTM zones and get reprojected, which could add a small offset.
+- March pairs come out a bit bigger than November pairs at most sites (about 2 to 2.5 m vs 0.8 to 2.9 m). We don't know why. Several of the 2018 and 2025 scenes come from different tiles (T40RBN vs T39RZH), which are in different UTM zones and get reprojected, which could add a small offset.
 
 ## Limits
 

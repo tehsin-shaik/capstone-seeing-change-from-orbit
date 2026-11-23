@@ -1,6 +1,6 @@
 # Final Deliverables
 
-The final versions of the project's submitted work go here.
+The project's submitted work.
 
 | Deliverable | File |
 | --- | --- |
@@ -8,4 +8,4 @@ The final versions of the project's submitted work go here.
 | Final presentation | `SDP_Presentation_Seeing_Change_from_Orbit.pdf` |
 | Demo | Video or link |
 
-Drafts and working notes stay outside this folder. Only the submitted versions are added here.
+Drafts and working notes are kept outside this folder.

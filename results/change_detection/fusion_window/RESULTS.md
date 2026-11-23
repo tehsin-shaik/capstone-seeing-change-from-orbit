@@ -46,7 +46,7 @@ We ran four checks:
    comparison 50 times with the 2025 dates cut down to match the 2018 image count and time of year.
 
 We measured repeatability separately from accuracy. Agreement with GMW was only a secondary check, because GMW also
-supplied the training labels. Independent validation of the mapped gain and loss is still pending.
+supplied the training labels. The mapped gain and loss have not been checked against independent labels.
 
 ![Disagreement against years apart (left) and time-of-year offset for pairs less than a year apart (right)](fusion_window.png)
 
@@ -71,7 +71,7 @@ supplied the training labels. Independent validation of the mapped gain and loss
 | Ras Ghurab | 0.18 | 0.20 | 0.28 |
 | Jubail Island | 0.32 | 0.35 | 0.40 |
 
-Our candidate primary window, pending independent validation, is the selected clear images from **February to
+Our candidate primary window, which has not been checked against independent labels, is the selected clear images from **February to
 April**, averaged and compared with February to April of the other year. October to December is used as a second
 check.
 
@@ -93,6 +93,6 @@ maps disagree too much even 5 to 45 days apart (0.65), and Al Nouf has only one 
 ## Limits
 
 - This measures how repeatable the maps are, not how accurate. The change has not been checked against independent
-  labels yet.
+  labels.
 - 2018 only has 2 to 3 clear images in each window, so the 2018 map is the weak point.
 - No tide matching, and not run on the locked test set.

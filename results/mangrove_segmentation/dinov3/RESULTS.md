@@ -3,7 +3,7 @@
 Train_Val_Dataset only (Test_Dataset never read). 2020 chips, label GMW v4.0.19 (10 m), hazy scenes dropped from training
 (variant b), the same 5 folds, 1-chip buffer and scoring code as B1, B2 and the U-Net.
 
-**Verdict:** **No: does not beat the random forest yet** (DINOv3 0.686 vs B2 0.704)
+**Verdict:** **No: does not beat the random forest** (DINOv3 0.686 vs B2 0.704)
 
 ## Headline (mean ± sd over folds)
 

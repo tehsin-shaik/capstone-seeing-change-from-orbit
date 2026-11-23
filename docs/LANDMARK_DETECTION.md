@@ -72,8 +72,7 @@ python figures.py   --data "D:/MyStuff/University/SDP/data/jubail" --out ../../r
 
 - In the 2018 image, the near-infrared band (B08) is exactly 0 over about 16 % of the scene, all of it water. The 2025 image has no such zeros. Older Sentinel-2 processing clipped very dark water to 0, and the current processing doesn't. This does not affect registration, but it shifts NDWI and NDVI over water between the two dates, so Track B should know about it.
 
-## Next steps
+## Follow-up checks
 
-1. Repeat on a pair at a clearly different tide, to test whether shoreline landmarks still hold.
-2. Test more pairs and areas (other mangrove sites, other years).
-3. Spread the landmarks evenly across the image (a few per grid cell), so the affine fit isn't dominated by one dense area.
+- Different tides: [different_tides](../results/registration/different_tides/RESULTS.md).
+- More sites: [Eastern Mangroves](../results/registration/eastern_mangroves/RESULTS.md), [Al Aryam](../results/registration/al_aryam/RESULTS.md), and all 6 sites with [phase correlation](../results/registration/phase_correlation/RESULTS.md).

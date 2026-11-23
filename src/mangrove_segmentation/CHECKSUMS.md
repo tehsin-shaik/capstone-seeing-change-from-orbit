@@ -8,4 +8,4 @@ From `src/mangrove_segmentation`:
 python make_checksums.py <exports folder> --out ../../data/checksums_exports.csv --pattern "*.tif"
 ```
 
-Leave out `--pattern` to include every file. It hasn't been run on the real exports yet, so there is no checksum table in the repository.
+Leave out `--pattern` to include every file. It hasn't been run on the real exports, so there is no checksum table in the repository.
