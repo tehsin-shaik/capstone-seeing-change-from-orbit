@@ -45,6 +45,8 @@ EXAMPLES (from the SDP folder, 'mangrove' environment active)
   python 2_Code/dinov3/train_dinov3_lora.py --no-grad-checkpoint --gpu-batch 4   # faster, more GPU memory (see below)
   python 2_Code/dinov3/train_dinov3_lora.py --lora-r 16 --lora-alpha 32      # more capacity
   python 2_Code/dinov3/train_dinov3_lora.py --lora-targets q_proj k_proj v_proj o_proj --lora-last-n 12
+  python 2_Code/dinov3/train_dinov3_lora.py --no-spectral                    # RGB only: no conv branch in the decoder
+  python 2_Code/dinov3/train_dinov3_lora.py --rgb-branch                     # RGB only: conv branch kept, fed B04/B03/B02
   python 2_Code/dinov3/train_dinov3_lora.py --bench --bench-arch vitl                  # memory + speed, no data needed
   python 2_Code/dinov3/train_dinov3_lora.py --smoke --force --cpu --out <temp folder>  # tiny random model: code test
 Needs the Hugging Face login with the DINOv3 licence accepted (HOW_TO_GET_DINOV3.md), except --smoke and --bench.
@@ -91,6 +93,7 @@ LR_HEAD, LR_LORA = 1e-3, 1e-4
 EPOCHS, PATIENCE, BATCH = (T.DEFAULTS["frozen"][k] for k in ("epochs", "patience", "batch"))   # 40, 10, 8
 
 MODEL_LABEL = "DINOv3_LoRA"          # value of the `model` column in cv_results.csv (the frozen run writes "DINOv3")
+RGB_IN_CHIP = [2, 1, 0]              # B04, B03, B02 in the chip's channel order (the bands DINOv3 itself gets)
 BENCH_ARCH = {                       # published DINOv3 ViT sizes, for --bench only (random weights)
     "vits": dict(hidden_size=384, num_hidden_layers=12, num_attention_heads=6, intermediate_size=1536),
     "vitb": dict(hidden_size=768, num_hidden_layers=12, num_attention_heads=12, intermediate_size=3072),
@@ -156,6 +159,30 @@ def describe(info: dict) -> str:
             f"of the backbone)")
 
 
+# ============================================================================ decoder input (RGB-only options)
+class RGBBranchHead(T.FusionHead):
+    """The same decoder, but its conv branch gets only B04, B03, B02 instead of all 8 channels (--rgb-branch).
+
+    The three bands are normalised and augmented exactly as in the 8-channel run; the other five channels are
+    dropped before the branch. The full decoder is built first, so the token projection and the fusion layers
+    start from the same random numbers as in the 8-channel run. Only the branch itself is new."""
+
+    def __init__(self, c_tok: int):
+        super().__init__(c_tok, spectral=True)
+        s = self.spec[0][0].out_channels
+        self.spec = torch.nn.Sequential(T.conv3(len(RGB_IN_CHIP), s), T.conv3(s, s))
+
+    def forward(self, tok, spec, size):
+        return super().forward(tok, spec[:, RGB_IN_CHIP], size)
+
+
+def make_head(c_tok: int, a):
+    """Decoder for this run. Default: T.FusionHead with the 8-channel branch, exactly as before."""
+    if getattr(a, "rgb_branch", False):
+        return RGBBranchHead(c_tok)
+    return T.FusionHead(c_tok, spectral=not a.no_spectral)
+
+
 # ============================================================================ training helpers
 def autocast(device: str, amp: bool):
     """16-bit floats for the DINOv3 forward pass on a GPU (about half the memory, faster). Off on a CPU."""
@@ -202,7 +229,7 @@ def default_run_name(a, info) -> str:
                                                                                         sorted(LORA_TARGETS), None):
         name += f"_r{info['lora_r']}_a{info['lora_alpha']:g}_" + "-".join(t.replace("_proj", "") for t in info["lora_targets"])
         name += f"_last{info['lora_last_n']}" if info["lora_last_n"] else ""
-    return name + ("_nospec" if a.no_spectral else "")
+    return name + ("_nospec" if a.no_spectral else "") + ("_rgbbranch" if getattr(a, "rgb_branch", False) else "")
 
 
 # ============================================================================ cross-validation
@@ -255,7 +282,7 @@ def run(a) -> Path:
         tr_ids, iv_ids = list(tr.chip_id), list(iv.chip_id)
         mean, std = T.fold_stats(tr_ids, data)
         # decoder first, so that it starts from the same random numbers as in the frozen run of this fold
-        head = T.FusionHead(run_.c_tok, spectral=not a.no_spectral).to(device)
+        head = make_head(run_.c_tok, a).to(device)
         bb, *_ = T.load_backbone(a.model_id, a.smoke, device)             # fresh pretrained weights for every fold
         lora_bb, _ = add_lora(bb, a.lora_r, a.lora_alpha, a.lora_dropout, a.lora_targets, a.lora_last_n,
                               a.grad_checkpoint)
@@ -289,7 +316,8 @@ def run(a) -> Path:
         head.load_state_dict(best_state["head"])
         lora_bb.load_state_dict(best_state["lora"], strict=False)
         torch.save({"head": best_state["head"], "lora": best_state["lora"], "mean": mean, "std": std,
-                    "model_id": a.model_id, "spectral": not a.no_spectral, "lora_config": info},
+                    "model_id": a.model_id, "spectral": not a.no_spectral, "lora_config": info,
+                    **({"rgb_branch": True} if a.rgb_branch else {})},
                    out / f"dinov3_fold{k}.pt")
         probs = predict(run_, head, lora_bb, iv_ids, mean, std, amp)
         grid = np.round(np.arange(0.05, 0.951, 0.05), 2)
@@ -315,7 +343,7 @@ def run(a) -> Path:
                "spectral_branch": not a.no_spectral, "scale": a.scale, "last4": a.last4, "aug": a.aug,
                "lora_r": a.lora_r, "device": device, "epochs": a.epochs, "patience": a.patience, "batch": a.batch,
                "lr_head": a.lr_head, "lr_lora": a.lr_lora, **info, "gpu_batch": gpu_batch, "mixed_precision": amp,
-               "grad_checkpoint": a.grad_checkpoint,
+               "grad_checkpoint": a.grad_checkpoint, **({"rgb_branch": True} if a.rgb_branch else {}),
                "per_fold": extra}, open(out / "config.json", "w"), indent=1)
     T.score(out, tv, cat, a)                          # evaluate.py scoring, figures and RESULTS.md, as for frozen
     finish_report(out, a, info, gpu_batch, amp, extra, folds, all_folds)
@@ -363,6 +391,8 @@ def finish_report(out: Path, a, info: dict, gpu_batch: int, amp: bool, extra: li
     md = (out / "RESULTS.md").read_text(encoding="utf-8")
     md = md.replace(f"LoRA r={a.lora_r} on attention q/v", describe(info))
     md = set_verdict(md, verdict_line(float(cv["iou"].mean()), folds, all_folds, a.smoke))
+    if a.rgb_branch:                                  # train_dinov3.score() only knows the 8-channel branch
+        md = md.replace("over the 8 spectral channels (B02–B12, NDVI, MNDWI)", "over B04, B03, B02 only (--rgb-branch)")
     peak = [e["peak_gpu_mb"] for e in extra if e["peak_gpu_mb"]]
     md += f"""
 ## LoRA settings
@@ -412,7 +442,7 @@ def bench(a) -> dict:
     bb = DINOv3ViTModel(DINOv3ViTConfig(patch_size=16, image_size=px, num_register_tokens=4, **BENCH_ARCH[a.bench_arch]))
     lora_bb, info = add_lora(bb, a.lora_r, a.lora_alpha, a.lora_dropout, a.lora_targets, a.lora_last_n, a.grad_checkpoint)
     lora_bb.to(device).train()
-    head = T.FusionHead(bb.config.hidden_size, spectral=not a.no_spectral).to(device).train()
+    head = make_head(bb.config.hidden_size, a).to(device).train()
     opt = torch.optim.AdamW([{"params": head.parameters(), "lr": a.lr_head},
                              {"params": [p for p in lora_bb.parameters() if p.requires_grad], "lr": a.lr_lora}])
     scaler = torch.amp.GradScaler("cuda", enabled=amp)
@@ -475,6 +505,8 @@ def parse(argv=None):
     ap.add_argument("--scale", type=int, default=2, help="upsampling of the 256 px chip before DINOv3 (2 -> 32x32 tokens)")
     ap.add_argument("--last4", action="store_true", help="average the last 4 layers instead of the last one")
     ap.add_argument("--no-spectral", action="store_true", help="ablation: DINOv3 RGB features only")
+    ap.add_argument("--rgb-branch", action="store_true",
+                    help="keep the decoder's conv branch but give it only B04, B03, B02 (the model sees RGB only)")
     ap.add_argument("--aug", choices=["none", "flip"], default="flip")
     ap.add_argument("--train-val", default=None, help="default 6_Work/datasets/Train_Val_Dataset")
     ap.add_argument("--qa", default=None, help="haze table (site, date, water_b04_p5); default: found by dino_paths")
@@ -492,6 +524,8 @@ def parse(argv=None):
     a = ap.parse_args(argv)
     if a.smoke and not a.out:
         ap.error("--smoke needs --out <temp folder>, so smoke results never land in 4_Results")
+    if a.rgb_branch and a.no_spectral:
+        ap.error("--rgb-branch keeps the conv branch and --no-spectral removes it: use one of the two")
     if a.lora_r < 1 or a.batch < 1 or (a.gpu_batch is not None and a.gpu_batch < 1):
         ap.error("--lora-r, --batch and --gpu-batch must be at least 1")
     return a

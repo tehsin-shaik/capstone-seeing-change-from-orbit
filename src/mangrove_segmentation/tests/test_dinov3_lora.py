@@ -217,3 +217,34 @@ def test_bench_runs_without_data_or_weights():
     res = L.bench(L.parse(["--bench", "--cpu", "--bench-arch", "vits", "--bench-chip", str(SIZE), "--batch", "2",
                            "--gpu-batch", "1", "--bench-steps", "1"]))
     assert res["tokens"] == 16 and res["seconds_per_update"] > 0 and res["lora_modules"] == 12 * 2
+
+
+def test_rgb_only_decoders_do_not_use_the_other_five_channels():
+    """--no-spectral and --rgb-branch: changing NIR, SWIR and the indices must not change the output."""
+    torch.manual_seed(0)
+    tok, spec = torch.randn(2, 64, 4, 4), torch.randn(2, 8, SIZE, SIZE)
+    other = spec.clone(); other[:, 3:] += 5.0                     # B08, B11, B12, NDVI, MNDWI
+    rgb = spec.clone(); rgb[:, 0] += 5.0                          # B02
+    for flags in (["--no-spectral"], ["--rgb-branch"]):
+        head = L.make_head(64, L.parse(flags)).eval()
+        with torch.no_grad():
+            assert torch.equal(head(tok, spec, (SIZE, SIZE)), head(tok, other, (SIZE, SIZE))), flags
+    with torch.no_grad():
+        assert not torch.equal(head(tok, spec, (SIZE, SIZE)), head(tok, rgb, (SIZE, SIZE)))      # the RGB branch is live
+        default = L.make_head(64, L.parse([])).eval()
+        assert not torch.equal(default(tok, spec, (SIZE, SIZE)), default(tok, other, (SIZE, SIZE)))
+    assert head.spec[0][0].in_channels == 3 and type(default) is T.FusionHead
+
+
+def test_rgb_branch_keeps_the_rest_of_the_decoder_start_and_gets_its_own_folder(trainval, tmp_path):
+    torch.manual_seed(3); default = L.make_head(64, L.parse([]))
+    torch.manual_seed(3); rgb = L.make_head(64, L.parse(["--rgb-branch"]))
+    for part in ("proj", "fuse"):                                 # same random start outside the branch
+        a, b = getattr(default, part).state_dict(), getattr(rgb, part).state_dict()
+        assert all(torch.equal(a[n], b[n]) for n in a)
+    root, qa = trainval
+    out = L.run(lora_args(root, qa, tmp_path / "runs", "--folds", "1", "--epochs", "1", "--rgb-branch"))
+    assert out.name == "SMOKE_lora_smoke_rgbbranch" and json.load(open(out / "config.json"))["rgb_branch"] is True
+    assert "over B04, B03, B02 only" in (out / "RESULTS.md").read_text(encoding="utf-8")
+    with pytest.raises(SystemExit):
+        L.parse(["--rgb-branch", "--no-spectral"])
