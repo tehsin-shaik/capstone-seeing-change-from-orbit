@@ -1,0 +1,31 @@
+{
+ "time_utc": "2026-11-23T21:47:20+00:00",
+ "started_utc": "2026-11-23T21:46:37+00:00",
+ "git_commit": "dfe08d77d4c424489cb7d4ba72a43b36f4761f9a",
+ "model_sha256": "0d4cb8f90629d5c30ad64c3dbfcd8ad1356a39806f0f5b0fb9bc49dfcf6dd19c",
+ "test_root": "C:\\Users\\Zain\\Documents\\sdp-data\\Test_Dataset",
+ "groups_scored": [
+  "fixed_test",
+  "external"
+ ],
+ "catalogs": {
+  "fixed_test": {
+   "sites": [
+    "abu_al_abyad",
+    "marawah"
+   ],
+   "chips_in_catalog": 73
+  },
+  "external": {
+   "sites": [
+    "ajman_al_zorah",
+    "khor_al_beida",
+    "khor_kalba",
+    "ras_al_khaimah_creek",
+    "ras_al_khor"
+   ],
+   "chips_in_catalog": 219
+  }
+ },
+ "error": null
+}
